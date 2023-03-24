@@ -1,0 +1,65 @@
+=> Spring Boot is just one approach to develop spring Based application with less configurations.
+
+=> Spring boot came into market with Auto configuration concept.
+
+Note: Spring Boot will take care of configurations required for our application.
+
+=> we can do rapid development using springBoot.
+
+
+Application Development
++++++++++++++++++++++++++
+
+
+=> Application Development divided into 2 parts 
+        1) backend Development
+        2) Frontend Development 
+
+    FullStack Development  = Backend Development + Frontend Development
+
+=> Backend contains the business logic of our application
+
+    (webservice calls, validations, email logic, db communication)
+
+=> Frontend contains user interface of the application
+        (presentation logic)
+
+=> End users interact with frontend of our application. Frontend will interact with Backend of our application. Backend will execute business logic and it will communicate with database also.
+
+=> The developers who can do backend and Frontend development they are called as FullStack developers.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Monolith vs Microservices
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+Monolith Architecture Based Application
+---------------------------------------
+
+=> If we develop all the functionalities in the single project then it is called as Monolith Architecture based application.
+
+Drawback :- 
+1) Code changes integration is difficult
+2) Classes will be tightly coupled 
+3) For any change, whole project should be re-deployed
+4) Maintenance is difficult
+5) Single point of failure
+
+Microservices Architecture Based Application
+---------------------------------------------
+
+For each functionalities we are creating separate small small api's which is nothing but REST API's.
+and springBoot is used to develop these REST API's by following Microservices Architecture.
+
+Advantages:-
+1) Project functionalities distributed to several API's
+2) Maintenance is easy 
+3) Issue fixing is easy
+4) Development is easy 
+
+
+
+
+
+
