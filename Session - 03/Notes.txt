@@ -1,0 +1,36 @@
+Spring Core
+============
+
+-------------------
+Spring Framework
+-------------------
+
+1) What is programming Language
+2) What is Framework
+
+
+-> Programming Language used by humans to communicate with Computers.
+-> Programming Language contains set of instructions & syntaxes
+
+    Ex: C, C++, Java, C#, Python etc....
+
+
+-> Framework means semi-developed software.
+
+-> Framework Will provide common logic which are required for application development.
+
+-> If we don't use Framework in our application development then we should develop both business logics and common logics.
+
+-> If we use framework then it will provide some common logics required for our application so that we can concentrate only on business logic development.
+
+    Ex: Hibernate, Struts, Spring etc....
+
+Hibernate : It is an ORM framework, Used to develop persistence layer of our application.
+
+Struts : It is a web framework, Used to develop web layer of our application.(Outdated)
+
+Spring : It is an application development framework. Entire project can be developed by using this.
+
+    (we can do application end to end development)
+
+
