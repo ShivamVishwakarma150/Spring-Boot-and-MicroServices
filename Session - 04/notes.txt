@@ -1,0 +1,108 @@
+Spring Advantages
+-----------------
+
+-> It is a free & open source framework.
+
+-> Spring is very light weight framework 
+
+-> Spring is versatile (Adjustable) framework (spring can be integrated with any other java framework available in the market)
+
+-> Spring is non-invasive framework.
+(spring framework will not force us to use framework related interfaces or classes)
+
+Ex: To create a servlet we need to implement servlet Interface or we need to extends HttpServlet or GenericServlet. That means servlet is forcing us to use Servlets specific interfaces or classes. 
+
+
+Note : In Spring we can create a simple pojo then spring will execute our pojo classes.
+
+-> spring works based on POJO and POJI model.
+
+    POJO : Plain old java object.
+    POJI : Plain old java interface
+
+-> Spring is not a single framework. It is collection of Modules.
+
+---------------------------------------------------------------------------
+
+Spring Modules
+==============
+
+1) Spring core 
+2) Spring Context 
+3) Spring DAO / Spring JDBC
+4) Spring AOP
+5) Spring ORM 
+6) Spring Web MVC
+7) Spring Security
+8) Spring REST
+9) Spring Data
+10) Spring Cloud 
+11) Spring Batch etc...
+
+Note: Spring framework is loosely coupled. It will not force to use all Modules.
+
+-> Based on project requirement we can choose which modules we need to use from Spring.
+
+----------------------------------------------------------------------
+
+============
+Spring core
+============
+
+Note: Spring Core is the base module for all other modules in Spring. TO work with any module in spring first we need to know Spring Core Modules.
+
+Spring Core Module is Spring framework. It is providing IOC container & Dependency Injection.
+
+Note: IOC & DI are fundamental concepts of Spring framework.
+
+
+
+-> Spring Context module will deal with configuration related stuff.
+
+-> Spring AOP stands for Aspect Oriented Programming. Spring AOP is used to deal with Cross Cutting logics in application.
+
+    Application = Business Logic + Cross Cutting Logic 
+
+Note: We can separate Business Logic and Cross Cutting logic (Repeated Logics) using AOP module.
+
+-> Spring JDBC / Spring DAO module used to develop Persistence Layer.
+
+-> Spring ORM module is used to develop Persistence Layer with ORM features.
+
+-> Spring Web MVC Module is used to develop web Application.
+
+-> Spring Security module is used to implement Security Features in our application.
+
+-> Spring REST is used to develop RESTful services (REST API)
+
+-> Spring Data is used to develop Persistence Layer. It provided pre-defined repositories to simplify CRUD operations.
+
+-> Spring Cloud providing cloud concepts like Service Registry, Cloud Gateway, FeignClient, Filters, Routing etc...
+
+-> Spring Batch is used to implement Batch Processing in our application, Batch Processing means bulk operations.
+
+-----------------------------------------------------------
+-> Spring framework released in 2003 as Spring 0.9 version
+
+-> Spring framework released in 2004 (First Production released)
+
+-> The current version of Spring is 5.x version (released in 2017) 
+
+Note: Spring 5.x version introduced Reactive Programming in Spring.
+
+Note: Spring Boot 1.x released in 2014
+
+-> The current version of Spring Boot is 3.x version
+
+Note: Spring Boot is an extension for spring framework.
+
+-----------------------------------------------------------
+
+
+
+
+
+
+
+
+
