@@ -1,0 +1,12 @@
+Spring Core 
+-----------
+
+=> Spring Core is base module in Spring framework.
+
+=> All the other module of spring are developed on top of Spring core only
+
+=> Spring Core Providing fundamental concepts of Spring framework.
+    (IOC Container & Dependency Injection)
+
+=> Spring Core is all about Managing dependencies among the classes
+    (Creating Objects & Injecting Objects)
