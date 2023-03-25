@@ -13,6 +13,6 @@ Spring Core
 
 => We cant use inheritance or Composition for accessing one class from another class there is a problem when we have to access multiple classes from one class , because multiple inheritance is not supported in JAVA and in Composition also we have to must know about the whole signature of method while accessing the classes then it is also case of tight coupling.
 
-=> Conclusion to Achieving loose coupling we are using spring core. there using IOC Container we can Achieve loose coupling.
+=> Conclusion to Achieving loose coupling we are using spring core. there using IOC Container we can Achieve loose coupling .
 
 
