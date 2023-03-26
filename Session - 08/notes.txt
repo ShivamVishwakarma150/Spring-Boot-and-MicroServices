@@ -1,0 +1,31 @@
+Dependency Injection
++++++++++++++++++++++
+
+->The process of injecting one class object into another class object is called as Dependency Injection.
+
+-> We can perform Dependency Injection in three ways 
+   
+    1) Setter Injection
+    2) Constructor Injection
+    3) Field Injection
+
+-> The process of injecting one class object into another class object using Setter method then it is called as Setter Injection.
+
+Ex :: 
+    
+    BillCollector bc= new BillCollector();
+    bc.SetPayment(new CreditCardPayment())
+
+-> The process of injecting one class object into another class object using Constructor is called as Constructor Injection.
+
+Ex:: 
+    BillCollector bc1 = new BillCollector(new CreditCardPayment());
+	bc1.collectPayment(150.00);
+
+
+-> The process of injecting one class object into another class object using variable is called as Field Injection.
+
+Note: if variable is declared as public then we can access that variable outside of the class we can initialize directly.
+
+Note: If variable is declared as private then we can't access that variable outside of the class directly. To access private variable outside of the class we can use Reflection api.
+
