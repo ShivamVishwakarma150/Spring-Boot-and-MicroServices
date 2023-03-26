@@ -1,0 +1,47 @@
+-> In our application several classes will be available
+
+-> One class method wants to talk another class method.
+
+-> We can establish communication among the classes in 2 ways.
+
+        1) Inheritance
+        2) Composition
+
+-> If we use Inheritance or Composition then our classes will become tightly coupled.
+
+-> Instead of we are creating objects we can ask Spring Core to manager dependencies among our classes.
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------
+
+
+-> If we want Spring Core Module to manage dependencies among the classes with loosely coupling then we have to develop our classes by following some best practices.
+
+-> Spring Core suggesting Developers to follow Strategy Design Pattern to develop classes so that Spring Core can easily manager dependencies among the classes with loosely coupling.
+
+
+------------------------------------------------------------------------------------------------
+
+
+
++++++++++++++++++++++++
+Strategy Design Pattern 
++++++++++++++++++++++++
+
+-> It comes under Behavioral Design Pattern
+-> It enables our code to choose an algorithm at run time.
+-> When we have multiple algorithms then we can use this pattern to choose one algorithm at run time.
+
+Rules
+-----
+
+1) Favour Composition over Inheritance
+2) Code to interfaces instead of implementation classes.
+3) Code should be open for extension and code should be closed for modification.
+
+
+
