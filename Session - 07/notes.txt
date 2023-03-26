@@ -1,0 +1,60 @@
+Dependency injection => the process of injecting one class object into another class object is known as Dependency injection.
+
+
+
+constructor injection
+Another Approach to do the injection
+
+
+setter injection
+Another Approach to do the injection
+
+
+
+package in.shivam;
+
+public class BillCollector {
+	private IPayment payment;
+	
+    // for setter injection
+	public void setPayment(IPayment payment) {
+		this.payment = payment;
+	}
+	
+	public BillCollector() {
+		
+	}
+	
+    // for constructor injection
+	public BillCollector(IPayment payment) 	{
+		this.payment=payment;
+	}
+	
+	public void collectPayment(double amount) {
+		// As it is tightly coupled then it is not recommended way 
+//		CreditCardPayment ccd= new CreditCardPayment();
+//		ccd.pay(amount);
+		String status = payment.pay(amount);
+		
+		System.out.println(status);
+	}
+}
+
+
+
+package in.shivam;
+public class Test {
+	public static void main(String[] args) {
+		BillCollector bc = new BillCollector();
+		
+		// setter injection is the process of injecting one class object into another class object
+		// Injecting CreditCard obj into BillCollector (Setter Injection)
+        //bc.setPayment(new CreditCardPayment());
+		
+		//constructor injection
+		// Another Approach to do the injection
+		// injecting CreditCard obj into BillCollector (Constructor Injection)
+		BillCollector bc1 = new BillCollector(new CreditCardPayment());
+		bc.collectPayment(150.00);
+	}
+}
