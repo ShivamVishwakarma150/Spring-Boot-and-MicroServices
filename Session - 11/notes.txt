@@ -1,0 +1,20 @@
+-> To perform setter injection we will use <property/> tag below.
+
+<bean id="billCollector" class="in.shivam.BillCollector">
+		<property name="payment" ref="upi"/>
+</bean>
+
+-> To perform constructor injection we will use <constructor-arg/> tag below.
+
+<bean id="billCollector" class="in.shivam.BillCollector">
+		<constructor-arg name="payment" ref="upi"/>
+</bean>
+
+
+-> when we perform setter and constructor injection for same variable then setter injection will override constructor injection  because constructor will execute first initialize the variable then setter will execute and it will re-initialize the variable.
+
+<bean id="billCollector" class="in.shivam.BillCollector">
+		<property name="payment" ref="creditCard"/>
+		<constructor-arg name="payment" ref="upi"/>
+</bean>
+	
