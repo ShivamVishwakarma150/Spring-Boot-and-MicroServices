@@ -1,0 +1,64 @@
+Building First Application Using Spring Framework.
+
+
+1) Open STS IDE and Create Maven Project
+2) Add Spring-Context Dependency in project pom.xml file
+
+<dependencies>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>5.3.20</version>
+    </dependency>
+</dependencies>
+
+
+3) Create Bean Classes 
+
+    IPayment.java
+    CreditCardPayment.java
+    DebitCardPayment.java 
+    UpiPayment.java 
+    BillCollector.java 
+    Test.java 
+
+4) Create Beans configuration file and configure our classes as Spring Beans 
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+        <!-- Bean Definition -->
+        <bean id="creditCard" class="in.shivam.CreditCardPayment"/>
+        
+        <bean id="debitCard" class="in.shivam.DebitCardPayment"/>
+        
+        <bean id="upi" class="in.shivam.UpiPayment"/>
+        
+        <bean id="billCollector" class="in.shivam.BillCollector">
+            <!-- Here property represents Setter Injection -->
+            <property name="payment" ref="creditCard"/>
+        </bean>
+	
+	
+
+    </beans>
+
+5) Start the IOC container and test the Application
+
+public class Test {
+	public static void main(String[] args) throws Exception {
+		
+		//I am giving my beans configuration file as a input for IOC container
+		ApplicationContext context = new ClassPathXmlApplicationContext("Spring-Beans.xml");
+	
+		// get object from IOC
+		BillCollector bc =  context.getBean("billCollector",BillCollector.class);
+		bc.collectPayment(1400.00);
+	
+	}
+}
+
+
+

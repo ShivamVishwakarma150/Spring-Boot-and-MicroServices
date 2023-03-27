@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Bean Definition -->
+	<bean id="creditCard" class="in.shivam.CreditCardPayment"/>
+	
+	<bean id="debitCard" class="in.shivam.DebitCardPayment"/>
+	
+	<bean id="upi" class="in.shivam.UpiPayment"/>
+	
+	<bean id="billCollector" class="in.shivam.BillCollector">
+		<!-- Here property represents Setter Injection -->
+		<property name="payment" ref="debitCard"/>
+	</bean>
+	
+	
+
+</beans>
