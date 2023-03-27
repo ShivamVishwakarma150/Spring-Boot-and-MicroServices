@@ -1,0 +1,19 @@
+-> If we develop the project without using spring framework then programmer should perform dependency injection among the classes in the application.
+
+-> If programmer performs dependency injection then classes will become tightly coupled.
+
+-> In Realtime project we will have 100's of classes then performing Dependency Injection is very very difficult and code will become cumbersome.
+
+-> To overcome this problem we can use Spring IOC container.
+
+-> If we develop the project using spring framework then spring IOC will take care of dependency injections in our application.
+
+-> IOC is a principle which is responsible to manage and collaborate dependencies among the classes available in the application.
+
+Note: IOC stands for Inversion of Control. DI stands for Dependency Injection.
+
+-> In spring framework IOC will perform DI.
+
+-> IOC provide Beans as output which is ready to use.
+
+the classes which are managed by IOC container those are called as spring Bean.
