@@ -1,0 +1,40 @@
+Autowiring
+==========
+
+-> In application several classes will be available 
+-> One class wants to talk to another class 
+-> We are using IOC container to perform that dependency injection
+-> we are giving instruction to IOC to inject dependent object into target object using 'ref' attribute.
+
+<bean id="billCollector" class="in.shivam.BillCollector">
+		<constructor-arg name="payment" ref="upi"/>
+</bean>
+
+-> Using ref attribute we are telling to IOC which object it has to inject.
+
+-> This process is called as Manual Wiring
+
+-> Spring IOC supports Autowiring concept that means Spring IOC having capability to identify the dependent and inject dependent to target.
+
+-> by default Autowiring is disabled we nned to enable the Autowiring concept.
+
+-> Autowiring will not work for primitive data type it is only work for reference data type.
+
+-> There are several modes available in Autowiring.
+
+1) byName
+2) byType
+3) constructor
+4) no
+
+
+<bean id="car" class="in.shivam.beans.Car">
+  	<!-- Manual Wiring -->
+  	<property name="dieselEng" ref="dieselEng"/>
+</bean>
+
+-> byName means if target class variable name matched with any bean id/name in bean configuration file then IOC will consider that as dependent bean and it will inject that dependent bean object into target object.
+
+-> byType means it will check data type or the variable. with Datatype of variable if any bean class is configured then it will identify that as dependent and it will inject into target.
+
+Note: We can configure one class for multiple times with different ids then we will get ambiguity problem in byType scenario.
