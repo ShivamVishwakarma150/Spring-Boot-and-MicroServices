@@ -1,0 +1,54 @@
+-> In byType mechanism if we have more than one bean matching with type then we will get ambiguity problem.
+
+=> To overcome ambiguity problem we need to use 'autowire-candidate=false'
+
+    <bean id="xyz" class="in.shivam.beans.DieselEngine" autowire-candidate="false"/>
+  	
+  	<bean id="abc" class="in.shivam.beans.DieselEngine"/>
+  	
+  	<bean id="car" class="in.shivam.beans.Car" autowire="byType">
+  	</bean>
+
+Note: When we configure autowiring with byName it is performing setter injection by default.
+
+=> If we want to perform Autowiring through constructor then we can use 'constructor' mode.
+
+    <bean id="diesel" class="in.shivam.beans.DieselEngine" autowire-candidate="false"/>
+  	
+  	<bean id="abc" class="in.shivam.beans.DieselEngine"/>
+  	
+  	<bean id="car" class="in.shivam.beans.Car" autowire="constructor">
+  	</bean>
+
+
+=> In 'constructor' mode byType will be used to identify dependent bean object.
+
+------------------------------------------------------------------------------------------------
+
+
+
+
+What is Spring Framework?
+Spring Modules
+Tightly coupled vs Loosely Coupling
+Strategy Design Pattern
+Spring Core Introduction
+IOC Container
+Dependency Injection 
+    Setter Injection
+    Constructor Injection
+    Field Injection
+<propery/> tag
+<constructor-arg/> tag
+Bean Scopes
+    - singleton
+    - prototype
+
+<ref /> attribute
+Autowiring
+    - byName
+    - by Type
+    - constructor
+------------------------------------------------------------------------------------------------
+
+xx------------Spring Core Fundamental Completed---------xx
