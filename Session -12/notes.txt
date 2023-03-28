@@ -1,0 +1,84 @@
+Bean Scopes
+------------
+
+-> bean scope will decide how many objects should be create for a spring bean 
+
+-> The default scope of spring bean is singleton (that means only one object will br created)
+
+-> we can configure below scopes for spring bean.
+
+1) singleton
+2) prototype
+3) request
+4) session 
+
+Note : For singleton beans objects will be created when IOC starts.
+
+-> When we call context.getBean(..) Method then object will be created for prototype beans.
+
+-> for prototype beans every time new object will be created.
+
+FAQ: Why spring Framework make default scope as singleton?
+Ans: To save the memory spring framework made the default scope as singleton.
+
+
+Ex: singleton Scope 
+--------------------
+
+package in.shivam;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test {
+
+	public static void main(String[] args) {
+		
+		// starting IOC Container
+		ApplicationContext context= new ClassPathXmlApplicationContext("Spring-Beans.xml");
+		
+		Car car1 =context.getBean("Car",Car.class);
+		System.out.println(car1.hashCode());
+		
+		Car car2 =context.getBean("Car",Car.class);
+		System.out.println(car2.hashCode());
+	}
+
+}
+
+OP:-
+Motor:Constructor
+Car:Constructor
+726281927
+726281927
+
+
+Ex: prototype Scope 
+--------------------
+
+package in.shivam;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test {
+
+	public static void main(String[] args) {
+		
+		// starting IOC Container
+		ApplicationContext context= new ClassPathXmlApplicationContext("Spring-Beans.xml");
+		
+		Car car1 =context.getBean("Car",Car.class);
+		System.out.println(car1.hashCode());
+		
+		Car car2 =context.getBean("Car",Car.class);
+		System.out.println(car2.hashCode());
+	}
+
+}
+
+OP:-
+Car:Constructor
+1800659519
+Car:Constructor
+1691538257
