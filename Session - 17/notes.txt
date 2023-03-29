@@ -1,0 +1,85 @@
+Depends upon starters in pom.xml it is starting the IOC container programmers are not responsible for starting the IOC container in Spring-Boot IOC container started as part of run method.
+
+@Component Annotation is used to represent a class as spring bean.
+
++++++++++++++++++++++ 
+Banner in Spring Boot 
++++++++++++++++++++++
+
+-> In Boot application console we can see spring logo that is called as Banner in Spring Boot 
+
+-> We can customize banner text by creating "banner.txt" file under src/main/resources 
+
+-> We can keep our company name or project name as Banner text in Ascii
+
+format Note: Generate Ascii text from here :
+
+https://patorjk.com/software/taag/#p=display&f=Graffiti&t=Shivam%20Sharma 
+
+-> Spring Boot banner having below 3 modes
+    1) console ---- > it is default mode 
+    2) log 
+    3) off 
+    
+Note: If we set banner mode as off then banner will not printed spring.main.banner-mode = off
+
+
+
++++++++++++++++++++++++++++++++++++++ 
+How ioc container will start in Spring Boot ? +++++++++++++++++++++++++++++++++++++ 
+
+=> For boot-starter, run( ) method using "AnnotationConfigApplicationContext" class to start IOC container 
+
+=> For boot-starter-web, run ( ) method using "AnnotationConfigServletWebServerApplicationContext" to start IOC 
+
+=> For starter-webflux, run ( ) method using
+"AnnotationConfigReactiveWebServerApplicationContext" to start IOC 
+
+-> boot-starter is used to create standalone applications 
+
+-> boot-starter-web dependency is used to develop web applications 
+
+-> boot-starter-webflux is dependency is used to develop applications with Reactive Programming
+
+
+++++++++++++++++++++ 
+Runners in Spring Boot 
+++++++++++++++++++++
+
+=> Runners are getting called at the end of run ( ) method 
+
+=> If we want to execute any logic only once when our application got started then we can use Runners concept 
+
+
+=> In Spring Boot we have 2 types of Runners 
+    1) ApplicationRunner 
+    2) CommandLineRunner 
+    
+=> Both runners are functional interface. They have only one abstract method i.e run (..) method
+
+Use cases 
+--------------- 
+
+1) send email to management once application started 
+2) read data from db tables and store into cache memory 
+
+
+@Component 
+public class CacheManager implements ApplicationRunner { 
+    @Override 
+    public void run(ApplicationArguments args) throws Exception { 
+        System.out.println("Logic executing to load data into cache...."); 
+        } 
+    }
+
+
+@Component 
+public class SendAppStartMail implements CommandLineRunner { 
+    @Override 
+    public void run(String... args) throws Exception { 
+        System.out.println("logic executing to send email...."); 
+    } 
+}
+
+
+Note: @Component annotation is used to represent our java class as Spring Bean
