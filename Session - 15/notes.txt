@@ -1,0 +1,82 @@
+Spring Boot & Microservices 
++++++++++++++++++++++++++ 
+-> Spring is an application development framework 
+-> By using spring framework we can develop below types of applications 
+    1) standalone applications
+    2) web applications 
+    3) distributed applications 
+
+-> Spring framework developed in modular fashion 
+
+-> Spring framework came into market in 2004 
+
+-> The current version of Spring is 5.x 
+
+-> Spring is non-invasive framework 
+
+-> Spring is versatile framework 
+
+Note: When we develop application by using spring, programmer is responsible to take care of configurations required for the application.
+
+-> After few years Spring team realized that for every project configurations are required 
+
+-> Every Programmer dealing with configurations in the project
+
+-> The configurations are common in the project 
+
+=> To overcome configuration problems spring team released Spring Boot into market 
+
++++++++++++++++ 
+Spring Boot 
+++++++++++++++++ 
+
+=> It is another approach to develop spring based applications with less configurations
+
+=> Spring Boot is an enhancement of Spring framework 
+
+=> Spring Boot internally uses Spring framework only 
+
+=> What type of applications we can develop using spring framework, same type of applications can be developed by using Spring boot also 
+
+Spring Boot = Spring Framework - XML Configurations 
+
++++++++++++++++++++++++
+Spring Boot Advantages 
++++++++++++++++++++++++ 
+
+1) Auto Configuration 
+2) POM starters 
+3) Embedded Servers 
+4) Rapid Development 
+5) Actuators -> Auto configuration means boot will identify the configurations required
+
+for our application and it will provide that configurations 
+- Starting IOC container 
+- Creating Connection Pool 
+- Creation SMTP Connections 
+- Web Application Deployment to server 
+- Depedency Injections etc.... 
+
+-> POM starters are nothing but dependencies that we use to develop our application 
+a) web-starter 
+b) jdbc-starter 
+c) security-starter
+d) mail-starter 
+
+-> Boot will provide web server to run our web applications. Those servers are called as Embedded Server 
+    a) Tomcat (default) 
+    b) Jetty 
+    c) Netty 
+    
+-> Rapid Development means fast development. We can focus only on
+business logic because Boot will take care of configurations.
+
+
+
+-> Actuators are used to monitor and manage our application. Actuators providing production-ready features for our application. 
+
+    a) How many classes loaded 
+    b) how many objects created 
+    c) how many threads are running 
+    d) URL Mappings Available 
+    e) Health of the project etc...
