@@ -1,0 +1,94 @@
++++++++++++++++++++++++++++++++++ 
+Building First Spring Boot Application 
++++++++++++++++++++++++++++++++++
+
+-> We can create boot application in 2 ways 
+1) using Spring Initializr website (start.spring.io) 
+2) using IDE Creating project using start.spring.io 
+
+Creating project using start.spring.io 
++++++++++++++++++++++++++++++++++++++++
+
+-> Goto start.spring.io website and generate the project 
+
+-> It will download project in zip file -> Extract that zip file 
+
+-> Go t IDE -> New -> Import -> Maven -> Existing Maven Project 
+
+-> Select Project path upto pom.xml file location 
+
+Creating project using STS IDE 
++++++++++++++++++++++++++++++++
+
+-> Go to STS IDE -> New -> Spring Starter Project -> Fill the details and create the project 
+
+Note: STS IDE will use start.spring.io internally to create the project 
+
+Note: To create spring boot application internet connection is mandatory for our application.
+
+
+
+Spring Boot Application Folder Structure +++++++++++++++++++++++++++++++++++ 
+- 09-Spring-Boot-App -------------- Project Name (root folder) 
+    - src/main/java 
+            - Application.java (This is start class) 
+
+    - src/main/resources 
+            - application.properties or application.yml 
+
+    - src/test/java 
+            - ApplicationTests.java 
+
+    - Maven Dependencies (It contains jars which got downloaded)
+
+    - target (it contains .class files) 
+
+    - pom.xml (Maven configuration file) 
+
+-> We will write our source code under src/main/java folder 
+
+-> We will create our configuration files under src/main/resources folder 
+
+-> We will create Junit class under src/test/java folder 
+
+-> Project dependencies we will configure in pom.xml file 
+
+-> POM stands for Project Object Model
+
+
++++++++++++++++++++++++++++++++ 
+What is start class in Spring Boot? +++++++++++++++++++++++++++++++ 
+
+-> When we create boot application by default one java class will be created with a name Application.
+
+java i.e called as Start class of spring boot 
+
+-> Start class is the entry point for boot application execution
+
+ @SpringBootApplication 
+ public class Application { 
+    public static void main(String[] args) { 
+        SpringApplication.run(Application.class, args); 
+        } 
+    }
+
+=> @SpringBootApplication annotation is equal to below 3 annotations 
+@SpringBootConfiguration 
+@EnableAutoConfiguration 
+@ComponentScan
+
+bootstrapping logic -> logic which is used to start the application.
+
+=> SpringApplication.run (..) method contains bootstrapping logic. It is the entry point for boot application execution
+
+    - start stop watch
+    - start listeners 
+    - prepareEnv 
+    - print Banner
+    - create IOC container 
+    - refresh Container 
+    - stop that stop watch 
+    - print time taken to start application 
+    - call runners 
+    - return IOC reference
+
