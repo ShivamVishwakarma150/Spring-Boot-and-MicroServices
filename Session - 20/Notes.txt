@@ -1,0 +1,99 @@
+Autowiring Example with @Qualifer 
++++++++++++++++++++++++++++++++ 
+
+-> When we use @Autowired annotation it will use byType mode to identify dependent object 
+
+-> If our interface having more than one impl then IOC will get confused to perform DI (Ambiguity) 
+
+-> To resolve that ambiguity problem we will use @Qualifier to specify bean name to inject 
+
+
+Note: When we use @Qualifier it will use byName mode to inject dependent object
+
+
+Note: If we don't want to use @Qualifier then we should specify @Primary for one bean to get injected
+
+public interface ReportDao { 
+    public String findData(); 
+}
+
+@Repository("Oracle")
+public class OracleReportDaoImpl implements ReportDao {
+	
+	
+	public OracleReportDaoImpl() {
+		System.out.println("OracleReportDaoImpl :: Constructor");
+	}
+	
+	@Override
+	public String findData() {
+		System.out.println("fetching report from Oracle db");
+		return "Report Data";
+	}
+
+}
+
+@Repository("MySql")
+public class MySqlReportDaoImpl implements ReportDao{
+	public MySqlReportDaoImpl() {
+		System.out.println("MySqlReportDaoImpl :: Constructor");
+	}
+	
+	@Override
+	public String findData() {
+		System.out.println("fetching report from MySql db");
+		return "Report Data";
+	}
+}
+
+@Service
+public class ReportService {
+	private ReportDao reportDao;
+		
+	@Autowired
+	@Qualifier("Oracle")
+	public void setReportDao(ReportDao reportDao) {
+		System.out.println("setReportDao() :: Method Called");
+		this.reportDao=reportDao;
+	}
+	
+	
+	public void generateReport() {
+		reportDao.findData();
+		System.out.println("Generating Report...");
+	}
+}
+
+
+@Autowired at Constructor Level
+++++++++++++++++++++++++++++ 
+
+
+-> If we have both 0-Param constructor and parameterized constructor then ioc will use 0-param constrictor to create object 
+
+-> If we want IOC to choose Param-Constructor to create obj then we should write @Autowired annotation at param-constructor 
+
+Note: If we have only param constructor in our class then @Autowired is optional
+
+@Service
+public class ReportService {
+	private ReportDao reportDao;
+		
+	/* @Autowired
+	public void setReportDao(ReportDao reportDao) {
+		System.out.println("setReportDao() :: Method Called");
+		this.reportDao=reportDao;
+	} */
+	
+	@Autowired //optional because here only one constructor because ReportService is a spring bean 
+	public ReportService(ReportDao reportDao) {
+		System.out.println("ReportService :: Param Constructor Called");
+		this.reportDao=reportDao;
+	}
+	
+	public void generateReport() {
+		reportDao.findData();
+		System.out.println("Generating Report...");
+	}
+}
+
