@@ -1,0 +1,76 @@
++++++++++++++++++++++++++++ 
+What is @SpringBootApplication ?
+++++++++++++++++++++++++++++ 
+
+-> This annotation used at start class of spring boot 
+-> This annotation is equal to below 3 annotations 
+    1) @SpringBootConfiguration 
+    2) @EnableAutoConfiguration 
+    3) @Component Scan 
+    
+
+What is ComponentScan ?
++++++++++++++++++++++++
+
+-> The process of scanning packages in the application to identify spring bean classes is called as Component Scan.
+
+-> Component Scan is built-in concept 
+
+-> Component Scanning will start from base package 
+
+Note: The package which contains start class is called as base package. 
+
+-> After base package scanning completed it will scan sub packages of base package. 
+
+
+Note: The package names which are starting with base package name are called as sub packages.   
+            in.shivam (base package) 
+            in.shivam.dao 
+            in.shivam.service 
+            in.shivam.config 
+            in.shivam.rest 
+            in.shivam.util 
+            com.wallmart.security ----> This is not sub package so scanning will not happen 
+            
+            
+-> We can specify more than one base package also in our boot start class 
+
+@SpringBootApplication 
+@ComponentScan(basePackages = { "in.shivam", "com.wallmart" }) 
+
+public class Application { 
+    public static void main(String[] args) {
+         SpringApplication.run(Application.class, args); 
+         } 
+    }
+
+Note: It is highly recommended to follow proper package naming conventions 
+
+    Ex: companyDomainName.projectName.moduleName.layerName 
+    
+    com.tcs.passport (basePkgName) 
+    com.tcs.passport.user.dao 
+    com.tcs.passport.user.service
+
++++++++++++++++++++++++ 
+What is @Bean annotation 
++++++++++++++++++++++++ 
+
+
+-> @Bean is a method level annotation 
+
+-> When we want to customize any object creation then we will use @Bean annotation for that 
+
+@Configuration 
+public class AppConfig {
+
+@Bean 
+public AppSecurity createInstance() { 
+    AppSecurity as = new AppSecurity(); // custom logic to secure our functionality return as; 
+    } 
+}
+
+
+Note: @Bean method we can write in any spring bean class but recommended to write in @Configuration class like above. 
+
+
