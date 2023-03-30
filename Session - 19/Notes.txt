@@ -1,0 +1,76 @@
+How to represent java class as a Spring Bean? ++++++++++++++++++++++++++++++++++++++
+
+ @Component 
+ @Service 
+ @Repository 
+
+ @Controller 
+ @RestController 
+
+ @Configuration 
+ @Bean 
+ 
+
+
+Note: All the above annotations are class level annotations but @Bean is method level annotation 
+
+-> @Component is a general purpose annotation to represent java class as Spring Bean 
+
+-> @Service annotation is a specialization of @Component annotation. This is also used to represent java class as spring bean. It is allowing for
+implementation classes to be auto detected through class path scanning. 
+
+    Note: For business classes we will use @Service annotation.
+
+
+-> @Repository annotation is a specialization of @Component annotation.This is also used to represent java class as spring bean. It is having Data Access Exception translation .
+
+    Note: For dao classes we will use @Repository 
+
+
+
+-> In Web applications to represent java class as controller we will use @Controller annotation. It is used for C2B communication. 
+
+-> In Distributed application to represent java class as distributed component we will use @RestController annotation. It is used for B2B communication. 
+
+-> If we want to perform customized configurations then we will use @Configuration annotation along with @Bean methods. 
+
+Based on requirement we can have multiple @Configuration classes in the project.
+
+
+Ex: Swagger Config, DB Config, RestTemplate Config, Kafka Config,Redis Config, Security Config etc... Note: @Bean annotated method we can keep in any spring bean class but it is highly recommended to keep them in @Configuration classes.
+
+Note: @Bean annotated method we can keep in any spring bean class but it is highly recommended to keep them in @Configuration classes.
+
+++++++++++
+Autowiring 
+++++++++++
+
+-> Autowiring is used to perform dependency injection 
+
+-> The process of injecting one class object into another class object is called as dependency injection. 
+
+-> In Spring framework IOC container will perform dependency injection 
+
+-> We will provide instructions to IOC to perform DI in 2 ways 
+    
+    1) Manual Wiring (using ref attribute in beans config xml file) 
+
+    2) Autowiring 
+    
+
+-> Autowiring means IOC will identify dependent object and it will inject into target object 
+
+-> Autowiring will use below modes to perform Dependency Injection 
+    1) byName 
+    2) byType 
+    3) constructor (internally it will use byType only) 
+    
+-> To perform Autowiring we will use @Autowired annotation 
+
+-> @Autowired annotation we can use at 3 places in the program 
+    1) variable level (Field injection - FI ) 
+    2) setter method level (Setter Injection - SI ) 
+    3) constructor (Constructor Injection - CI ) 
+    
+Note: Autowiring supports only referenced types (No suppot for primitive types)
+
