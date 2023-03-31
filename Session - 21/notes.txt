@@ -1,0 +1,118 @@
+@Autowired with Field Injection 
++++++++++++++++++++++++++ 
+
+
+-> IOC will use Reflection api to internally to perform Field Injection 
+
+
+@Service public class ReportService { 
+    
+    @Autowired 
+    private ReportDao reportDao; 
+    public void generateReport() { 
+        reportDao.findData(); 
+        System.out.println("generating report...."); 
+        } 
+    }
+
+Note: Field Injection is not recommended because it is violating oops principles and it breaks Single Responsibility Principles. 
+
+
+-> When objects injected using field injection code review tools can't identify complexity.
+
+
+SI vs CI vs FI 
++++++++++++++ 
+
+
+Setter Injection 
+-----------------
+
+
+-> Setter Injection will be performed through setter method 
+
+-> It is mandatory to specify @Autowired annotation at setter method 
+
+-> If we don't specify @Autowired annotation then DI will not happen (Partial Injection) 
+
+-> If DI not happened , when we call methods then we will get NullPointerException 
+
+-> Target Bean will be created first then setter method will be called to inject dependent.
+
+
+
+
+Constructor Injection 
+---------------------
+
+
+-> Constructor injection will be performed through constructor 
+
+-> If we have more than one constructor then we have to specify @Autowired at constructor level 
+
+-> If we have only one parameterized constructor then @Autowired is optional 
+
+-> In CI, dependent bean will be created first then target bean will be created 
+
+-> Partial Injection is not possible in CI
+
+
+
+Field Injection
+---------------
+
+
+-> FieldInjection will be performed through Reflection API 
+
+-> FI violating OOPS principles (private variable getting initialized from outside using Reflection) 
+
+-> It is simple to use 
+
+-> Most of the programmers will use FI in projects because it us just one line code
+
+
+
+Note: Out of all these Dependency Injections, Constructor Injection is recommended because Partial Injection not possible and target bean will be created if dependent bean is available.
+
+
+
+Bean Life Cycle 
+++++++++++++++++
+
+-> The java class which represented as Spring Bean is called as Bean Class 
+
+-> The java class which is managed by IOC is called as Spring Bean 
+
+-> Spring Beans life cycle will be managed by IOC 
+
+-> For Spring Beans Obj creation and Obj destruction will be taken by IOC container.
+
+-> We can execute life cycle methods for Spring Bean 
+
+-> In Spring Boot, we can work with Bean Lifecycle methods in 2 ways 
+    1) By Implementing interfaces ( Initializing Bean & DisposableBean ) 
+    2) By Using Annotations ( @PostConstruct & @PreDestroy )
+
+
+// tightly coupled
+// interface approach
+
+@Component
+public class Motor implements InitializingBean,DisposableBean{
+	
+	public Motor() {
+		System.out.println("Motor :: Constructor");
+	}
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		System.out.println("afterPropertiesSet() method called....");
+	}
+	
+	@Override
+	public void destroy() throws Exception {
+		System.out.println("destroy() method called.....");
+	}
+}
+
+
