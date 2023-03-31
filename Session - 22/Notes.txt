@@ -1,0 +1,43 @@
+Spring Data JPA 
+++++++++++++++++ 
+
+
+-> It is used to develop persistence logic in our application
+
+-> The logic which is responsible to communicate with database is called as Persistence Logic 
+
+
+-> Already we have JDBC, Spring JDBC, Hibernate, Spring ORM to develop persistence logic 
+
+-> If we use JDBC,or Spring JDBC or Hibernate or Spring ORM then we should common logics in all DAO classes to perform CRUD Operations 
+
+-> Data JPA simplified persistence logic development by providing pre-defined interfaces with methods 
+
+-> Data JPA provided Repository methods to perform CRUD operations 
+
+Note: If we use Data JPA then we don't need to write logic to perform CRUD operations bcz Data JPA will take care of that 
+
+-> Data JPA provided Repository interfaces to perform CURD operations 
+    1) CrudRepository (Methods to perform Crud Operations) 
+    2) JpaRepository (Methods to perform Crud Operations + Pagination + Sorting + QBE)
+
+
+Hibernate Vs Data JPA 
+++++++++++++++++++++++ 
+
+-> In Hibernate we should implement all methods to perform CRUD operations 
+
+-> Data JPA providing predefined methods to perform CRUD Operations 
+
+-> In Hibernate we should boiler plate code (same code in multiple classes) 
+
+-> In Data JPA we don't need to write any method because JPA Repositories providing methods for us.
+
+Environment Setup 
++++++++++++++++++ 
+
+
+1) MySQL Database (Server s/w) (https://dev.mysql.com/downloads/installer/) 
+
+2) MySQL Workbench (Client s/w) (https://dev.mysql.com/downloads/workbench/)
+
