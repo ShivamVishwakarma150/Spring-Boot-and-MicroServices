@@ -1,0 +1,45 @@
++++++++++++++++++++++++++ 
+Build First App using Data JPA
+++++++++++++++++++++++++++ 
+
+
+1) Create spring boot application with below dependencies 
+    a) starter-data-jpa 
+    b) mysql-connector 
+
+2) Create Entity class using Annotations 
+
+3) Create Repository interface by extending CrudRepository 
+
+4) Configure DataSource & ORM properties in application.properties file 
+
+5) Call Repository methods in start class to perform DB operations
+
+
+CrudRepository methods 
+++++++++++++++++++++ 
+
+1) save (. ) :: upsert method ( insert and update ) - for one record 
+
+2) saveAll ( ..) :: upsert method (insert and update) - for multiple records 
+
+3) findById (. ) :: To retrieve single record using primary key 
+
+4) findAllById ( ..) :: To retrieve multiple records using primary keys 
+
+5) findAll ( ) :: To retrieve all records from table 
+
+6) count ( ) :: To get total records count 
+
+7) existsById (. ) : To check record presence in table using Primary key 
+
+8) deleteById (. ) : To delete single record using primary key 
+
+9) deleteAllById (.. ) : To delete multiple records using primary keys 
+
+10) delete(. ) : To delete record using entity object 
+
+11) deleteAll (.. ) : To delete all records from table with given entities 
+
+12) deleteAll ( ) : To delete all records
+
