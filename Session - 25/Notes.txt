@@ -1,0 +1,134 @@
+CRUD Operation using Spring Data JPA
+-------------------------------------
+
+@Entity
+@Table(name="USER_MASTER")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class User {
+	
+	@Id
+	@Column(name="USER_ID")
+	private Integer userId;
+	
+	@Column(name="USER_NAME")
+	private String username;
+	
+	@Column(name="USER_GENDER")
+	private String gender;
+	
+	@Column(name="USER_AGE")
+	private Integer age;
+	
+	@Column(name="USER_COUNTRY")
+	private String country;
+}
+
+----------------------------------------------------------------------------------------------------------
+
+
+public interface UserRepository extends  CrudRepository<User, Integer>{
+
+}
+
+----------------------------------------------------------------------------------------------------------
+
+@SpringBootApplication
+public class Application {
+
+	public static void main(String[] args) {
+		
+		ConfigurableApplicationContext context =	SpringApplication.run(Application.class, args);
+		
+		// giving the implementation for UserRepository interface
+		UserRepository repository = context.getBean(UserRepository.class);
+		
+		User u1 = new User(101,"Ramesh","Male",25,"India");
+		
+        //repository.save(u1);
+		
+		/*User u2 = new User(102,"Raju","Male",26,"India");
+		User u3 = new User(103,"johny","Male",30,"India");
+		User u4 = new User(104,"Rakesh","Male",32,"US");
+		
+		repository.saveAll(Arrays.asList(u2,u3,u4));*/
+		
+		
+		// Retrive Record based on primary key
+		// Here optional means record may available or may not be available
+		/* Optional<User> findById =  repository.findById(103);
+		if(findById.isPresent()) {
+			System.out.println(findById.get()); */
+			
+			// Retrive multiple record based on primary keys
+			/* Iterable<User> allById =  repository.findAllById(Arrays.asList(101,102));
+			
+			allById.forEach(user ->{
+				System.out.println(user);
+			});
+			*/
+		
+		/* Iterable<User> findAll = repository.findAll();
+		
+		findAll.forEach(user ->{
+			System.out.println(user);
+		}); */
+		
+		/*long count = repository.count();
+		
+		System.out.println("total Records in table :: "+count); */
+		
+		/*boolean existById = repository.existsById(102);
+		System.out.println("Record Precence with id - 102 :: "+existById);*/
+		
+		//repository.deleteById(104);
+		
+		repository.deleteAllById(Arrays.asList(102,103));	
+			
+			
+			
+		
+	}
+
+}
+
+
+----------------------------------------------------------------------------------------------------------
+
+server.port=8085
+
+spring.datasource.url=jdbc:mysql://localhost:3306/sbms
+spring.datasource.username=root
+spring.datasource.password=Shivam@123
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+
+# to print queries on console
+spring.jpa.show-sql=true
+
+# To create tables dynamically
+spring.jpa.hibernate.ddl-auto=update
+
+----------------------------------------------------------------------------------------------------------
+
+-> In CrudRepository interface we have methods to retrieve records 
+    1) findById (ID) ----> to retrieve based on primary key 
+    2) findAllById(Iterable<ID> ids) ----> to retrieve based on multiple primary keys 
+    3) findAll( ) -----> to retrieve all records 
+    
+
+Requirement -1 : Retrieve users records who are belongs to INDIA 
+
+SQL : select * from user_master where user_country='INDIA'; 
+
+Requirement -2 : Retrieve users whose age is below 30 years 
+
+SQL : select * from user_master where user_age <=30; 
+
+Note: user_age and user_country are non-primary columns in the table 
+
+-> To retrieve data based on Non-Primary key columns we don't have pre-defined methods. To implement these kind of requirements in Data JPA we have below 2 options 
+    1) findby methods 
+    2) custom queries
+
+
