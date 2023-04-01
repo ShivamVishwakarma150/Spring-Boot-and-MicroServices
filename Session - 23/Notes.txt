@@ -1,0 +1,145 @@
+MySQL DB Properties 
+++++++++++++++++++ 
+
+
+spring.datasource.url=jdbc:mysql://localhost:3306/sbms 
+
+spring.datasource.username=root
+
+spring.datasource.password=root
+
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver 
+
+spring.jpa.hibernate.ddl-auto=update 
+
+spring.jpa.show-sql=true
+
+
+Entity Class 
++++++++++++++ 
+
+
+-> The java class which is mapped with DB table is called as Entity class 
+
+-> To map java class with DB table we will use below annotations 
+
+@Entity : It represents our class as Entity class. (It is mandatory annotation) 
+
+@Table : It is used to map our class with DB Table name 
+
+Note : @Table is optional if our class name and table name is same. If we don't give @Table then it will consider class name as table name. 
+
+@Id : It represents variable mapping with primary column in table (It is mandatory annotation)
+
+@Column : It is used to map our class variables with DB table column names 
+
+Note: @Column is optional if class variable name and DB table column names are same. If we don't give @Column then it will consider variable name as column name. 
+
+
+Note: For every table we should create one Entity class. Entity class represents DB operations should be performed in which table. 
+
+
+Normal class
+-------------
+
+public class Player { 
+    
+    private Integer playerId; 
+     
+    private String playerName; 
+    
+    private Integer playerAge; 
+    
+    private String location; 
+}
+
+
+Converted class
+----------------
+
+@Entity 
+@Table(name="CRICKET_PLAYERS") 
+public class Player { 
+    @Id
+    @Column(name="PLAYER_ID") 
+    private Integer playerId; 
+    
+    @Column(name="PLAYER_NAME") 
+    private String playerName; 
+    
+    @Column(name="PLAYER_AGE") 
+    private Integer playerAge; 
+    
+    @Column(name="LOCATION") 
+    private String location; 
+}
+
+
+Note: One entity class will be mapped with only one DB table.
+
+
++++++++++++++++++++ 
+Repository Interfaces 
+++++++++++++++++++++
+
+-> JPA provided repository interfaces to perform Curd Operations 
+
+-> For Every DB table we will create one Repository interface by extending Jpa Repository 
+
+Syntax: 
+--------- 
+
+public interface PlayerRepository extends CrudRepository<Entity, ID>{
+
+
+}
+
+( or )
+
+public interface PlayerRepository extends JpaRepository<Entity, ID>{
+
+
+}
+
+Example 
+--------
+
+public interface PlayerRepository extends CrudRepository<Player, Serializable>{ }
+
+Here In place of Serializable we can use ID also.
+but Serializable is generic so we can use that also.
+
+
+Note: When our interface extending properties from JPA Repository interfaces then JPA will provide implementation for our interface in Runtime using Proxy Design Pattern.
+
++++++++++++++++++++++ 
+Datasource properties 
+++++++++++++++++++++ 
+
+-> Datasource properties represents with which database we want connect 
+    - DB URL 
+    - DB Uname 
+    - DB Pwd 
+    - DB Driver Class 
+    
+-> We will configure datasource properties in application.properties file or application.yml file 
+
+spring.datasource.url=jdbc:mysql://localhost:3306/sbms 
+spring.datasource.username=root 
+spring.datasource.password=root
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+
++++++++++++++ 
+ORM Properties 
+++++++++++++++ 
+
+-> Hibernate provided some additional benefits while developing persistence logic 
+
+-> Tables can be created dynamically using "auto-ddl" property 
+Eg:
+    spring.jpa.hibernate.ddl-auto=update 
+
+-> We are calling JPA methods to perform DB operations. Those methods will generate queries to execute. To print those queries on console we can use 'show-sql' property.
+
+Eg:
+    spring.jpa.show-sql=true
