@@ -1,0 +1,57 @@
+Find By Methods 
++++++++++++++++
+
+-> Find By Methods are used to construct queries based on method name 
+
+-> Method Name is very important to prepare query dynamically 
+
+-> Based on our method name, JPA will prepare the query in Runtime and it will execute that query 
+
+Syntax : findBy+entityClassVariableName (parameters ...) 
+
+Note: findBy methods we will write in Repository interface ( abstract methods ) 
+
+Ex: Retrieve user data based on country_name        
+ 
+    findByCountry(String countryName); 
+
+Ex : Retrieve user data based on user_age 
+
+    findByAge(Integer age); 
+
+Note: findByXXX methods are used for only Retrieval (SELECT ) operation.
+
+++++++++++++++++++++++++++++++++ 
+FindBy Methods Examples++++++++++++++++++++++++++++++++
+
+
+public interface UserRepository extends  CrudRepository<User, Integer>{
+	
+	// select * from user_master where user_country=?;
+	public List<User> findByCountry(String cname);
+	
+	// select * from user_master where user_age=?;
+	public List<User> findByAge(Integer cage);
+	
+	// select * from user_master where user_age >= ?;
+	public List<User> findByAgeGreaterThanEqual(Integer age);
+	
+	//select * from user_master where user_country in (?,?,? ...);
+	public List<User> findByCountryIn(List<String> cname);
+	
+	// select * from user_master where user_country='India' and user_age=25;
+	public List<User> findByCountryAndAge(String cname,Integer age);
+	
+	
+	public List<User> findByCountryAndGender(String cname,String gender);
+	
+	// select * from user_master where user_country='India' and user_age=25 and user_gender='Male';
+	public List<User> findByCountryAndAgeAndGender(String cname,Integer age,String gender);
+	
+	
+}
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
