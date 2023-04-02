@@ -1,0 +1,261 @@
+POJO class
+===========
+
+=>Plain Old Java Object class
+
+=> The ordinary java class with out specialties is called POJO class
+
+=> The ordinary java class that compiled only using Jdk libraries is called POJO class
+
+=> The Ordinary java class that is not extending and implementing technology, framework apis classes and interfaces is called POJO class.
+
+note: POJO class is not against of inheritance or implementing interfaces .. It is against of
+inheriting and implementing technology, framework api classes and interfaces.
+
+=> oops, exception handling, awt,swing, collection api, reflection api, networking api, applets,multithreading and etc..part java language.
+
+=> Jdbc, servlet, jsp,  jndi, jsp ,ejb and etc.. called java technologies
+
+=> struts, spring, hibernate, spring rest and etc.. called java frameworks.. 
+
+
+Eg:
+
+class Test {
+
+    ....
+    ....
+}
+
+class Demo extends Test{
+    ...
+    ...
+}
+
+class Demo extends Thread{
+    ...
+    ...
+    ...
+} // POJO class  
+
+
+class Demo extends HttpServlet{
+    ....
+    ....
+    ....
+}
+// Not a POJO class
+
+
+// Part of RMI technology 
+class Demo implements java.mi.Remote{
+    ..........
+    ...........
+
+}// Not a POJO Class 
+
+
+// part of JDBC technology
+public class Demo1 implements java.sql.Connection{
+    ....
+    ....
+}// Not a POJO class 
+
+
+class Test extends Test1{
+    .....
+    .....
+}
+
+class Test1 implements java.sql.Statement{
+    ...
+    ...
+}
+
+Test, Test1 are not POJO classes.
+
+----------------------------------------------------------------------------------------------------------------
+
+
+
+
+class Test extends Test1{
+    .....
+    .....
+}
+
+class Test1 implements java.io.Serializable{
+    ....
+    ....
+    ....
+}
+
+// Serializable is part of java language so Test,Test1 are POJO classes
+
+
+---------------------------------------------------------------------------------------------------------------------
+
+
+// Exceptional Case 
+public class Demo{
+    public void m1(){
+        ....
+        .... // hibernate API 
+    }
+}// It is POJO class. but cannot be compiled just having JDK libraries in the class path (Exceptional case).
+
+
+
+
+@Entity -> hibernate api annotation
+class Demo{
+    ....
+    ....
+}// POJO Exceptional Case 
+
+
+=> POJO class need not follow java bean standards..
+
+=>Every Java bean class is POJO class .. but every POJO class is not Java bean class
+
+=> POJO classes can have b.methods with complex b.logics..
+
+=>Spring supports POJO and POJI model programming i.e the main classes/resources of the spring projects/Apps can be taken as ordinary classes (POJO classes) and ordinary interfaces (POJI) .. without having dependency with spring APIs.
+
+
+POJI (Plain Old Java Interfaces)
+================================
+
+=> An ordinary interface without specialties is called POJI.
+
+=> An ordinarily interface that can be compiled only using jdk libraries is called POJI.
+
+=> The interface that is not extending from Technology, framework api interfaces is called is called POJI.
+
+interface Test1{
+    ...
+    ...
+}// It is POJI 
+
+interface Test1 extends java.lang.Clonable{
+    ...
+    ...
+}// It is POJI 
+
+
+interface Test2 extends java.rmi.Remote{
+    ...
+    ...
+    ...
+} // It is not a POJI.
+
+------------------------------------------------------
+
+
+
+
+interface Test3 extends java.sql.Connection{
+    ...
+    ...
+}//Not a POJI 
+
+
+
+
+interface Test4 extends java.lang.Runnable{
+    ....
+    ....
+}// It is POJI 
+
+
+
+
+
+interface Test5 extends Test6{
+    ...
+}
+interface Test6{
+    ...
+    ...
+} // Test5 , Test6 are POJI's 
+
+
+
+
+@Remote -> given by EJB API 
+interface Test7{
+    ....
+    ....
+}
+
+=> POJI but cannot be compiled only having jdk libraries (Exceptional case).
+
+=> if project supports POJO,POJI model programming while developing main classes where b.logics and persistence logics.. then we can move those other frameworks having loose coupling.
+
+
+
+note:: POJO classes, POJIS are very much specific to programmer developed user-defined classes.. we can not use these terminologies while referring technology,framework apis supplied pre-defined classes.. 
+
+
+------------------------------------------------------------------------------------------------------------
+
+
+Bean class / Component class 
+=============================
+
+=>The java class that is having state (member variables) and behavior (methods) and state is used inside the behavior having reusability is called Bean class /component class..
+
+=> The methods of component/Bean class contains b.logic with reusability ..
+
+=> This class can be developed as POJO class or not POJO class
+
+=>This class not be developed as Java Bean..
+
+=> In real projects service class (contains b.logic), DAO class (persistence logic), controller class (monitoring logic) are component /Bean classes
+
+=>Servlet classes are component classes
+
+example
+========
+public class BankingService{
+    //state
+    private String branchName;
+    private String ifscCode;
+    private String location;
+    private long mid;
+    private long phoneNo;
+}
+
+public String transferMoney(long srcAcno,long destAcno,double amount){
+        ....
+        ....//b.logic to transfer money
+        ....(state will be used in b.logic)
+}
+
+=>Java bean class is different from Bean class /component..
+
+=>Java bean is helper class .. acting as data carrier
+
+=>Component /bean class is main class having main logics like b.logics, Persistence logics and etc...
+
+=>if needed u can use java bean as data carries b/w two bean classes/component classes
+
+
+
+
+
+
+
+note:: 
+
+JAva Bean :: Java class acting data carrier having setter and getter methods
+
+POJO class :: Ordinary java class supporting portability across the multiple java projects
+
+POJI :: Ordinary java Interface supporting portability across the multiple java projects
+
+Component/Bean class :: class having state, behavior with reusability.. can be developed as POJO or as Non POJO class.
+
+
+
+
