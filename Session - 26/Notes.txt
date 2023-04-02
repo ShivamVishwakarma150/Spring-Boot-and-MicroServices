@@ -145,4 +145,101 @@ public interface UserRepository extends  CrudRepository<User, Integer>{
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
+We can perform DB operations using Data JPA in below 3 ways 
+    1) Predefined methods 
+    2) findByXXX methods 
+    3) Custom Queries ( @ Query ) 
+    
+    
+++++++++++++++++++ 
+JpaRepository 
+++++++++++++++++++ 
+
+
+-> It is a predefined interface available in data jpa 
+
+-> Using JpaRepository interface also we can perform CRUD operations with DB tables 
+
+-> JpaRepository also having several methods to perform CRUD operations 
+
+-> JpaRepository having support for Pagination + Sorting + QBE (Query By Example) 
+
+Note: CrudRepository interface doesn't support Pagination + Sorting + QBE
+
+
+
+Sorting 
+++++++++ 
+-> Sorting is used to sort the records either in ascending or in descending order 
+
+-> We can pass Sort object as parameter for findAll ( ) method like below
+
+        //List<User> users= repository.findAll();
+		
+		//List<User> users = repository.findAll(Sort.by("age").ascending());
+		
+		List<User> users = repository.findAll(Sort.by("username","age").descending());
+		
+		users.forEach(user->{
+			System.out.println(user);
+		});
+
+
+++++++++++ 
+Pagination 
+++++++++++
+
+
+-> The process of dividing all the records into multiple pages is called as Pagination 
+
+-> If we retrieve all the records at once then performance issues we will get in the application 
+
+-> When we have lot of data in table to display then we will divide those records into multiple pages and we will display in front-end
+
+
+-> Data will be displayed based on below 2 conditions 
+
+    => PAGE NUMBER (User landed on which page) 
+
+    => PAGE SIZE (How many records should be displayed in single page)
+
+
+        int pageNo=0; // come from UI dynamically
+		int pageSize=5;
+		
+		PageRequest pageRequest =  PageRequest.of(pageIndex, pageSize);
+		
+		Page<User> pageData = repository.findAll(pageRequest);		
+		
+		int totalPages = pageData.getTotalPages();
+		System.out.println("Total Pages :: "+totalPages);
+		
+		List<User> users = pageData.getContent();
+		
+		users.forEach(user->{
+			System.out.println(user);
+		});
+		
+
+
+++++++++++++++++++++++ 
+Query By Example (QBE)
++++++++++++++++++++++ 
+
+-> It is used to prepare the query dynamically 
+
+-> To implement Dynamic Search Option we can use QBE concept
+
+        User entity = new User();
+		
+		entity.setCountry("India"); // set it if required
+		entity.setAge(25); // set it if required
+		
+		Example<User> example = Example.of(entity);
+		
+		List<User> users = repository.findAll(example);
+		
+		users.forEach(user->{
+			System.out.println(user);
+		});
 
