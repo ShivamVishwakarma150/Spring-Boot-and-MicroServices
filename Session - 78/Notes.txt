@@ -1,0 +1,154 @@
+Java Bean
+=========
+
+=> It is a java class that is developed by following some standards
+
+
+=> It is always used as helper class to pass multiple values as single object from one class to another class of same project or different projects.
+
+
+The Standards are 
+=================
+
+=>class must be public Class
+
+=>Recommended to implement java.io.Serializable (I)
+
+=> All member variables must be taken as private and non-static
+        (bean properties)
+
+=> Make sure that one Zero param constructor is going to come in the class directly or indirectly.
+directly -> given by programmer 
+indirectly -> given by compiler
+
+=> Every bean property (non-static variable) should have public setter method and one public getter method
+    (setter method is useful to set /modify data of bean property and getter method is useful to read data from bean property)
+
+we can send only Serializable data to internet.
+
+In java Bean we don't place methods having b.logic because java bean is a data carrier.
+
+Example
+=======
+
+public class CreditCardDetails implements java.io.Serializable{
+    // bean properties
+    private long cardNo;
+    private String cardType;
+    private String gateway;
+    private Date expiryDate;
+
+    // setter and getter methods
+
+    public void setCardNo(long cardNo){
+        this.cardNo = cardNo;
+    }
+
+    public long getCardNo(){
+        return cardNo;
+    }
+
+    .....
+    ...... // more setter and getter methods (4+4)
+    .....
+    .....
+}
+
+
+
+problem
+--------
+
+public class StudentProgressReportService{
+    
+    public String generateResult(int sno,String sname, String addrs, int m1,int m2,int m3){
+        ... //calculate totale ,avg
+        ...// generate result
+        ...
+    return "pass"/"fail";
+    }
+
+}
+
+Client App
+----------
+
+public class ClientApp{
+    public static void main (String args[]){
+        StudentProgressReportService service = new StudentProgressReportService();
+
+        String result = service.generateResult(101,"Akash","Bom",50,60,70);
+
+        System.out.println(result);
+
+    }
+}
+
+
+Designing java method having more than 3 params is bad practice , the reasons 
+
+a) we must remember the order of args while calling the method
+
+b) Though we do need not one or another arg value.. we still need to pass meaning full dummy value.
+
+c) Remembering lengthy signature of the method is very complex.
+
+
+Solution
+========
+
+take Java Bean type parameter for java method
+
+// java Bean 
+public class Student{
+    private int sno;
+    private String sname;
+    private String sadd;
+    private int m1,m2,m3;
+
+    //setter and getter methods 
+    ....... 6 setter, 6 getter methods 
+    .......
+}
+
+// service class / Business class 
+public class StudentProgressReportService{
+    
+    public String generateResult(Student s1){
+        ... // read data from "s1" object using
+        ... // getter methods and calculate total,avg 
+        ... // and generate result 
+        ...
+        return "pass"/"fail";
+    }
+
+}
+
+Client App
+----------
+// Now we don't have to bother about the order.
+public class ClientApp{
+    public static void main (String args[]){
+        StudentProgressReportService service = new StudentProgressReportService();
+
+        Student st = new Student();
+        st.setSno(101);
+        st.setM1(90);
+        st.setM2(30);
+        st.setName("Akash");
+
+        String result = service.generateResult(st);
+        S.O.Println(result);
+    }//main
+}//class 
+
+Advantages of Working with Java bean.
+=====================================
+
+a) method signature becomes simple signature to remember
+
+b) While setting data java bean class obj we need not to follow the order
+
+c) the names of setter methods helps a allot while setting data to bean properties of java bean class obj
+
+d) we can ignore to set one or two values which unknown to us.
