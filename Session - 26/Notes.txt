@@ -54,4 +54,74 @@ public interface UserRepository extends  CrudRepository<User, Integer>{
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
+++++++++++++++++
+Custom Queries
+++++++++++++++++
+
+-> We can write our own query and we can execute that query using JPA that is called as Custom Query 
+
+-> Custom Queries we can write in 2 ways
+    1) HQL Queries 
+    2) Native SQL Queries
+
+Native SQL Vs HQL 
+++++++++++++++++ 
+
+SQL - Standard Query Language 
+HQL - Hibernate Query Language
+
+-> Native SQL queries are DB dependent 
+-> HQL Queries are DB in-dependent 
+
+
+-> Native Queries will use table name and column names in the query directly 
+-> HQL queries will use 'Entity Class Name' and 'Entity Class Variable Names' in the query 
+
+
+-> Native SQL queries will execute in Database Directly 
+-> HQL queries can't execute in DB directly (HQL queries will be converted to SQL query using Dialect class before execution) 
+
+Note: In Hibernate we have Dialect classes for every database 
+
+-> As SQL queries are executing directly in DB hence performance wise they are good. HQL queries should be converted before execution hence HQL queries will take more time than SQL queries for execution. 
+
+
+-> Performance wise SQL queries are good 
+-> Maintenance wise HQL queries are good
+
+
+
+
+# Retrieve all records from table 
+SQL : SELECT * FROM USER_MASTER 
+HQL : From User 
+
+
+
+# Retrieve all records of users who are belongs to country 'India' 
+SQL : SELECT * FROM USER_MASTER WHERE USER_COUNTRY = 'INDIA' 
+HQL : From User where country='India' 
+
+
+
+# Retrieve users who are belongs to 'India' and age is 25 
+SQL : SELECT * FROM USER_MASTER where USER_COUNTRY='INDIA' AND USER_AGE =
+25
+HQL : From User where country='India' and age = 25 
+
+
+
+# Retrieve User ID and User Name based on User Country 
+SQL : select user_id, user_name from User_master where
+user_country='India'; 
+HQL : select userid, username from User where country='India'
+
+
+Note: If we don't have projection then we can start HQL query with 'FROM' keyword. If we have projection then we need to start with 'SELECT' keyword 
+
+Note: Projection means retrieving specific columns data from the table 
+
+-> To write custom queries we will use @Query annotation in Repository interface
+
+
 
