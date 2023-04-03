@@ -1,0 +1,128 @@
+++++++++++++ 
+Primary Keys 
++++++++++++ 
+
+-> Primary Key is a constraint (rule) 
+
+-> Primary constraint is the combination of below 2 constraints 
+
+1) UNIQUE 
+2) NOT NULL
+ 
+-> When we use PRIMARY KEY constraint for a column then that column value shouldn't be null and it should be unique. 
+
+-> It is not recommended to set values for Primary Key columns manually 
+
+-> We will use Generators to generate the value for primary key column
+
+-> To use Generator we will specify @GeneratedValue annotation
+
+-> In MYSQL Database we will use auto_increment to generate value for primary key. To specify auto_increment we will use IDENTITY generator.
+
+    @Id
+    @Column(name = "PRODUCT_ID") 
+    @GeneratedValue(strategy=GenerationType.IDENTITY) 
+    private Integer pid; 
+
+-> In Oracle database we will use sequence concept to generate value for primary key column. For every primary key one sequence will be created in database 
+
+Ex:
+create sequence product_id_seq 
+start with 101 
+increment by 1; 
+
+-> If we want to generate primary key column value like below then we should go for Custom Generator (Our own Generator we have to develop) 
+
+IBM01 
+IBM02 
+IBM03 
+IBM04
+
+
++++++++++++++++++++++++ 
+Composite Primary Keys 
++++++++++++++++++++++++ 
+
+-> Table can have more than one primary key column 
+
+-> If table contains more than one primary key column then those primary keys are called as Composite Primary Keys 
+
+CREATE TABLE ACCOUNTS (
+    ACC_ID NUMBER, 
+    ACC_NUMBER NUMBER, 
+    HOLDER_NAME VARCHAR2(50), 
+    ACC_TYPE VARCHAR2(10), 
+    BRANCH_NAME VARCHAR2(10) PRIMARY KEY (ACC_ID, ACC_NUMBER, BRANCH_NAME) 
+)
+
+Note: For Composite Primary Keys we can't use Generator. We have to set values manually.
+
+@Data
+@Embeddable
+public class AccountPK implements Serializable {
+	private Integer accId;
+	private String accType;
+	private String holderName;
+	
+	
+}
+
+
+@Data
+@Entity
+@Table(name="BANK_ACCOUNTS")
+public class Account {
+	
+	@Column(name="BRANCH_NAME")
+	private String branchName;
+	
+	@Column(name="MIN_BAL")
+	private Double minBal;
+	
+	@Embedded
+	private AccountPK accPk;
+}
+
+public interface AccountRepository extends JpaRepository<Account, AccountPK>  {
+
+}
+
+
+@Service
+public class AccountService {
+	private AccountRepository accRepo;
+	
+	public AccountService(AccountRepository accRepo) {
+		this.accRepo = accRepo;
+	}
+	public void getDataUsingPK() {
+
+		AccountPK pk = new AccountPK(); 
+
+		pk.setAccId(101);
+		pk.setAccType("CURRENT");
+		pk.setHolderName("IBM");
+
+		Optional<Account> findById = accRepo.findById(pk); 
+
+		if (findById.isPresent()) {
+			System.out.println(findById.get());
+		}
+
+	}
+	public void saveAccData() {
+		AccountPK pk = new AccountPK();
+		
+		pk.setAccId(104);
+		pk.setAccType("SAVINGS");
+		pk.setHolderName("IBM");
+		
+		Account acc = new Account();
+		acc.setMinBal(4000.00);
+		acc.setBranchName("Mumbai");
+		
+		acc.setAccPk(pk); // setting pk class obj to entity obj
+		
+		accRepo.save(acc);
+	}
+}
