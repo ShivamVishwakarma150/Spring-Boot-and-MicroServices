@@ -1,0 +1,100 @@
+++++++++++++++++++++++++ 
+Timestamping in Data JPA 
+++++++++++++++++++++++++ 
+
+-> For every table we need to maintain below 4 columns to analyze data 
+
+CREATED_DATE 
+CREATED_BY 
+
+UPDATED_DATE 
+UPDATED_BY 
+
+Note: In realtime we will maintain these 4 columns for every table 
+
+-> CREATED_BY & UPDATED_BY represents which user creating and updating records in table. In Web applications we will use logged in username and we will set for these 2 columns. 
+
+-> CREATED_DATE & UPDATED_DATE columns represents when record got created and when record got updated. 
+
+-> Instead of setting CREATED_DATE & UPDATE_DATE columns values manually we can below annotations 
+    1) @CreationTimestamp 
+    2) @UpdateTimestamp
+
++++++++++++++++++++++++++++++++ Example +++++++++++++++++++++++++++++++++++
+
+@Data
+@Entity
+@Table(name="PRODUCT_MASTER")
+public class Product {
+	
+	@Id
+	@Column(name="PRODUCT_ID")
+	private int pid;
+	
+	@Column(name="PRODUCT_NAME")
+	private String pname;
+	
+	@Column(name="PRODUCT_PRICE")
+	private Double price;
+	
+	@CreationTimestamp
+	@Column(name="CREATED_DATE",updatable=false)
+	private LocalDateTime createdDate;
+	
+	@UpdateTimestamp
+	@Column(name="UPDATED_DATE",insertable=false)
+	private LocalDateTime updatedDate;
+}
+
+-> updatable = false means that column value should not updated when we do update operation on the table. 
+
+-> insertable = false means that column value should not inserted when we do insert operation on the table.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+
+Q ) Why to use Wrapper classes instead of Primitive data types in Entity class ?
+
+-> Primitive data types will take default values when we don't set the value for variable 
+
+Ex : if we take 'price variable with double data type' then it will insert price as '0' if we don't set price for the record. It is not recommended. 
+
+-> If we take wrapper classes it will consider 'null' as default value when we don't set value for a variable.
+
+
+++++++++++++ 
+Primary Keys 
++++++++++++ 
+
+-> Primary Key is a constraint (rule) 
+
+-> Primary constraint is the combination of below 2 constraints 
+
+1) UNIQUE 
+2) NOT NULL
+ 
+-> When we use PRIMARY KEY constraint for a column then that column value shouldn't be null and it should be unique. 
+
+-> It is not recommended to set values for Primary Key columns manually 
+
+-> We will use Generators to generate the value for primary key column
+
+-> To use Generator we will specify @GeneratedValue annotation
+
+-> In MYSQL Database we will use auto_increment to generate value for primary key. To specify auto_increment we will use IDENTITY generator.
+
+    @Id
+    @Column(name = "PRODUCT_ID") 
+    @GeneratedValue(strategy=GenerationType.IDENTITY) 
+    private Integer pid; 
+
+-> In Oracle database we will use sequence concept to generate value for primary key column. For every primary key one sequence will be created in database 
+
+Ex:
+create sequence product_id_seq start with 101 increment by 1; 
+
+-> If we want to generate primary key column value like below then we should go for Custom Generator (Our own Generator we have to develop) 
+
+TCS01 
+TCS02 
+TCS03 
+TCS04
