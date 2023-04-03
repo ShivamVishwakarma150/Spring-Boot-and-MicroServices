@@ -1,0 +1,112 @@
+++++++++++++++++++++++++ 
+TX management in Data JPA 
+++++++++++++++++++++++++ 
+
+-> Unit amount of work is called as Transaction 
+
+-> When we are performing non select operations (insert/update/delete) we need to deal with Transactions 
+
+-> For select operations transaction is not required (Retrieval) 
+
+-> In Data JPA it is care of transaction management 
+
+-> If all operations are successful then we should commit transaction 
+
+-> If any operation is failed in the transaction then we need to rollback that transaction 
+
+-> When we are working with transactions we need to follow ACID properties 
+
+    A - Atomicity 
+    C - Consistence 
+    I - Isolation 
+    D - Durability 
+
+-> COMMIT means storing data in database permanently 
+
+-> ROLLBACK means bringing database to previous state
+
+
++++++++++++++++++++++++++++++ Example for rollback +++++++++++++++++++++++++
+
+@Transactional(rollbackOn = Exception.class)
+	public void saveData() {
+
+		Employee emp = new Employee();
+		emp.setEmpId(201);
+		emp.setEmpName("Saurabh");
+		emp.setEmpSal(25000.00);
+		empRepo.save(emp);
+
+		int i=10/0;
+		
+		Address addr = new Address();
+		addr.setAddrId(501);
+		addr.setEmpId(201);
+		addr.setCity("Mumbai");
+		addr.setState("MH");
+		addr.setCountry("India");
+		addrRepo.save(addr);
+	}
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Requirement : Develop Data JPA Application to insert image file into database table +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+USER_TBL (TABLE NAME) ------------------------------------- 
+USER_ID     INTEGER     PRIMARY KEY     AUTO_INCREMENT 
+USER_NAME   VARCHAR 
+USER_EMAIL  VARCHAR
+USER_PHOTO  BLOB
+
+
+
+@Data
+@Entity
+@Table(name="USER_TBL")
+public class User {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="USER_ID")
+	private Integer userId;
+	
+	@Column(name="USER_NAME")
+	private String userName;
+	
+	@Column(name="USER_EMAIL")
+	private String userEmail;
+	
+	@Column(name="USER_IMAGE")
+	@Lob
+	private byte[] userImage;
+}
+
+
+@Service
+public class UserService {
+
+	@Autowired
+	private UserRepository userRepo;
+	
+	public void saveUser() throws IOException {
+		String imagePath="D:\\user.png";
+		User user= new User();
+		user.setUserName("Suresh");
+		user.setUserEmail("Suresh@gmail.com");
+		long size=Files.size(Paths.get(imagePath));
+		System.out.println(size);
+		byte[] arr=new byte[(int)size];
+		FileInputStream fis =new FileInputStream(new File(imagePath));
+		
+		fis.read(arr);
+		fis.close();
+		
+		user.setUserImage(arr);
+	
+		
+		userRepo.save(user);
+	}
+}
+
+
+
