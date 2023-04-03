@@ -1,0 +1,97 @@
+Spring Bean class
+==================
+
+=>The java class whose object is created managed by spring Containers (part of spring framework) is
+called Spring bean i.e the whole life cycle spring bean class will taken care by spring containers.
+
+=>A container is s/w program that manages whole life cycle of given resource/class i.e takes cares of
+all activities from birth to death (Object creation to object destruction).
+
+
+=> Container is like an aquarium taking care of fishes called comps/resources/classes.
+
+
+=> Servletcontainer takes care of the servlet comps life cycle
+
+=> Jsp Container takes care of the jsp comps life cycle
+
+=> Spring Containers takes cares of spring beans life cycle.
+
+note: spring containers no way related to servlet container and jsp container .In fact spring containers
+not alternate servlet container, jsp container.
+
+=> Spring f/w given two built-in spring Containers
+a) BeanFactory Container (Basic Container)
+b) ApplicationContext container (advanced container)
+
+
+ApplicationContext container = BeanFactory container ++
+
+Refer PNG file... 1.1
+
+
+=> Spring bean class can be a user-defined class or pre-defined class or third party supplied java class
+but its life cycle management (object creation to object destruction) must be done by Spring containers.
+
+
+=>Spring Bean class can be developed as POJO class or Non POJO class (POJO class is recommended)
+
+=>Spring Bean class can be a Java bean class or component /Bean class.
+
+=> Generally, we will not take abstract classes,interfaces as the spring beans because they
+can not be instantiated (object creation is not possible)
+
+=> To make java class spring bean class we need to use <bean> tag in xml file or @Component annotation.
+
+=> We can give instructions/inputs to Springcontainers either using xml file(spring bean cfg file) or using annotations (best).
+
+    //using xml cfgs (Giving details to Spring container using xml file and xml tags)
+    <bean id="bankService" class="com.nt.beans.BankServiceMgmt"/>
+    // we pass fully qualified Name of a class 
+    // id internally becomes spring bean class object name when spring container creates the object.
+
+                    or 
+
+    // Annotation cfgs 
+    (Giving details to spring container using annotations)
+
+    package com.sv.beans;
+
+    @Component("bankService")
+    public class BankServiceMgmt{
+        ...
+        ...
+        ...
+    }
+
+Refer 1.2 in Notes.PNG 
+
+
+=>Generally in core java standalone Apps we manually create object using "new" operator because we need to create less no.of objects as standalone App is specific to computer and will be operated by 1 user at time..
+
+=> While dealing web applications(websites), distributed Apps, enterprise Apps .. we will be having lacks of users using multiple services simultaneously.. So huge no.of objects creation, management, destruction is required continuously 24/7
+For this we take the support containers for automating the whole process.
+
+Q) every JAva bean class is POJO class? (true)
+
+Q) every POJO class is a Java bean class? (false)
+
+Q) Spring Bean class must be a POJO class? (false)
+
+Q) Spring Bean class can be a POJO class? (true)
+
+Q) Third party supplied java class can be taken as spring bean? (true)
+
+Q) we create objects for spring bean classes? (false)
+
+Q) spring containers takes all java classes of jdk library as spring bean classes automatically? (false)
+
+Q) Java bean can not be taken as spring bean? (false)
+
+Q) The id of spring bean becomes spring bean class object internally (true)
+
+Q) Every Spring bean class must component class ? (false)
+
+Q) Component class can be taken as spring bean class? (true)
+
+
