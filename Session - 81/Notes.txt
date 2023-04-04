@@ -1,0 +1,159 @@
+Two types of frameworks based on mode of the Application development
+===========================================
+
+a) Invasive Framework
+b) Non-Invasive Framework
+
+
+a) Invasive Framework
+---------------------
+
+    =>Here the resources/classes framework based App development are tightly coupled with Framework APIs i.e the classes of the App development should implement or should extend from Framework API interfaces or classes.
+
+    => Here the App classes developed programmer for certain Framework .. should always be executed in the same framework and can not be moved to another frameworks.
+
+        eg: Struts Framework
+
+    => Invasive frameworks do not support POJO and POJI model programming
+
+
+b) Non-invasive Framework
+--------------------------
+    => Here the resources/classes framework based App development are loosely coupled with Framework APIs i.e the classes of the App development need not to implement or extend from Framework API interfaces or classes.
+
+
+    => Here the resources/classes of the App development will be developed as POJO classes i.e it support POJO/POJI model programming..
+
+    
+    => Here the App classes developed from certain framework can be moved another frameworks
+    dynamically because they are POJO classes
+    eg: Hibernate, Spring, spring boot, JSF and etc..
+
+
+
+Spring 
+======
+
+type: Application framework or JEE framework
+vendor :: Interface21 /pivotal team
+open source framework
+Creator :: Mr.Rod jhonson
+spring libraries (jars) :: earlier they used give in form of zip file .. now they stopped giving.. asking to use Maven /Gradle dependencies mechanism (download jar files from internet repositories dynamically).
+
+Repository means : small permanent storage places
+
+
+
+Q)How an Open Source company survive financially?
+
+Ans) 
+
+    a) By conducting corporate training on new technologies
+    b) By conducting certification exams
+    c) By conducting certification exams training programs
+    d) By providing services to s/w companies if they stuck up in the middle of the Project development. and etc..
+
+
+Q) Is spring is alternate for EJB?
+Ans) EJB is just distributed Technology to develop distributed Apps where Spring is all-rounder or
+JEE framework which can be used to develop standalone Apps,web applications, distributed Apps and etc..
+
+
+Q) Is spring alternate to Struts ?
+Ans) NO, Struts is just for web application development where as Spring is all-rounder or
+JEE framework which can be used to develop standalone Apps,web applications, distributed Apps and etc..
+
+
+Q) Is spring alternate for JEE Technologies?
+Ans) No, Spring is a framework internally using JEE technologies to simplify the Application development.. i.e spring is alternate JEE technologies rather it compliments them by internally using them,
+
+Q) Is spring boot is alternate spring ?
+Ans) No, spring boot internally uses spring framework and simplifies spring Apps development.
+
+note: spring boot extension spring to simplify spring Apps development.
+
+note:: Boilerplate code (common logics) of Java, JEE Technologies programming will be avoided by spring framework. 
+
+note:: Boilerplate code (comnon logics) of spring programming will be avoided by spring boot framework.
+
+Spring/spring boot modules: core, aop, jee, Txmgmt, jndi,orm, jdbc, mvc, mail, jms and etc..
+
+Spring/spring boot extension modules :: security, batch, oauth, social, spring data jpa,spring mongo db,spring cloud,spring rest and etc..
+
+spring micro services concepts ::
+spring bean life cycle management
+eureka server and client,
+Load Balancer,
+Flyway Database,
+ZUUL API gateway,
+Spring config server & client,
+circuit breaker,
+Retry limiter pattern,
+rate limiter pattern,
+and etc...
+
+--------------------------------------------------------------------------------------------------------------
+
+
+Q) Why spring or spring boot framework libraries are given in the form of modules?
+Ans) Generally we do not or we can not use all spring/spring boot modules in one Project development.. we use different sets of modules in different projects.. So they releases spring/spring boot libraries (jar files) as modules.. So that we can add only those libraries of modules as per the project requirement.
+
+
+Why the name spring is given for spring framework?
+Ans) The creator liked spring season of his nepal trip ...so he named framework as spring boot.
+
+
+we developing spring Apps in 4 approaches
+approach1) Using Xml driven cfgs
+approach2) Using Xml + Annotation driven cfgs 
+approach3) Using 100% code driven/Java Config cfgs
+approach4) Using Spring Boot 
+
+
+
+
+Spring Core module
+==================
+=>Base module for other other modules
+=>if this module is used alone ..we can develop only standalone Apps in spring
+
+=>This modules gives Two spring containers (BeanFactory,ApplicationContext) to perform spring beans life cycle management and Dependency Management
+
+Spring Bean life cycle management 
+-----------------------------------
+=>if we given java class to Spring Containers .. it will care of total life cycle of that spring Bean like Loading bean class, creating object,management object, destroying object.
+
+
+
+Dependency Management
+======================
+=> Assigning/Arranging Dependent class object to target class object dynamically is called Dependency Management.
+
+=>The spring bean/class that uses other spring services is called target class /target spring bean/main class
+
+=>The spring bean/class that acts as helper class for other spring beans/classes is called Dependent class/helper class spring Container
+
+    =>Flipkart need DTDC services for courier actives So flipkart is target class,DTDC is dependent class.
+
+    =>Vehicle needs Engine services for moving/driving actives So Vehicle is target class, Engine is dependent class.
+
+    =>Student needs CourseMaterial services for preparation actives So Student is target class,CourseMaterial is dependent class.
+
+=>if we give target and dependent class to spring containers.. it not only manages their life cycle.. it also assigns/arranges to Dependent class obj to target class object..So that target class can use dependent class services directly with out arrange them separately.
+
+Refer 1.1 in Notes.png 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
