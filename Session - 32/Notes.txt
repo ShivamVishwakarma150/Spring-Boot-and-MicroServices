@@ -1,0 +1,17 @@
+++++++++++++++++++++ 
+What is Context-Path ?
+++++++++++++++++++++ 
+ 
+-> Context-Path represents name of our application 
+
+-> In Spring Boot, the default context-path is empty
+
+-> In Spring Boot we can set our own context-path using below property in application.properties file server.servlet.context-path=/webapp 
+
+-> When we set context we have to access our application using context-path in URL. URL : http://localhost:8080/webapp/welcome 
+
+Note: Embedded Tomcat Server will run on the port number 8080. This is default behavior. 
+
+-> We can change embedded server port number using below property in application.properties server.port=9090
+
+
