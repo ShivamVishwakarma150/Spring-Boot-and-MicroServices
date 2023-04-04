@@ -1,0 +1,28 @@
+++++++++++++++++++++++++++++++++++++++++++++++ 
+Building First Web Application using Spring Web MVC 
++++++++++++++++++++++++++++++++++++++++++++++ 
+
+1) Create Spring Starter application with below dependencies 
+    a) spring-boot-starter-web 
+    b) tomcat-embed-jasper 
+    c) devtools 
+
+
+2) Create Controller class and write Required methods 
+
+3) Create View Files with Presentation logic 
+
+4) Configure ViewResolver in application.properties file with prefix and suffix 
+
+5) Run the application and test it. 
+
+Note-1 : web-starter will provide the support to build web apps with MVC architecture and it provides Tomcat as default embedded container (we no need to setup server manually). 
+
+Note-2 : tomcat-embed-jasper will provide the support to work with JSP files in Spring Web MVC 
+
+Note-3 : devtools is used to re-start the server when changes happened in the code. 
+
+Note-4 : Java class will be represented as a Spring Controller using @Controller annotation
+
+
+Note-5 : Controller class methods should be binded to HTTP Protocol methods to handle HTTP Requests
