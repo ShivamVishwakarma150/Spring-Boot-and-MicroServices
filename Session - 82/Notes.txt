@@ -1,0 +1,96 @@
+Dependency Management
+======================
+=> It is all about keeping Dependent class object ready for target class object,So the target class can the use the services of dependent class while executing its own services.
+
+Two types Dependency Management (is called as IOC :: Inversion of Control)
+----------------------------------------------------------------
+
+1) Dependency Lookup
+2) Dependency Injection
+
+1) Dependency Lookup
+=====================
+
+=> Here the target class should spend time and should write some logic to search and get Dependent class obj from various resources/places.
+
+=> target class searches for Dependent class obj and pulls it to target class object.
+
+eg1:: Student getting Course material by asking/request for if from the faculty /College
+
+eg2: Java class writing Jndi lookup code to search and get DataSource object from Jndi registry.
+
+JNDI :: Java Naming And Directory Interface.
+
+Refer 1.1 in Notes.PNG
+
+=>To provide global visibility and accessibility to any java object we keep its reference in the Jndi registry
+
+=> In Jndi registry we can keep only java objects references
+
+=> The process searching and getting object references from Jndi registry is called Jndi lookup operation
+
+eg:: Cos registry, RMI registry, weblogic registry and etc..
+
+note:: InitialContext object establish the connection b/w Java App and Jndi registry and provides base to perform lookup operation.
+
+
+
+pros of Dependency Lookup
+=========================
+=> The target class can search and get only required dependent class objects.
+
+cons 
+====
+=> The target class should spend time and should write logic to search and gets Dependent objects.
+
+
+
+
+2. Dependency Injection
+========================
+=> Here the underlying container/server/framework/JVM/JRE /another service dynamically assigns Dependent class object to target class object at runtime.
+
+=>Here the underlying server/container/.... pushes dependent class obj to target class object
+
+eg1:: Student getting Course material dynamically faculty the moment he joins the course
+
+eg2:: The way JVM assigns default values(dependent values) to object (like 0,0.0,null and etc..) the moment JVM creates the object
+of java class (target class)
+
+eg3:: The way Servlet Container assigns SerlvetConfig object to Servlet class object that moment it creates Serlvet class obj.
+
+----------------------------------------------------------------------------------------------------
+
+pros
+====
+=>Target class can directly use dependent class object and its services
+
+=> Target class need not to spend time or need not write logics to search and get dependent class obj because the underlying container/server /.. takes cares of this work
+
+
+cons 
+====
+=> The underlying server/container/... may inject both necessary and unnecessary objects.
+
+----------------------------------------------------------------------------------------------------
+
+
+=>spring containers support both Dependency lookup and Dependency Injection.. but realtime projects we use Dependency Injection.
+
+
+Dependency Management/IOC in spring
+==================================
+
+1. Dependency Lookup
+
+
+2. Dependency Injection
+
+    a) setter Injection
+    b) constructor Injection
+    c) Method Injection/Method Replacer
+    d) Field Injection (only in annotation driven configuration)
+    e) Aware Injection /Interface injection/Contextual Injection
+    f)Lookup Method Injection
+
+
