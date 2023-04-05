@@ -1,0 +1,128 @@
+++++++++++++++++++++++++++++++++++++ 
+Forms Development Using Spring Web MVC ++++++++++++++++++++++++++++++++++++ 
+
+-> Forms are very important in every web application 
+
+-> Forms are used to collect data from the user Ex: Login form, Registration form, Search Forms etc.... 
+
+-> Spring Web MVC provided form tag library to develop forms easily 
+
+-> Spring Form Tag Library contains several Tags
+
+<form:form >
+<form:input > 
+<form:password> 
+<form:radioButton> & <form:radioButtons> <form:select> 
+<form:option> & <form:options> 
+<form:checkbox> & <form:checkboxes> 
+<form:hidden> 
+<form:error> 
+
+
+-> Spring Web MVC support Form Binding that means it can bind form data to object and vice versa.
+
+Note: In servlets we use request.getParameter("key") to capture form data. 
+
+-> In Spring Web MVC we no need to use request.getParameter("") to capture form data bcz Web MVC having Form Binding Support.
+
+-> To achieve Form Binding we need to create a binding class (class variables will be mapped with form fields) 
+
+-> To work with Spring Form Tag library we need to use below taglib
+
+directive <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"
+%>
+
+Steps to build first form based application +++++++++++++++++++++++++++++++++++++++++++ 
+
+1) Create boot app with below dependencies 
+    a) web-starter 
+    b) devtools 
+    c) lombok 
+    d) tomcat-embed-jasper 
+2) Create Form Binding class 
+3) Create a controller class with required methods 
+    a) method to display empty form (GET Request Method) 
+    b) method to handle form submission (POST Request Method) 
+4) Create View Page with presentation logic 
+
+5) configure view resolver in application.properties file
+
+----------------------------------------------------------------------------------------------------
+@Data
+public class Product {
+	private Integer productId;
+	
+	private String productName;
+	
+	private Double productPrice;
+}
+
+
+@Controller
+public class ProductController {
+	
+	@GetMapping("/")
+	public String getProductForm(Model model) {
+		Product productObj = new Product();
+		
+		model.addAttribute("product", productObj);
+		
+		return "index";
+	}
+	
+	@PostMapping("/product")
+	public String handleFormSubmit(Product product,Model model) {
+		System.out.println(product);
+		
+		model.addAttribute("msg", "Prodcut saved Successfully");
+		
+		return "success";
+	}
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<form:form action="product" modelAttribute="product" method="POST">
+		<tr>
+			<td>Product ID</td>
+			<td><form:input path="productId"/></td>
+			
+		</tr>
+		<tr>
+			<td>Product Name</td>
+			<td><form:input path="productName"/></td>
+			
+		</tr>
+		<tr>
+			<td>Product Price</td>
+			<td><form:input path="productPrice"/></td>
+			
+		</tr>
+		<tr>
+			<td><input type="submit" value="Submit"/></td>
+			
+		</tr>
+	</form:form>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>${msg}</h1>
+	<a href="/">Go Home</a>
+</body>
+</html>
+
+
+
