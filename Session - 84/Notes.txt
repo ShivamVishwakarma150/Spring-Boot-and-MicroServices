@@ -1,0 +1,166 @@
+=> Spring Container /IOC Container creates spring class object with bean id (takes bean id as the object name / reference variable name).
+
+=> Spring Container identifies spring bean with its bean id if want to get spring bean class from spring container as if you want to inject one spring class object to another spring bean class object then in tha case we need to use bean ids.
+
+Setter Injection - Dependency Injection
+----------------------------------------
+=> if the Spring Container uses setter method of target class to inject/assign Dependent class object to target class object then it is called setter Injection..
+
+=>For this we need to given instructions to IOC container using <property> in springBean cfg file (applicationContext.xml) and we should
+also place setter method in target class.
+
+Refer 1.2 in Notes.png 
+
+WishMessageGenerator.java
+=========================
+
+package com.st.beans;
+
+public class WishMessageGenerator{
+
+    // HAS-A property (Composition)
+    private Date date;
+
+    // setter method supporting setter Injection
+    public void setDate(Date date){
+        this.date=date;
+    }
+
+    // b.method 
+    public String generateMessage(String user){
+        
+        // get current hour of the day 
+        // current hour of the day in 24 hours format (0 to 23)
+        int hour = date.getHour(); 
+
+        if(hour<12)
+            return "GM"+user;
+        else if(hour<16)
+            return "GA"+user;
+        else if(hour<20)
+            return "GE"+user;
+        else 
+            return "GN"+user;
+
+
+    }
+
+}
+
+applicationContext.xml (com/st/cfgs)
+------------------------------------
+
+<beans>
+    <!- spring bean cfgs->
+
+    //dependent class 
+    <bean id="dt" class="java.util.Date"/>
+
+    // target class 
+    <bean id="wmg" class="com.st.beans.WishMessageGenerator">
+    
+        // for setter Injection
+        <property name="date" ref="dt"/>
+
+        // date -> property name 
+        // dt -> dependent class bean id to inject dependent spring bean obj to target class obj 
+    
+    </bean>
+
+</beans>
+
+Client App (SetterInjectTest.java)
+===================================
+
+package com.st.test;
+
+... .. // pkgs imports
+
+public class SetterInjectTest{
+    public static void main(String []args){
+
+    //Locate and hold spring cfg file name and location
+    FileSystem Resource res=new FileSystem Resource(".../com/st/cfgs/applicationContetx.xml");
+
+    //create IOC Cotainer
+    XmlBeanFactory factory=new XmlBeanFactory(res);
+
+    // Ask SpringContainer/ IOC Container to give Target spring bean class obj 
+    Object obj=factory.getBean("wmg");
+
+    // invoke b.method
+    // # String result = obj.generateMessage("Raja"); // Not Allowed
+    // (If super class reference variable is pointing to sub class object then we cannot call direct method of sub class so above code give compile time error .. To make it possible use down casting/typecasting)
+
+    
+    //type casting
+    WishMessageGenerator generator=(WishMessageGenerator)obj;
+
+    // Now we can invoke the b.method()
+    // String result = generator.generateMessage("Raju");
+
+    System.out.println("Wish Message is ::"+result);
+
+    }
+    
+}
+
+
+w.r. to code 
+=============
+1) Client App call factory.getBean(-) method
+
+2) IOC container searches for spring bean cfg whose gean bean id is "wmg" and loads class and creates the object.
+
+3)Based <property name="date" ref="dt"> IOC container becomes ready to perform setter Injection "date" property
+
+4) takes ref="dt" and searches for spring bean class cfg with bean id is "dt" and finds java.util.Date class, So Loads and creates the object
+
+5) Spring container creates calls wmg.setData(dt) method to complete setter Injection
+
+6) factory.getBean("wmg") returns WishMassageGenerator class obj having Date class obj in it back to Client App and we are referring that object with java.lang.Object class ref variable.
+
+
+--------------------------------------------------------------------------------------------------
+
+
+
+Setup Required for 1st Application development 
+===============================================
+
+a) jdk any version (jdk1.8+)
+b) Eclipse IDE (2019+)
+    |-> contains build-in maven support
+
+
+
+
+Procedure to Develop spring First App (Setter Injection using Eclipse IDE)
+=================================================
+step1) Launch eclipse IDE by choosing workspace folder name and location.
+
+workspace folder -> The folder where projects of eclipse IDE will be saved.
+
+
+
+maven/gradle
+============
+
+maven/gradle -> Build tools Simplifying all aspects project development, executing,Testing, release and etc..
+
+=>Building the Project/App is nothing keeping the Project/App ready for execution/release.
+
+Features
+---------
+
+a) gives standard project directory structures (archetypes) for different types apps
+
+b) Allows to download jar files/libraries/Dependencies dynamically to projects from Internet repositories
+
+c) Gives built-in de-compilers to see the source code of api.
+
+d) Allows to pack the code in different formats like jar file,war file and etc..
+
+e) Can run JunitTest cases and can generate Test report
+
+f) if we add main jar files/libraries ..it automatically downloads dependent jars/libraries.. and etc..
