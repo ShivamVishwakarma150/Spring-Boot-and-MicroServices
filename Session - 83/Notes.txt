@@ -1,0 +1,137 @@
+IOC : Inversion of Control
+
+Plan/Theory 
+=>IOC is specification providing rules and guidelines to manage dependency between target and dependent classes. It is like a Plan.
+
+Implementation/Practical 
+=>Dependency lookup and Dependency Injection are two implementation models of IOC /Dependency Management (It is like execution of a plan)
+
+Spring Container are designed to perform Dependency Management /IOC.. So they are also called as IOC containers..
+
+Spring Container ----> IOC Container
+----------------------------------------------------------------------------------------------------
+
+Why it is named as IOC ?
+(or)
+Why Dependency Management is named as IOC?
+
+=>IOC means Inversion of Control i.e reversing the control/process that is actually happening..
+
+=>Generally programmers hold control to assign /arrange dependency class object to target class obj.. In IOC implementations that control/power is totally taken by the underlying server/container/framework/JVM.. i.e it is reverse/inversion of the regular process,So it
+is named as IOC (given by Martin Flower)
+
+=>Spring Containers/IOC container are light weight containers because.
+
+    a) They can created in any kind java code by just instantiating one pre-defined java class given spring API (spring framework packages)
+
+    b) Spring Container/IOC container can be created directly on top of JVM i.e no need of having any heavy webServers(Tomcat) and Application servers(widlfy)
+
+Note : Spring containers are not alternate for servlet container, jsp Containers
+
+note:: In Xml driven cfgs based spring App development.. we need to pass spring bean cfg file(xml file) as input file while creating spring Container/IOC container's..
+
+
+
+
+Creating BeanFactory container in spring App 
+==============================================
+
+=> By creating object for a class implementing BeanFactory(I).. we can create BeanFactory Container.. spring api provides multiple classes implementing this BeanFactory Interface.. One of them is "XmlBeanFactory" class.
+
+
+=> any <filename>.xml can be given as spring bean cfg file  but recommended to take applicationContext.xml as the spring bean cfg file as the spring Container name "applicationContext".
+
+=> Spring bean configuration file contains the following cfgs( instructions) to spring containers/IOC Containers.
+    a) spring bean cfgs 
+    b) dependency Management cfg 
+    c) spring bean life cycle cfgs 
+    d) spring bean ids alias names cfgs 
+    and etc...
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+// Below code can be placed in any kind of Java App to create BeanFactory container.
+
+//Locate and hold Spring bean cfg file
+FileSystemResource res=new FileSystemResource("......./applicationContext.xml");
+
+FileSystemResource internally uses java.io.File class to locate and hold spring bean cfg name and location.
+
+// create BeanFactory IOC Container
+XmlBeanFactory factory = new XmlBeanFactory(res);
+
+Refer 1.1 in Notes.png
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+Setter Injection - Dependency Injection
+----------------------------------------
+=> if the Spring Container uses setter method of target class to inject/assign Dependent class object to target class object then it is called setter Injection..
+
+=>For this we need to given instructions to IOC container using <property> in springBean cfg file (applicationContext.xml) and we should
+also place setter method in target class.
+
+Refer 1.2 in Notes.png 
+
+WishMessageGenerator.java
+=========================
+
+package com.st.beans;
+
+public class WishMessageGenerator{
+
+    // HAS-A property (Composition)
+    private Date date;
+
+    // setter method supporting setter Injection
+    public void setDate(Date date){
+        this.date=date;
+    }
+
+    // b.method 
+    public String generateMessage(String user){
+        
+        // get current hour of the day 
+        // current hour of the day in 24 hours format (0 to 23)
+        int hour = date.getHour(); 
+
+        if(hour<12)
+            return "GM"+user;
+        else if(hour<16)
+            return "GA"+user;
+        else if(hour<20)
+            return "GE"+user;
+        else 
+            return "GN"+user;
+
+
+    }
+
+}
+
+applicationContext.xml (com/st/cfgs)
+------------------------------------
+
+<beans>
+    <!- spring bean cfgs->
+
+    //dependent class 
+    <bean id="dt" class="java.util.Date"/>
+
+    // target class 
+    <bean id="wmg" class="com.st.beans.WishMessageGenerator">
+    
+        // for setter Injection
+        <property name="date" ref="dt"/>
+
+        // date -> property name 
+        // dt -> dependent class bean id to inject dependent spring bean obj to target class obj 
+    
+    </bean>
+
+</beans>
+
