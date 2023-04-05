@@ -1,0 +1,115 @@
+++++++++++++++++++++++++++++++++++ 
+Sending Data From Controller To UI 
++++++++++++++++++++++++++++++++++++ 
+
+-> We can send data from controller to UI in multiple ways 
+    1) ModelAndView 
+    2) Model 
+    3) @ResponseBody
+
+################# Approach-1 (ModelAndView) #####################
+
+@Controller
+public class WelcomeController {
+	
+	@GetMapping("/welcome")
+	public ModelAndView welcomeMsg() {
+		ModelAndView mav = new ModelAndView();
+		
+		mav.addObject("msgs","Welcome to India");
+		
+		mav.setViewName("welcome");
+		
+		return mav;
+	}
+}
+
+
+
+################# Approach-2 (Model) #####################
+
+@Controller
+public class GreetController {
+	
+	@GetMapping("/greet")
+	public String getGreetMsg(Model model) {
+		String msgTxt= "Good Morning..";
+		model.addAttribute("msg",msgTxt);
+		return "greet";
+	}
+}
+
+
+################# Approach-3 ( @ResponseBody ) #####################
+
+@Controller
+public class WishController {
+	
+	@GetMapping("/wish")
+	@ResponseBody
+	public String getWishMsg() {
+		String msg = "<h1>All the best!!<h1>";
+		
+		return msg;
+	}
+}
+
+
+
+################# sending object data from Controller to UI #######################
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Book {
+	
+	private Integer bookId;
+	private String bookName;
+	private Double bookPrice;
+}
+
+
+-------------------------------------------
+
+@Controller
+public class BookController {
+	
+	@GetMapping("/book")
+	public String getBookData(Model model) {
+		
+		// setting data to binding object
+		Book bookObj = new Book(101,"Spring",450.00);
+		
+		//adding data to model object to send to ui
+		model.addAttribute("book",bookObj);
+		
+		// return view name
+		return "book";
+	}
+}
+
+-----------------------------------------------
+
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>Book Data</h2>
+	
+	Book Id : ${book.bookId} <br/>
+	Book Name : ${book.bookName} <br/>
+	Book Price : ${book.bookPrice} <br/>
+	
+</body>
+</html>
+
+
+
+----------------------------------------------------------------------------------------------------
+
+
+Assignment: Develop Spring Boot web application to display multiple books
+in a table format.
+
