@@ -26,7 +26,8 @@ Thymeleaf
 
 
 
----------------------------------------------------------------------------------------------- Procedure to develop spring boot application with thymeleaf --------------------------------------------------------------------------------------------- 
+---------------------------------------------------------------
+Procedure to develop spring boot application with thymeleaf ---------------------------------------------------------------
 
 1) Create Spring Starter Project with below dependencies 
     a) web-starter 
