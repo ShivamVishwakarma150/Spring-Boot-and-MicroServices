@@ -1,0 +1,166 @@
+Procedure to Develop spring First App (Setter Injection using Eclipse IDE)
+=================================================
+step1) Launch eclipse IDE by choosing workspace folder name and location.
+
+workspace folder -> The folder where projects of eclipse IDE will be saved.
+
+Step2) Create Maven Project by taking "maven-archetype-quickstart" as the archetype (Project Template for Standalone App)
+
+for details step follow PNG Notes
+
+In Maven Project/jar file/plugin are identified with 3 details
+    group id :: Company name
+    artifactId :: Project name/jar file name /plugin name
+    version :: Projection version/ jar file version/ plugin version
+
+=>maven is providing 2000+ ready made archetypes as readymade Project templates .. the popular archetypes are
+
+a) maven-archetype-quickstart ----> for standalone Apps
+
+b) maven-archetype-webapp -----> for web applications/ Distributed Apps
+
+step3) change java version of project to latest version
+    1.7 -> 16 in pom.xml file 
+    right click on project -> then maven update
+
+POM : Project Object Model
+
+step4) Add the following <depedency> tag in pom.xml file to download spring core module jar file to the classpath of project
+
+    => maven depedencies means the libraries nothing but jar files
+
+To collect this tags go to https://mvnrepository.com ---> search for spring context support--> select version (6.0.7) ---> go to maven tab ---> copy xml code ---> paste in
+
+
+=>This code not only gvies spring-context-suppot-6.0.7.jar file and also gives its dependent jar files.
+
+<dependencies> section of pom.xml
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context-support</artifactId>
+    <version>6.0.7</version>
+</dependency>
+
+then save pom.xml .
+
+step5) Understand The directory structure of the Project? 
+
+Refer Notes.PNG 
+
+Programmer's Testing on hist own peace of code is called unit testing. we can do that unit testing by using the tool called Junit.
+
+
+step6) Develope the packages having source code in "src/main/java" folder..
+
+
+=>To make all spring programmer developing spring bean cfg file by following same set of rules and guidelines (i.e same tags and and attributes ) we need to import DTD /XSD rules given by spring framework in spring bean cfg file..
+
+DTD :: Document Type Definition (old)
+XSD :: Xml schema Definition (new)
+
+Follow Notes.PNG for diagram for this 
+
+
+Code 
+----
+//WishMessageGenerator.java
+package com.st.beans;
+
+import java.util.Date;
+
+public class WishMessageGenerator {
+	// Has-A Property ( supporting composition)
+	
+	private Date date;
+
+	
+	
+	public WishMessageGenerator() {
+		System.out.println("WishMessageGenerator :: 0 param Constructor");
+	}
+
+	// setter method for setter Injection (Alt+shift+s, r->select setDate(-) --> ok)
+	public void setDate(Date date) {
+		System.out.println("WishMessageGenerator.setDate(-)");
+		this.date = date;
+	}
+	
+	//B.method
+	public String generateMessage(String user) {
+		System.out.println("WishMessageGenerator.generateMessage()");
+		// get current hour of the day
+		int hour = date.getHours(); // 24 hours format (0 to 23)
+		
+		//generate wish message
+		if(hour<12)
+			return "Good Morning"+user;
+		else if(hour<16)
+			return "Good Afternoon" +user;
+		else if(hour<20)
+			return "Good Evening::"+user;
+		else 
+			return "Good Night::"+user;
+		
+		
+	}//method
+}//class
+
+
+
+SetterInjectionTest.java 
+-------------------------
+
+package com.st.test;
+
+import com.st.beans.WishMessageGenerator;
+
+public class SetterInjectionTest {
+	
+	
+	public static void main(String[] args) {
+		// Locate and hold spring bean cfgs file name and location
+		FileSystemResource res = new FileSystemResource("src/main/java/com/st/cfgs/applicationContext.xml");
+		
+		//create IOC Container (BeanFactory container)
+		XmlBeanFactory factory = new XmlBeanFactory(res);
+		
+		// get Target spring bean class object
+		Object obj = factory.getBean("wmg");
+		//typecasting
+		WishMessageGenerator generator = (WishMessageGenerator)obj;
+		//invoke the b.method
+		String result = generator.generateMessage("Akash");
+		System.out.println("Wish Message is ::"+result);
+		
+		
+		
+	
+	}//main
+}//class
+
+
+ApplicationContext.xml 
+-----------------------
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- spring bean configurations here -->
+    <bean id="dt" class="java.util.Date"/>
+    
+    	
+    <bean id="wmg" class="com.st.beans.WishMessageGenerator">
+    	<!-- Setter Injection -->
+    	<property name="date" ref="dt"/>
+    </bean>
+
+</beans>
+
+
+Step7) Run the client Application.
+    Go to Client App's .java file --> Run as -> Java App 
+        or 
+    CTRL + F11
