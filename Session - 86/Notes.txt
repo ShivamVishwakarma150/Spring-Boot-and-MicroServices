@@ -1,0 +1,144 @@
+Xml file /document Syntax rules are
+------------------------------------
+
+a) xml tags and attributes are case-sensitive
+
+b) xml docs are strictly typed docs (rules must be followed)
+
+c) every Open tag should have closing tag
+
+d) Tags must be nested in proper order (In which order they are opened.. they must be closed in reverse order)
+
+e) Attribute values must be quoted (must be there either in single quotes or double quotes)
+
+f) The First tag in xml is called root tag and once is closed.. we should not place any other content in xml file.
+
+-----------------------------------------------
+
+What is main difference b/w HTML and XML?
+Ans) HTML is given to display to data/documents by applying styles where as XML is given to construct Data by describing it.
+
+=>HTML is loosely typed .. where as XML is strictly typed.
+
+=>HTML tags and attributes are pre-defined.. where XML tags and attributes are user-defined.
+
+-----------------------------------------------
+
+
+=> if Xml doc/file is satisfying its xml syntax rules then is called "well-formed" xml document.
+
+=> if Xml doc/file is satisfying the imported DTD/XSD rules then is called "Valid-formed" xml document.
+
+=> We can use Xml Parser (software program) to check whether given XML doc is well-formed or not, valid or not and also to read and process the xml documents.
+
+Java based Xml parsers are
+a) SAX parser (Simple API for xml processing)
+b) DOM Parser (Document Object Model )
+c) JDOM parser (Java Document Object Model)
+d) DOM4J Parser (DOM for Java)
+and etc..
+
+=>java Xml parser loads the given XML doc, checks well formed, valid or not, reads the document and prepares In Memory Metadata in the memory (JVM memory)where the current Application is of RAM is running..
+
+Refer Notes.PNG 
+
+=> Instead of loading and reading xml doc for multiple times from HDD drive... it is better to create InMemory MetaData of Xml file in the JVM memory of RAM and use its content for multiple times for better performance..
+
+=> Spring Containers/IOC containers are having built-in Xml parser called SAX Parser.. So Spring containers also prepares In Memory MetaData of spring bean cfg file and uses that content for multiple times as
+discussed above.
+
+
+
+What is the difference b/w pool and cache?
+------------------------------------------
+
+Pool gives reusability of same items while cache gives reusability of different items.
+
+Refer Notes.PNG 
+
+In Pool => We can use List Collection to make our own Pool.
+
+In Cache => We can use Map Collection to make our own Cache.
+
+
+
+==============================================================================================
+
+
+
+
+Problems with "new" operator 
+----------------------------
+
+=> Test t = new Test();
+    =>  "new" operator creates the object of java class at runtime.. but expects the presence of java class from compile time onwards i.e we can not use new operator to create object java class whose class name comes to our App dynamically at runtime either through xml file or properties file or cmd line args and etc.. For this we need to "newlnstance()" method of reflection API.
+
+Note: spring container also uses "reflection API" newInstance() method to create spring bean class objects because spring container gets the class names of spring bean from spring bean cfg file dynamically at runtime.
+
+
+============
+Reflection API newInstance() method code
+example App
+=========
+
+a) Load java class into App dynamically at runtime
+
+    Class c = Class.forName(args[0]);
+
+    // args[0] -> assume the class name is "java.util.Date"
+
+    // Refer Notes.PNG
+
+b) create the object of Loaded class using "c".
+
+    Object obj=c.newInstance();
+
+    //newInstance() -> creates the object for the Loaded class (java.util.Date) using 0-param constructor Internally.
+
+    // from java 11 newInstance() of java.lang.Class is deprecated and recommending to use newInstance() of java.lang.reflect.Constructor.
+
+    System.out.println(obj.toString());
+
+Eg:
+
+//NewInstanceMethodTest.java
+package com.st.test;
+
+public class NewInstanceMethodTest {
+	public static void main(String[] args) throws Exception{
+		
+		// Load classes
+		Class c1 = Class.forName(args[0]);
+		
+		Class c2 = Class.forName(args[1]);
+		
+		//create the objects for Loaded classes
+		Object obj1 = c1.newInstance();
+		Object obj2=c2.newInstance();
+		
+		System.out.println(obj1.toString());
+		System.out.println(obj2.toString());
+		
+	}
+}
+
+//Test.java
+package com.st.comp;
+
+public class Test {
+	private int a=10;
+	private String b="Hello";
+	
+	public Test() {
+		System.out.println("Test:: 0-param constructor");
+	}
+	
+	//alt+shift+s,s
+	@Override
+	public String toString() {
+		return "Test [a=" + a + ", b=" + b + "]";
+	}
+	
+	
+}
+
