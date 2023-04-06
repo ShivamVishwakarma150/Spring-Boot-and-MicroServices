@@ -1,0 +1,122 @@
+Form Handling using Thymleaf
+============================
+
+Eg: 
+
+Book.java 
+----------
+
+@Data
+public class Book {
+	
+	private String bookName;
+	
+	private String authorName;
+	
+	private Double bookPrice;
+}
+
+BookController.java 
+--------------------
+
+@Controller
+public class BookController {
+	
+	@GetMapping("/")
+	public String displayForm(Model model) {
+		
+		Book bookObj = new Book();
+		model.addAttribute("book", bookObj);
+		return "index";
+	}
+	
+	@PostMapping("/book")
+	public String saveBook(Book book,Model model) {
+		
+		System.out.println(book);
+		
+		model.addAttribute("msg", "Book Saved Successfully..");
+		
+		return "success";
+	}
+}
+
+index.html 
+-----------
+
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<form th:action="@{/book}" th:object="${book}" method="POST">
+		
+		<table>
+			<tr>
+				<td>Book Name</td>
+				<td><input type="text" th:field="*{bookName}"/></td>
+			</tr>
+			<tr>
+				<td>Author Name</td>
+				<td><input type="text" th:field="*{authorName}"/></td>
+			</tr>
+			<tr>
+				<td>Book Price</td>
+				<td><input type="text" th:field="*{bookPrice}"/></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" value="Submit"/></td>
+			</tr>
+		
+		</table>
+	
+	</form>
+</body>
+</html>
+
+
+success.html
+------------
+
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<p th:text="${msg}"></p>
+	<a href="/">Go Back</a>
+</body>
+</html>
+
+++++++++++++++++++ 
+Embedded Servers 
+++++++++++++++++++ 
+
+
+-> Spring Boot provided embedded containers to run our web applications 
+
+-> When we add "web-starter" by default it is giving 'tomcat' as default embedded container
+
+
+-> In spring boot we have multiple embedded containers 
+    1) tomcat 
+    2) jetty 
+    3) netty 
+    4) undertow etc... 
+    
+Note: we can deploy spring boot application into external servers also as a war file. 
+
+Q) How change default container from tomcat to jetty ? -------------------------------------------------------------------------
+
+-> To make jetty as embedded container we need make below 3 changes in pom.xml file 
+
+    1) Remove tomcat-starter dependency 
+
+    2) Exclude tomcat-starter from web-starter 
+    
+    3) Add jetty dependency
