@@ -1,0 +1,173 @@
+XML & JAX-B 
+############# 
+
+-> XML stands for Extensible Markup Language 
+
+-> XML is free & open source -> XML is interoperable (Language independent & Platform independent) 
+
+
+-> XML we can use to transfer data from one application to another application 
+
+-> XML introduced by w3c org 
+
+-> The initial version of xml is 1.0 and the current version of xml is also 1.0 
+
+-> XML will represent data in the form of elements 
+
+-> An element is the combination of start tag and end tag 
+    Ex: <name> India </name> 
+
+-> We will have 2 types of elements in the XML
+    1) Simple Element 
+    2) Compound Element 
+    
+-> The element which contains data directly is called as Simple Element 
+    <name> India </name> 
+    <type> Country </type>
+
+
+-> The element which contains child element(s) is called as Compound Element 
+    <person> 
+        <id> 101 </id> 
+        <name> raju </name> 
+    </person> 
+    
+Note: here <person> is a compound element and <id> <name> are simple elements 
+
+
+-> We can have attributes also for the element 
+    <student branch="CSE"> 
+        <id> 101 </id> 
+        <name> Mahesh </name> 
+    </student> 
+    
+Note: XML should have only one root element. Inside the root element we can have multiple child elements.
+
+<persons> 
+    <person> 
+        <id> 101 </id> 
+        <name> raju </name> 
+    </person> 
+    <person> 
+        <id> 101 </id> 
+        <name> raju </name> 
+    </person> 
+</persons>
+
+
+########### 
+JAX-B 
+############ 
+
+
+-> JAX-B stands for Java Architecture For XML Binding 
+
+-> JAX-B is used to convert Java object to xml and xml to java object 
+
+-> JAX-B is free and open source -> JAX-B given by sun microsystems. 
+
+-> JAX-B is part of JDK up to 1.8v 
+
+-> If you are using JDK 1.8+ version of java then you need to add JAX-B dependency in pom.xml file .
+
+-> The process of converting Java Object into xml is called as "Marshalling" 
+
+-> The process of converting XML data to Java Object is called as "Un-Marshalling" 
+
+-> To perform Marshalling and Un-Marshalling We need to design Binding Classes.
+
+-> The java class which represents the structure of XML is called as Binding class. 
+
+-> JAX-B provided annotations to represent java class as Binding Class. 
+
+Note: Binding Class creation is one time operation. 
+
+Note: Earlier people used to create Binding Classes using XSD. XSD represents structure of xml.
+
+
+#############
+Binding Class 
+##############
+
+@Data
+public class Address {
+		
+	private String city;
+	private String state;
+	private String country;
+
+}
+
+
+-------------------------------
+
+@Data
+@XmlRootElement
+public class Person {
+	
+	private Integer id;
+	
+	private String name;
+	
+	private Integer age;
+	
+	private Long phno;
+	
+	private Address address;
+	
+}
+
+---------------------------------------
+
+public class ConvertJavaToXml {
+	
+	public static void main(String[] args) throws Exception {
+		
+		Address addr = new Address();
+		addr.setCity("hyd");
+		addr.setState("MH");
+		addr.setCountry("india");
+		
+		
+		Person person = new Person();
+		
+		person.setId(101);
+		person.setName("Jonas");
+		person.setAge(25);
+		person.setPhno(1257571l);
+		person.setAddress(addr);
+		
+		JAXBContext instance = JAXBContext.newInstance(Person.class);
+		
+		Marshaller marshller = instance.createMarshaller();
+		
+		marshller.marshal(person, new File("Person.xml"));
+		
+		System.out.println("Marshalling Completed....");
+		
+	}
+	
+}
+
+-----------------------------------------------
+
+
+O/P:-
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<person>
+	<address>
+		<city>hyd</city>
+		<country>india</country>
+		<state>MH</state>
+	</address>
+	<age>25</age>
+	<id>101</id>
+	<name>Jonas</name>
+	<phno>1257571</phno>
+</person>
+
+
+
+
+
