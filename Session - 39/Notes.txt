@@ -1,0 +1,121 @@
+################ 
+What is HTTP ? 
+################ 
+
+-> HTTP stands for Hyper Text Transfer Protocol 
+
+-> It acts as a mediator between client & server ( Consumer & Provider ) 
+
+-> Consumer application will send HTTP Req to Provider application 
+
+-> Provider application will process the request and it will send HTTP response to Consumer
+
+############### 
+HTTP Methods 
+############### 
+
+
+-> HTTP methods are used to send request from Consumer application to Provider application 
+
+-> HTTP method will represent what type of operation client / consumer wants to perform with Provider 
+    a) GET 
+    b) POST 
+    c) PUT 
+    d) DELETE 
+    
+-> GET request is used to retrieve data from Server / Provider application. 
+
+
+-> GET request will not have body to send data in the request 
+
+-> To send any data using GET request then we will use Path Params & Query Params 
+
+Note: Path Params & Query Params data will be displayed in the URL 
+
+Note: It is not recommended to send sensitive / secret data using Path Params & Query Params 
+
+-> GET request is Idempotent (means if you send same GET request for multiple times also nothing will change at server) 
+
+
+
+
+POST 
+====
+
+
+-> POST request is used to create a new record at server 
+
+-> When consumer wants to send huge data/ sensitive data then Consumer will use POST request 
+
+-> POST request contains request body 
+
+-> POST request is Non-Idempotent 
+
+Note: In POST request we can send data in URL and in Request Body. 
+
+Note: Request Body is the recommended approach to send sensitive data to server 
+
+
+PUT 
+===
+
+-> PUT request is used to update a record at server 
+
+-> When consumer wants to update a record at then consumer will send PUT request to Provider 
+
+-> PUT request contains request body -> PUT request is Idempotent Note: In PUT request we can send data in URL and in Request Body. 
+
+Note: Request Body is the recommended approach to send sensitive data to server 
+
+
+
+DELETE
+======
+
+-> DELETE request is used to delete a record at server 
+
+-> DELETE request contains request body 
+
+-> DELETE request is Idempotent 
+
+Note: In DELETE request we can send data in URL and in Request Body. 
+
+###################### 
+HTTP Request Structure 
+#######################
+
+1) Initial Request Line ( HTTP method + URL ) 
+
+2) Request Headers ( key-value ) 
+
+3) Blank Line to separate Header & Body 
+
+4) Request Body (Request Payload)
+
+###################### 
+HTTP Response Structure 
+####################### 
+
+1) Initial Response line (Protocol Version + Status Code + Status msg)
+
+2) Response Headers (Key-value) 
+
+3) Blank Line to separate Header & Body
+
+4) Response Body (Response Payload)
+
+################## 
+HTTP Status Codes 
+################## 
+
+-> HTTP Status codes will represent how the request process by server / provider 
+
+1xx (100 - 199) ---> INFO 
+
+2xx (200 - 299) ---> OK (success) 
+
+3xx (300 - 399) ---> Redirect 
+
+4xx (400 - 499) ---> Client Error 
+
+5xx (500 - 599) ---> Server Error
