@@ -1,0 +1,60 @@
+RESTFul Services 
++++++++++++++++ 
+
+
+-> REST stands for 'Representational State Transfer' 
+
+-> RESTFul services are used to develop Distributed Applications with
+Interoperability 
+
+-> If one application is communicating with another application then those are called as 'Distributed Apps' 
+
+-> Interoperability means irrespective of the platform and language applications can communicate 
+    java app <-----------> .Net app 
+    .Net app <----------> Python app 
+    Python app <---------> Java App 
+    
+-> Distributed applications are used for B 2 B communications 
+
+-> B2B means Business to Business Communication 
+
+-> Distributed Application will re-use services of one application in
+another application 
+
+-> RESTful Services are providing 'Intereoperability' 
+
+-> Two Actors will be involved in Distributed Applications development 
+    1) Provider 
+    2) Consumer 
+    
+-> The application which is providing business services is called as Provider Application
+
+
+-> The application which is accessing business services is called as Consumer Application 
+
+Note: One provider application can have multiple consumer applications 
+
+-> Provider and Consumer will communicate using HTTP as a mediator 
+
+-> Provider and Consumer will exchange the data in Text / XML / JSON format 
+
+Note: In Industry we will use JSON format to exchange data from one application to another application 
+
+
+-> To start our journey with RESTFul services development we should be good in below areas 
+    1) HTTP Protocol (Methods, Status Codes, Req structure & Res Structure) 
+    2) XML and JAX-B Api 
+    3) JSON and Jackson Api 
+    
+################ 
+What is HTTP ? 
+################ 
+
+-> HTTP stands for Hyper Text Transfer Protocol 
+
+-> It acts as a mediator between client & server ( Consumer & Provider ) 
+
+-> Consumer application will send HTTP Req to Provider application 
+
+-> Provider application will process the request and it will send HTTP response to Consumer
+
