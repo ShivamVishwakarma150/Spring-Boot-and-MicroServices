@@ -1,0 +1,129 @@
+@XmlAccessorType(XmlAccessType.FIELD) : Controls marshalling and un-marshalling using fields of entity class 
+
+@XmlAccessorOrder : Follow order of variables in the class to marshall and un-marshall 
+
+@XmlElement(name = "PhoneNum") : It is used to change the name of element 
+
+@XmlAttribute : It represents variable as attribute in xml 
+
+
+@XmlTransient : To skip a variable in marshalling 
+
+Note: By default every variable will be considered as Element and variable name will be considered as element name.
+
+##################### 
+Marshalling Example 
+#####################
+
+@Data
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorOrder
+public class Person {
+	
+	private Integer id;
+	
+	private String name;
+	
+	private Integer age;
+	
+	@XmlElement(name="PhoneNum")
+	private Long phno;
+	
+	@XmlAttribute
+	private String type;
+	
+	private Address address;
+	
+}
+
+-----------------------------------------
+
+public class ConvertJavaToXml {
+	
+	public static void main(String[] args) throws Exception {
+		
+		Address addr = new Address();
+		addr.setCity("hyd");
+		addr.setState("MH");
+		addr.setCountry("india");
+		
+		
+		Person person = new Person();
+		
+		person.setId(101);
+		person.setName("Jonas");
+		person.setAge(25);
+		person.setPhno(1257571l);
+		person.setType("Enginner");
+		person.setAddress(addr);
+		
+		JAXBContext instance = JAXBContext.newInstance(Person.class);
+		
+		Marshaller marshller = instance.createMarshaller();
+		
+		marshller.marshal(person, new File("Person.xml"));
+		
+		System.out.println("Marshalling Completed....");
+		
+	}
+	
+}
+
+####################### 
+Un-Marshalling Example 
+#######################
+
+
+@Data
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorOrder
+public class Person {
+	
+	private Integer id;
+	
+	private String name;
+	
+	private Integer age;
+	
+	@XmlElement(name="PhoneNum")
+	private Long phno;
+	
+	@XmlAttribute
+	private String type;
+	
+	private Address address;
+	
+}
+
+
+
+public class ConvertXmlToJava { 
+    public static void main(String[] args) throws Exception { 
+        File xmlfile = new File("Person.xml"); 
+        JAXBContext context = JAXBContext.newInstance(Person.class); 
+        Unmarshaller unmarshaller = context.createUnmarshaller(); 
+        Object object = unmarshaller.unmarshal(xmlfile);
+        Person person = (Person) object;
+        System.out.println(person); 
+    } 
+}
+
+
+Person.xml
+----------
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<person type="Enginner">
+	<id>101</id>
+	<name>Akash</name>
+	<PhoneNum>1257571</PhoneNum>
+	<address>
+		<city>hyd</city>
+		<country>india</country>
+		<state>MH</state>
+	</address>
+</person>
+
+O/P :- Person(id=101, name=Akash, age=null, phno=1257571, type=Enginner, address=Address(city=hyd, state=MH, country=india))
+
