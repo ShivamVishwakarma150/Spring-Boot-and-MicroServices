@@ -1,0 +1,156 @@
+Working with newInstance() method of java.lang.reflect.Constructor class for dynamic object creation
+==========================================================================================
+
+=>This method can use either 0-param constructor or parameterized constructor for object creation where as the newInstance() method of java.lang.Class can use only 0-param constructor for object creation.
+
+
+sample code on newInstance() of java.lang.reflect. Constructor class
+------------------------------------------
+
+//NewInstanceMethodTest1.java
+package com.st.test;
+
+import java.lang.reflect.Constructor;
+
+public class NewInstanceMethodTest1 {
+	public static void main(String[] args) throws Exception{
+		
+		// Load classes
+		Class c1 = Class.forName(args[0]);
+		
+		// get All constructor of the Loaded class
+		Constructor cons[] = c1.getDeclaredConstructors();
+		// Dynamic object using 0 param Constructor
+		Object obj = cons[0].newInstance();
+		
+		System.out.println(obj);
+		
+		System.out.println(".............");
+		// Dynamic object using 0 param Constructor
+				Object obj2 = cons[1].newInstance(100,"India");
+				
+			System.out.println(obj2);
+				
+				
+		
+		
+	}
+}
+
+Test.java
+----------
+
+//Test.java
+package com.st.comp;
+
+public class Test {
+	private int a=10;
+	private String b="Hello";
+	
+	public Test() {
+		System.out.println("Test:: 0-param constructor");
+	}
+	
+	public Test(int a, String b) {
+		System.out.println("Test.Test() :: 2 param Constructor");
+		this.a = a;
+		this.b = b;
+	}
+
+	
+	
+	//alt+shift+s,s
+	@Override
+	public String toString() {
+		return "Test [a=" + a + ", b=" + b + "]";
+	}
+	
+	
+}
+
+*********Refer Notes.PNG*********
+
+
+First spring App Internal Flow (Complete flow end to End)
+=============================================
+
+Refer Notes.PNG for Complete Flow 
+
+a) End user runs the Client App/ and man(-) method executes
+
+
+b) //Hold spring bean cfg file name and location (ctrl+shift+o :: To import pkg)
+    FileSystemResource res = new FileSystemResource("src/main/java/com/st/cfgs/applicationContext.xml");
+
+    =>Internally uses java.io.File class to hold the name and location of given spring cfg file.. It does not actually locate the given file.. it just holds name and location of the file.
+
+c) 
+    //create IOC container (BeanFactory container)
+    XmlBeanFactory factory=new XmlBeanFactory(res)
+
+    i) takes given "res" object (FileSystem Resource obj) .. to get the name and location spring bean cfg file
+
+    ii) Loads the spring bean cfg file (applicationContext.xml) and checks weather it is well-formed or not and valid or not.. if not throws exception.
+
+    iii) if the spring bean cfg file is well-formed and valid .. then InMemory Metadata of spring bean cfg file will be created of IOC container in the JVM Memory of the RAM where the spring app is executing.
+
+    iv) create IOC container/spring container of type BeanFactory having the above created InMemory MetaData of spring bean cfg file and returns XmlBeanFactory object ref (factory)representing IOC container.
+
+
+Refer Notes.PNG
+
+d)
+    Object obj = factory.getBean("wmg");
+
+    i) factory.getBean("wmg") method called on IOC container object (factory),makes the IOC container to search "wmg" bean id spring bean class cfg in the InMemory MetaData of spring cfg file(applicationContext.xml file's InMemory MetaData) and finds com.st.beans. WishMessageGenerator having setter Injection cfg (because of <property>).. So its loads the class creates the object using reflection api.
+
+    //Loading class
+    Class c1=Class.forName("com.st.beans. WishMessageGenerator");
+
+    //get all constructors
+    Constructor cons[]=c1.getDeclaredConstructors();
+
+    //create dynamic object
+    Object obj=cons[0].newInstance();
+    WishMessageGenerator wmg=(WisMessageGenerator)obj;
+
+    ii) Goes to <property> tag ref="dt" attribute and searches for the spring bean class cfg whose bean id is "dt" in the InMemory MetaData of applicationContext.xml and finds "java.util.Date" class cfg. Notices that no injects that are configured,So loads the class and creates the object using reflection api.
+
+        //Loading class
+        Class c2=Class.forName("java.util.Date");
+
+        //get all constructors
+        Constructor cons[]=c2.getDeclared Constructors();
+
+        // create dynamic object
+        Object obj2=cons[0].newInstance();
+        java.util.Date dt=(java.util.Date) obj2;
+
+        iii) completes the setter Injection by calling wmg.setDate(dt) method based <property name="date" ref="dt"> tag of InMemory Metadata of spring bean cfg file dependent obj
+
+        dt -> dependent object 
+
+        Refer Notes.PNG
+
+e) Spring Container /IOC container keeps spring bean class objects in the Internal cache of IOC container for reusability having bean ids as keys and spring bean class obj references as the values.
+
+Refer Notes.PNG
+
+f) Client App gets WishMessageGenerator class obj ref as java.lang.Object class ref and it uses it for typecasting.
+
+    //typecasting
+    WishMessageGenerator generator=(WishMessageGenerator)obj;
+
+g) invocation of b.method getting the result and display the results..
+
+    // invoke the b.method 
+        String result = generator.generateMessage("Akash");
+		System.out.println("Wish Message is ::"+result);
+		
+
+h) End of the main(-) ..ends the app's execution by vanishing the objects .. In that process the IOC container(factory) and its spring bean objet (wmg,dt), Its InMemory MetaData and, Xml parser, Internal cache and etc.. will also be vanished.
+
+
+
+
+
