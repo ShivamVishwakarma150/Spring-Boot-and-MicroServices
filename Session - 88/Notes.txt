@@ -1,0 +1,219 @@
+constructor Injection
+======================
+
+=>if the spring container/IOC container is using parametrized constructor to create spring bean class obj and also inject dependents then it called constructor Injection.
+
+
+=>For this we need to place <constructor-arg> tags under <bean> tag where we cfg java class as the spring bean.
+
+=> if we place "n" <constructor-arg> tags under <bean> tag then then the spring container looks for n-param constructor for constructor Injection, For example if we place <constructor-arg> tags for 3 times then it looks for 3 param constructor for spring Bean class instantiation and Injection.
+
+=> spring container performs setter Injection after creating spring bean class object, it separately calls setter method for setter Injection .
+
+=> spring container performs constructor injection while instantiating the spring bean class using parameterized constructor.
+
+
+Example App on constructor injection
+====================================
+
+//WishMessageGenerator.java
+package com.st.beans;
+
+import java.util.Date;
+
+public class WishMessageGenerator {
+	// Has-A Property ( supporting composition)
+	
+	private Date date;
+
+	/*// setter method for setter Injection (Alt+shift+s, r->select setDate(-) --> ok)
+	public void setDate(Date date) {
+		System.out.println("WishMessageGenerator.setDate(-)");
+		this.date = date;
+	}*/
+	
+	public WishMessageGenerator(Date date) {
+		System.out.println("WishMessageGenerator:: 1 param-contructor");
+		this.date=date;
+	}
+	
+	
+	
+	//B.method
+	public String generateMessage(String user) {
+		System.out.println("WishMessageGenerator.generateMessage()");
+		// get current hour of the day
+		int hour = date.getHours(); // 24 hours format (0 to 23)
+		
+		//generate wish message
+		if(hour<12)
+			return "Good Morning "+user;
+		else if(hour<16)
+			return "Good Afternoon " +user;
+		else if(hour<20)
+			return "Good Evening:: "+user;
+		else 
+			return "Good Night:: "+user;
+		
+		
+	}//method
+}//class
+
+
+applicationContext.xml 
+======================
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- spring bean configurations here -->
+    <bean id="dt" class="java.util.Date"/> <!-- Dependent Class -->
+    
+    	
+    <bean id="wmg" class="com.st.beans.WishMessageGenerator"> <!-- Target Class -->
+    	<constructor-arg name="date" ref="dt"/> <!-- Constructor Injection -->
+    </bean>
+
+</beans>
+
+
+
+ConstructorInjectionTest.java
+-------------------------------
+
+public class ConstructorInjectionTest {
+	
+	
+	public static void main(String[] args) {
+		// Locate and hold spring bean cfgs file name and location
+		FileSystemResource res = new FileSystemResource("src/main/java/com/st/cfgs/applicationContext.xml");
+		
+		//create IOC Container (BeanFactory container)
+		XmlBeanFactory factory = new XmlBeanFactory(res);
+		
+		// get Target spring bean class object
+		Object obj = factory.getBean("wmg");
+		//typecasting
+		WishMessageGenerator generator = (WishMessageGenerator)obj;
+		//invoke the b.method
+		String result = generator.generateMessage("Akash");
+		System.out.println("Wish Message is :: "+result);
+		
+		
+		
+	
+	}//main
+}//class
+
+
+
+
+when factory.getBean("wmg") is called in Constructor Injection
+==================================================
+
+i) Takes given bean id "wmg", check in the internal cache of IOC container for Object ref availability .. since not not available it goes to InMemory MetaData of spring bean cfg file (applicationContext.xml) and finds "com.st.beans.WishMessageGenerator" class as spring bean and notices constructor injection cfg using <constructor-arg> tag.
+
+Note:: In setter Injection model, the IOC container first creates target class obj then creates Dependent class obj later assigns dependent class object to target class object by setter(-) on target class object In constructor Injection model, the IOC container first creates dependent class obj and use that Dependent class obj as the constructor arg value while creating target class object.
+
+
+ii) Since the enabled injection is constructor Injection, it takes ref="dt" from <constructor-arg> tag and searches "dt" bean id spring bean class obj ref in the Internal Cache. since not available the IOC container searches in the InMemory MetaData of applicationContext.xml for spring bean cfg whose bean id "dt" and finds "java.util.Date" class with out having any injections cfg.
+
+
+iii) IOC container loads "java.util.Date" class and creates the object for it using 0-param constructor and reflection API.
+
+    //Load the spring bean class
+    Class c1=Class.forName("java.util.Date");
+
+    // get call  the constructors the loaded spring bean class 
+    Constructor cons[] = c1.getDeclaredConstructors();
+
+    // Dynamic object creation 
+    Date dt = (Date)cons[0].newInstance();
+
+    when factory.getBean("wmg") is called in Constructor Injection
+
+
+iv) Completes constructor Injection on target class by loading and instantiating target class (WishMessageGenerator) using 1-param constructor through reflection API as shown below
+
+    //Load class
+    Class c2=Class.forName("com.st.beans.WishMessageGenerator");
+
+    //get All constructors of the loaded class
+    Constructor cons[]=c2.getDeclared Constructors();
+
+    //Dynamic object creation.
+    WishMessageGenerator generator=(WishMessageGenerator)cons[0].newInstance(dt);
+
+    // object creating and injection using 1-param constructor of WishMessageGenerator class 
+
+
+
+v) IOC container keeps both target and dependent class class obj in the Internal cache of IOC container taking 'bean ids as the keys and bean class obj refs as values..
+
+vi) factory.getBean("wmg") returns "WishMessageGenerator" class obj ref back to Client App as java.lang.Object class ref.
+
+------------------------------------------------------------------------------------------------------
+
+
+================================================
+if we perform both setter Injection and construction injection cfgs on the same bean property of target class with different dependent values.. can u tell which will be taken as the final value?
+=================================================
+
+since the setter method executes after constructor execution .. so the value injected by constructor Injection will be overridden with the value injected by the setter Injection.
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	 <bean id="dt1"  class="java.util.Date">
+            <property name="year" value="110"/>  <!-- add 1900 to given year so it becomes 2010 -->
+            <property name="month" value="4"/>  <!-- 0 to 11-->
+            <property name="date" value="20"/>  <!-- 1 to 31-->
+        </bean>
+        
+
+    <!-- spring bean configurations here -->
+    <bean id="dt" class="java.util.Date"/> <!-- Dependent Class -->
+    
+    	
+    <bean id="wmg" class="com.st.beans.WishMessageGenerator"> <!-- Target Class -->
+    	<constructor-arg name="date" ref="dt"/> <!-- Constructor Injection -->
+    	<property name="date" ref="dt1"/> <!-- Setter Injection -->
+    </bean>
+
+</beans>
+
+Note:: To inject one spring bean class object to bean property of another spring bean class use "ref" attribute specifying other spring bean id
+    <property name="date" ref="dt1"/>
+
+
+Note:: To inject simple or string value to pean property of spring bean class use "value" attribute specifying hardcoded value
+    <property name="date" value="20"/>
+
+
+------------------------------------------------------------------------------------------------------
+
+=> we can cfg one java class as multiple spring beans with different bean ids (nothing different object names will be created)
+
+Eg: 
+
+<bean id="dt1" class="java.util.Date">
+<property name="year" value="110"/> <!-- add 1900 to given year so it becomes 2010 -->
+<property name="month" value="4"/> <!-- 0 to 11-->
+<property name="date" value="20"/> <!-- 1 to 31-->
+</bean>
+
+<!-- spring bean cfgs -->
+<bean id="dt" class="java.util.Date"/> <!-- dependent class -->
+
+
+------------------------------------------------------------------------------------------------------
+
+=> IOC container identifies spring beans using its bean ids (object names/ reference variable names pointing spring bean class objects).So they must be unique with in a spring container.
+
