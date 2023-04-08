@@ -1,0 +1,114 @@
+Returning Multiple Java Objects / List of Products
+-----------------------------------------
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Product {
+	private Integer pid;
+	private String pname;
+	private Double price;
+}
+
+
+@GetMapping("/products")
+public ResponseEntity<List<Product>>  getProducts(){
+		
+	Product p1 = new Product(101,"Monitor",6000.00);
+	Product p2 = new Product(102,"RAM",5000.00);
+	Product p3 = new Product(103,"CPU",15000.00);
+		
+	List<Product> products =  Arrays.asList(p1,p2,p3);
+		
+	return new ResponseEntity<>(products,HttpStatus.OK);
+}
+
+
+############################## 
+Working with HTTP POST Request 
+############################# 
+
+
+-> HTTP POST request is used to create new resource/record at server 
+
+-> POST request contains request body 
+
+-> Client can send data to server in Request Body 
+
+-> To bind Rest Controller method to POST request we will use @PostMapping 
+
+-> To read data from Request body we will use @RequestBody annotation 
+
+-> "consumes" represents in which formats method can take input 
+
+-> "Content-Type" header represents in which format client sending data in request body.
+
+Example App 
+============
+
+@RestController
+public class BookRestController {
+	
+	@PostMapping(value="/book",consumes= {"application/json","application/xml"})
+	public ResponseEntity<String> addBook(@RequestBody Book book){
+		System.out.println(book);
+		
+		// logic to store in DB 
+		
+		String msg = "Book Added Successfully";
+		
+		return new ResponseEntity<String>(msg,HttpStatus.CREATED);
+	}
+}
+
+
+@Data
+@XmlRootElement
+public class Book {
+	private Integer id;
+	private String name;
+	private Double price;
+	
+}
+
+
+------------------------------------------------------------------------------------------------
+
+-> produces vs consumes 
+
+-> Content-Type vs Accept 
+
+-> produces attribute represents in which formats Method can provide response data to clients 
+
+-> consumes attribute represents in which formats Method can take request data from clients 
+
+-> Accept header represents in which format client expecting response from REST API. 
+
+-> Content-Type header represents in which format client is sending request data to REST API 
+
+Note: We can use both Consumes & Produces in single REST API method.
+
+produces + Accept header => GET Request 
+
+Consumes + Content-Type => POST Request 
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++
+Requirement : Develop IRCTC REST API to book a train ticket 
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+-> To develop any REST API first we have to understand the requirement 
+
+-> Identify input / request data 
+
+-> Identify output / response data 
+
+-> Create request & response binding classes 
+
+-> Create REST Controller with required methods. 
+
+-> Test REST API methods behavior using Postman
+
+
+
+
