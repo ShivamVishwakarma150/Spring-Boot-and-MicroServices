@@ -1,0 +1,117 @@
+++++++++++++++++++++++++++++ 
+Path Parameter or URI variables 
++++++++++++++++++++++++++++++ 
+
+-> Path Parameters are also used to send data to server in URL 
+
+-> Path Params will represent data directly in URL (no keys) 
+
+-> Path Params can present anywhere in the URL 
+
+-> Path Params will be separated by / (slash) 
+
+-> Path Params should be represented in Method URL pattern (Template Pattern)
+
+    Ex: www.byzus.in/courses/{cname}/trainer/{tname} 
+    
+-> To read Path Parameters we will use @PathVariable annotation
+
+
+@RestController
+public class BookRestController {
+	
+	@GetMapping("/book/{name}")
+	public ResponseEntity<String> getBookPrice(@PathVariable("name") String name){
+		
+		String respBody= name +" Price is 400 $";
+		
+		return new ResponseEntity<>(respBody,HttpStatus.OK);
+	}
+	
+	@GetMapping("/book/{bname}/{aname}")
+	public ResponseEntity<String> getBook(@PathVariable("bname") String bname,@PathVariable("aname")  String aname){
+		
+		String respBody = bname +" By "+aname+" is out of Stock";
+		
+		return new ResponseEntity<>(respBody,HttpStatus.OK);
+	}
+	
+	@GetMapping("/book/name/{bname}/author/{aname}")
+	public ResponseEntity<String> getBookData(@PathVariable("bname") String bname,@PathVariable("aname")  String aname){
+		
+		String respBody = bname +" By "+aname+" is out of Stock";
+		
+		return new ResponseEntity<>(respBody,HttpStatus.OK);
+	}
+}
+
+URL-1 : localhost:8080/book/Core Java/james bond
+
+URL-2 : localhost:8080/book/name/Core Java/author/james bond
+
++++++++++++++++++++++++++++++++++++++++ 
+Q) When to use Path Params & Query Params ? ++++++++++++++++++++++++++++++++++++++++ 
+
+-> To retrieve more than one record/resource we will use Query Params (filtering) 
+
+-> To retrieve specific/unique record we will use Path Params (single)
+
+
+
+
+
+################ 
+What is Produces 
+################# 
+
+-> "produces" is a media type 
+
+-> It represents the response formats supported by REST Controller Method 
+
+-> One method can support multiple response formats (xml and json) 
+
+    produces = { "application/xml", "application/json" } 
+
+
+
+-> Client should send a request with "Accept" http header 
+
+-> Accept header represents in which format client expecting response from the REST api 
+
+-> Based on Accept header value 'Message Converter' will convert the response into client expected format
+
+
+@Data
+@XmlRootElement
+public class Product {
+	private Integer pid;
+	private String pname;
+	private Double price;
+}
+
+
+@RestController
+public class ProductRestController {
+	
+	@GetMapping(value="/product",produces= {"application/xml","application/json"})
+	public ResponseEntity<Product> getProduct(){
+			
+		Product productObj =new Product();
+		productObj.setPid(101);
+		productObj.setPname("Keyboard");
+		productObj.setPrice(700.00);
+		
+		return new ResponseEntity<>(productObj,HttpStatus.OK);
+	}
+}
+
+
+For Warning with application/xml 
+---------------------------------
+add it to pom.xml
+
+<dependency>
+  <groupId>com.fasterxml.jackson.dataformat</groupId>
+  <artifactId>jackson-dataformat-xml</artifactId>
+</dependency>
+
