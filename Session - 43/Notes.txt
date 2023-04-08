@@ -1,0 +1,145 @@
++++++++++++++++++++++++++++++++++++ 
+How to develop REST API using Java 
+++++++++++++++++++++++++++++++++++++ 
+
+
+-> To develop RESFul Services/ REST APIs using java SUN Microsystems released 'JAX-RS' API 
+
+-> JAX-RS api having 2 implementations    
+    1) Jersey (Sun Microsystems) 
+    2) REST Easy (JBOSS) 
+    
+    
+Note: We can develop RESTFul Services using any one of the above implementation 
+
+-> Spring framework also provided support to develop RESTFul Services using 'Spring Web MVC' module.
+
++++++++++++++++++++++++++ 
+RESTFul Services Architecture 
++++++++++++++++++++++++++ 
+
+-> We will have 2 actors in RESTful services 
+
+    1) Provider / Resource 
+    2) Consumer / Client 
+    
+    
+-> The application which is providing services to other applications is called as Provider or Resource application 
+
+-> The application which is accessing services from other applications is called as Consumer or Client application 
+
+-> Client application and Resource application will exchange data in interoperable format (like XML & JSON)  
+
+                request
+client app <----------------------> Resource app 
+                response 
+
+
+Note: RESTful Services are used to develop B2B communications (No presentation logic, No view Resolver)
+
++++++++++++++++++++++++++++++++++++ 
+Develop First REST API Using Spring Boot 
++++++++++++++++++++++++++++++++++++ 
+
+1) Create Spring starter application with below dependencies 
+    a) web-starter 
+    b) devtools
+
+2) Create RestController with Required methods 
+
+Note: To represent java class as Rest Controller we will use @RestController annotation 
+
+@RestController = @Controller + @ResponseBody 
+
+Note: Every RestController method should be binded to HTTP Protocol
+
+method Ex: @GetMapping, @PostMapping, @PutMapping & @DeleteMapping 
+
+3) Run the application and test it.
+
+Note: To test REST APIs we will use POSTMAN tool (It is free)
+
+Note: Download postman tool to test our REST API functionality
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+@RestController
+public class WelcomeRestController {
+		
+	@GetMapping("/welcome")
+	public ResponseEntity<String> getWelcomeMsg(){
+		
+		String resPayload = "Welcome to India";
+		
+		return new ResponseEntity<>(resPayload,HttpStatus.OK);
+	}
+	
+	@GetMapping("/greet")
+	public String getGreetMsg() {
+		String resPayload ="Good Morning..!!";
+		
+		return resPayload;
+	}
+}
+
+
+
+Note: GET Request will not contain Request Body to send data 
+
+-> We can use Query Params and Path Params to send data in GET Request 
+
+-> Query Params & Path Params will represent data in URL directly
+
+++++++++++++++ 
+Query Params 
+++++++++++++++ 
+
+-> Query Params are used to send data to server in URL directly 
+
+-> Query Params will represent data in key-value format 
+
+-> Query Params will start with '?' 
+
+-> Query Parameters will be separated by '&' 
+
+-> Query Parameters should present only at the end of the URL 
+
+    Ex: www.byzus.in/courses?name=SBMS&trainer=Akash
+
+-> To read Query Parameters from the URL we will use @RequestParam annotation
+
+    @GetMapping("/welcome")
+	public ResponseEntity<String> getWelcomeMsg(@RequestParam("name") String name){
+		
+		String resPayload = name+" Welcome to India";
+		
+		return new ResponseEntity<>(resPayload,HttpStatus.OK);
+	}
+
+    EG:
+    GET: localhost:8080/welcome?name=Rakesh
+
+    o/p:- Rakesh Welcome to India
+
++++++++++++++++++++++++++++++++++++++++++++++++++++
+Working with 2 Query Params 
++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+@RestController
+public class CourseRestController {
+	
+	@GetMapping("/course")
+	public ResponseEntity<String> getCourseFee(@RequestParam("cname") String cname, @RequestParam("tname") String tname) {
+		
+		String respBody = cname +" By "+tname+" Fee is 7000 INR";
+		
+		return new ResponseEntity<>(respBody,HttpStatus.OK) ;
+	}
+}
+
+
+URL: localhost:8080/course?cname=Java&tname=Akash
+
+O/P: Java By Akash Fee is 7000 INR
