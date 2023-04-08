@@ -1,0 +1,293 @@
+=>The "name" attribute in <property> tag does not actually looks to take spring bean class property name.. It is actually the "xxx" word of setXxx(-) method that is taken for the setter Injection. 
+
+Generally the xxx word setXxx(-) method matches with bean property name.. if not matched we need give "xxx" word in the name attribute of <property> tag.
+
+Eg Code :
+-----------
+
+
+spring bean class 
+==================
+//WishMessageGenerator.java
+package com.st.beans;
+
+import java.util.Date;
+
+public class WishMessageGenerator {
+	// Has-A Property ( supporting composition)
+	
+	private Date date;
+
+	
+	public WishMessageGenerator() {
+		System.out.println("WishMessageGenerator :: 0 param Constructor");
+	}
+
+	// setter method for setter Injection (Alt+shift+s, r->select setDate(-) --> ok)
+	public void setDate1(Date date) {
+		System.out.println("WishMessageGenerator.setDate(-)");
+		this.date = date;
+	}
+	
+	//B.method
+	public String generateMessage(String user) {
+		System.out.println("WishMessageGenerator.generateMessage()");
+		// get current hour of the day
+		int hour = date.getHours(); // 24 hours format (0 to 23)
+		
+		//generate wish message
+		if(hour<12)
+			return "Good Morning"+user;
+		else if(hour<16)
+			return "Good Afternoon" +user;
+		else if(hour<20)
+			return "Good Evening::"+user;
+		else 
+			return "Good Night::"+user;
+		
+		
+	}//method
+}//class
+
+
+
+applicationContext.xml file 
+----------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+    <!-- spring bean configurations here -->
+    <bean id="dt" class="java.util.Date"/>
+    
+    	
+    <bean id="wmg" class="com.st.beans.WishMessageGenerator">
+    	<!-- Setter Injection -->
+    	<property name="date1" ref="dt"/>
+    </bean>
+
+</beans>
+
+
+
+
+=> In the "name" attribute of <constructor-arg> we should give constructor param name.. not the spring bean class property name.. generally both names match.. if not match we should give param name not bean property name.
+
+Eg Code :
+---------
+
+//WishMessageGenerator.java
+package com.st.beans;
+
+import java.util.Date;
+
+public class WishMessageGenerator {
+	// Has-A Property ( supporting composition)
+	
+	private Date date;
+
+	
+	public WishMessageGenerator(Date dat) {
+		System.out.println("WishMessageGenerator:: 1 param-contructor");
+		this.date=dat;
+	}
+	
+	//B.method
+	public String generateMessage(String user) {
+		
+	}//method
+}//class
+
+<?xml version="1.0" encoding="UTF-8"?>
+<bean>	 
+
+    <!-- spring bean configurations here -->
+    <bean id="dt" class="java.util.Date"/> <!-- Dependent Class -->
+    	
+    <bean id="wmg" class="com.st.beans.WishMessageGenerator"> 
+    	<constructor-arg name="dat" ref="dt"/> <!-- Constructor Injection -->
+    </bean>
+
+</beans>
+
+
+================================================================================================
+
+
+important statements on spring bean instantiation done spring container
+----------------------------------------------
+
+(a) if spring bean class is cfg with out any injections cfg then the IOC container creates
+that spring bean class object using 0-param constructor.
+
+(b) if spring bean class is cfg only having setter injections cfgs, then the IOC container creates that spring bean class object using O-param constructor.
+
+(c) if spring bean class is cfg having constructor injection cfgs, then the IOC container creates that spring bean class object using parameterized constructor.
+
+
+
+Q) Can i place only private constructor in spring bean class?
+-------------------------------------------
+Ans) yes, we can place.. because spring container internally uses reflection api to get access to private constructor to perform spring bean instantiation and the necessary constructor injections. (Not a good practice to keep private constructor in spring bean classes).
+
+note:: we can not private setter methods for setter Injection.
+
+Eg Code 
+-------
+
+//Test.java
+package com.st.comp;
+
+public class Test {
+	private int a=10;
+	private String b="Hello";
+	
+	private Test() {
+		System.out.println("Test:: 0-param constructor");
+	}
+	
+	private Test(int a, String b) {
+		System.out.println("Test.Test() :: 2 param Constructor");
+		this.a = a;
+		this.b = b;
+	}
+
+	
+	
+	//alt+shift+s,s
+	@Override
+	public String toString() {
+		return "Test [a=" + a + ", b=" + b + "]";
+	}
+	
+	
+}
+
+
+NewInstanceMethodTest1.java 
+-----------------------------
+
+public class NewInstanceMethodTest1 {
+	public static void main(String[] args) throws Exception{
+		
+		// Load classes
+		Class c1 = Class.forName(args[0]);
+		
+		// get All constructor of the Loaded class
+		Constructor cons[] = c1.getDeclaredConstructors();
+		// Dynamic object using 0 param Constructor
+		cons[0].setAccessible(true);// gives access to private constructor
+		Object obj = cons[0].newInstance();
+		
+		System.out.println(obj);
+		
+		System.out.println(".............");
+		// Dynamic object using 0 param Constructor
+		cons[1].setAccessible(true);// gives access to private constructor
+		Object obj2 = cons[1].newInstance(100,"India");
+				
+			System.out.println(obj2);
+			
+		
+	}
+}
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+==============================================
+Q) we can use either FileSystemResource or ClassPathResource obj to locate and hold spring bean cfg file What is the difference b/w both?
+==============================================
+
+Ans) 
+
+FileSystemResource
+===================
+
+FileSystemResource obj makes the spring container to locate the given spring bean cfg file from the specified path of file system (all drives of computer managed by OS)..we can pass either relative path(good) or absolute path of spring bean cfg file.
+
+eg:: FileSystemResource res=new FileSystem Resource("src/main/java/com/st/cfgs/applicationContext.xml");
+relative path w.r.t Project folder
+
+(or)
+
+eg: FileSystemResource res=new FileSystem Resource("G:\\Worskpaces\\Spring\\SBMS-InDepth\\IOCProj03-ConstructorInjection\\src\\main\\java\\com\\st\\cfgs\\applicationContext.xml");
+
+absolute path (not a good practice)
+
+ClassPathResource
+==================
+
+ClassPathResource obj makes the spring container to locate the given spring bean cfg file from the directories and jar files added to CLASSPATH or Build PATH.
+
+
+=>In MAVEN/Gradle Project "src/main/java" and "src/test/java" folders will there in the build path /classpath by default.
+
+
+eg:: ClassPathResource res=new ClassPath Resource("com/st/cfgs/applicationContext.xml");
+
+(or)
+
+After moving com/st/cfgs/ also as a source folder to keep that folder in the build path of the project.
+
+right click on "com/st/cfgs" -> buildpath -> use as source folder.
+
+eg: ClassPath Resource res=new ClassPath Resource("applicationContext.xml");
+
+CLASSPATH -> BUILDPATH (Eclipse)
+
+=>In MAVEN/Gradle Project "src/main/java" and "src/test/java" folders will there in the build path /classpath by default.
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+=>In a running java app to hold class name, interface name, annotation name, enum name and their details we can use the object of java.lang.Class (c).
+
+=> To hold numeric values in java app, we use numeric data type variables
+
+=> To hold text values in java app, we use String class objects
+
+=> To hold class name or interface name or annotation name or enum name and their details (metadata) we can take the support of java.lang.Class object. This object does not hold names as String values..it holds them with out loosing the java meanings.
+
+
+=>The easiest way to create the object of java.lang.Class holding any class/interface/enum/annotation name and details is ".class" property.
+
+    Class c1 = java.util.Date.class;
+    Class c2= Demo.class;
+    Class c3 = Test.class;
+
+    String s1 = "Test"; // Here "Test" text content, so we can only do String manipulation
+
+    Class c3 = Test.class; // Here "Test" treated as java class.. So using c3 we can get all the details "Test" class like super class name, constructor details, method details and etc. and we can use them for different operations/invocations.
+
+    => During the compilation of every java class, the java compiler adds the default property called "class" as the public static property of type java.lang.class.
+
+    Test.java
+    ==========
+
+    class Test{
+
+    }
+
+    javac Test.java 
+
+    Compiler improvised code in Test class during the compilation.
+
+    class Test extends java.lang.Object{
+        public static Class class;
+
+        public Test(){
+
+        }
+    }
+
+    then it gives Test.class as physical file.
+
+
+=>Built-in properties in Java class are :: .class, .length
+
+=>Built-in reference variables in Java App are :: this, super
+
+=>Built-in Threads in Java App are :: main, gc
+
+=>Built-in streams in Java App are :: System.in, System.out, System.err
