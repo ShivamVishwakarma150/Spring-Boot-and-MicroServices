@@ -1,0 +1,133 @@
+++++++++++++++++++++++++++++++++++++++++++++++++
+Requirement : Develop IRCTC REST API to book a train ticket 
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+-> To develop any REST API first we have to understand the requirement 
+
+-> Identify input / request data 
+
+-> Identify output / response data 
+
+-> Create request & response binding classes 
+
+-> Create REST Controller with required methods. 
+
+-> Test REST API methods behavior using Postman
+
+
+@RestController
+public class TicketRestController {
+	
+	@PostMapping(value="/ticket",
+			produces= {"application/json"},
+			consumes= {"application/json"}
+	)
+	public ResponseEntity<TicketInfo> bookTicket(@RequestBody PassangerInfo request){
+		System.out.println(request);
+		
+		//logic to book ticket
+		TicketInfo tinfo = new TicketInfo();
+		tinfo.setTicketId(1234);
+		tinfo.setPnr("JLJL6868");
+		tinfo.setTicketStatus("CONFIRMED");
+		
+		return new ResponseEntity<TicketInfo>(tinfo,HttpStatus.CREATED);
+	}
+}
+
+
+@Data
+public class TicketInfo {
+	
+	private Integer ticketId;
+	private String pnr;
+	private String ticketStatus;
+	
+}
+
+
+@Data 
+public class PassangerInfo {
+	
+	private String name;
+	private Long phno;
+	private String jdate;
+	private String from;
+	private String to;
+	private Integer trainNum;
+	
+}
+
+I/P:
+
+{
+  "name":101,
+  "phno":21321342,
+  "jdate":"05-12-2021",
+  "from":"mumbai",
+  "to":"pune",
+  "trainNum":45334
+}
+
+O/P:
+
+{
+  "ticketId": 1234,
+  "pnr": "JLJL6868",
+  "ticketStatus": "CONFIRMED"
+}
+
+
+================================================================================================
+
+
+################# 
+HTTP PUT Request 
+################# 
+
+-> PUT request is used to update an existing record / resource at server 
+
+-> PUT Request can take data in URL and in Request Body 
+
+-> To bind our method to PUT request we will use @PutMapping
+
+Eg:
+
+@PutMapping("/ticket")
+	public ResponseEntity<String> updateTicket(@RequestBody PassangerInfo request) {
+		System.out.println(request); // logic to update ticket
+		return new ResponseEntity<>("Ticket Updated", HttpStatus.OK);
+	}
+
+#################### 
+HTTP DELETE Request 
+#################### 
+
+-> DELETE request is used to delete an existing record / resource at server 
+
+-> DELETE Request can take data in URL and in Request Body 
+
+-> To bind our method to DELETE request we will use @DeleteMapping
+
+Eg:
+
+@DeleteMapping("/ticket/{ticketId}")
+	public ResponseEntity<String> deleteTicket(@PathVariable("ticketId") Integer ticketId) { 
+
+        // logic to delete the ticket
+		return new ResponseEntity<>("Ticket Deleted", HttpStatus.OK);
+
+}
+
+
+------------------------------------------------------------------------------------------------
+
+
+Q) Can we write the logic to update a record in POST request method ? 
+
+Ans) Yes, we can do it but not recommended. We need to follow HTTP Protocol standards while developing REST API.
+
+
+
+
+
