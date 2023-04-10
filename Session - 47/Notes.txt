@@ -1,0 +1,14 @@
+CRUD Operations using REST API with MySQL DB
+++++++++++++++++++++++++++++++++++++++++++++
+
+                SQL Queries
+    Db client ----------------> DB Server 
+
+
+
+-> Develop REST API using Layered Architecture
+
+    1) Web Layer 
+    2) Business / Service Layer 
+    3) DAO Layer 
+
