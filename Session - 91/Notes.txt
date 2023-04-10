@@ -1,0 +1,176 @@
+Limitations of creating BeanFactory IOC container using XmlBeanFactory class
+===================================================
+a)XmlBeanFactory class is Deprecated from the version spring 3.1
+
+b)XmlBeanFactory does not allow to working with multiple spring bean cfg files at a time
+
+c) We can not pass spring bean cfg file name and location as string values.. it is expecting
+them as Resource object (FileSystemResource or ClassPathResource obj)
+
+d) The spring Beans given to XmlBeanFactory will be passed to DefaultListableBeanFactory
+class for registration .. So better to use DefaultListableBeanFactory as directly
+
+To overcome the above problems .. prefer using DefaultListableBeanFactory and XmlBeanDefinition Reader together to create BeanFactory IOC container.
+
+Code to create BeanFactory Container using DefaultListableBeanFactory And XmlBeanDefinitionReader 
+==========================
+
+//create IOC container
+DefaultListableBeanFactory factory=new DefaultListableBeanFactory();
+
+XmlBeanDefinitionReader reader=new XmlBeanDefinitionReader(factory);
+				
+reader.loadBeanDefinitions("com/st/cfgs/applicationContext.xml");
+
+Refer Notes.PNG 
+
+Advantages of working DefaultListableBeanFactory
+------------------------------------------------
+a) Not a Deprecated java class
+
+b) Can take multiple xml files as the spring bean cfg files at a time (var args)
+
+c)we can spring cfg file names and locations as string values. (No need of Resource objects)
+
+d) The java classes become spring beans directly with out passing them to other classes..
+
+------------------------------------------------------------------------------------------------------
+
+
+
+Design Patterns
+================
+=> These are set of rules that are given best solutions for reoccurring problems of application/project development.
+
+=>Design patterns helps the developers to use programming languages, technologies and and frameworks more effectively in the Application development ..
+
+=> Design Patterns are not part of Project designing.. they are part of Project Implementation (coding)
+
+=>Design Patterns acts best solutions for solving memory, performances, tight coupling related problems.. e
+
+
+=> Every Object Oriented Programming language gives support to implement Design Patterns. of Different Types Design Patterns.
+
+a) GOF Patterns (total 23 patterns)
+    
+    =>Can be implemented in any oop language including java
+    
+    =>Generally these are design patterns related to standalone Apps development
+    
+    eg:: singleton class, factory pattern, abstract factory pattern, bridge pattern, strategy pattern and etc..
+
+
+
+b) JEE Patterns (25 patterns)
+
+    => Given by Sun Ms
+
+    => useful to address the problems related to JAva Layered Application Development
+
+    =>Can be implemented only Java,JEE,java frameworks env..
+
+    eg:: DAO class, FrontController, ViewHelper,Composite View and etc..
+
+
+c) Micro services Patterns
+
+    => Can be used while developing applications having micro services architectures
+
+    => addresses problems related to MicroService architecture based application development.
+
+    eg: SAGA Pattern, SOLID principles pattern and etc..
+
+
+
+
+Factory Pattern
+================
+
+=> Factory Pattern creates and returns one of several related classes obj based on the data that is supplied by providing abstraction (hiding the details) on object creation process.
+
+=> related classes means, the classes having common super class or commonly implementing interface.
+
+for Diagram Refer Nots.png 
+
+if Factory pattern is not given.. The Client App fellow should know object creation process entirely..sometimes it may more complex because one object creation may multiple other objects as dependents.
+
+eg1:: Car Factory provides abstraction on Car Manufacturing
+
+eg2:: DriverManager.getConnection(-,-,-) provides abstraction on Jdbc con object creation based
+on arg values (jdbcurl, db user, dbpwd) details we supply)
+
+    Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","Manager")
+
+    // gives oracle Db s/w connectivity related JDBC con obj 
+
+                (or)
+    
+    Connection con=DriverManager.getConnection("jdbc:mysql:///<logicalDB>","root","root");
+
+    // gives mysql Db s/w connectivity related JDBC con obj
+
+note:: All Jdbc statements that are given to create Statement obj, ResultSet obj and etc.. are also based on Factory Pattern.
+
+    Statement st=con.createStatement();
+    ResultSet rs=st.executeQuery("SELECT * FROM STUDENT");
+
+eg3: spring containers (both BF ::BeanFactory and AC: ApplicationContext) are given based factory Pattern.
+
+    Date dt=factory.getBean("dt",Date.class);
+
+    WishMessageGenerator generator=factory.getBean("wmg",WishMessageGenerator.class);
+
+=>Factory pattern implementation needs factory method .. The method that can returns either
+its own class object or related class obj or irrelevant class obj called factory method. The factory method used in Factory Pattern generally returns one of several related classes object based on the data /inputs the that are supplied.
+
+The factory method of Factory pattern can static or non-static .. generally we take it is as static method having the common super class or common interface as the return type.
+
+public class PersonFactory{
+
+    // Factory method having Factory pattern logic 
+    public static getPerson(String type){
+
+        if(type.equalsIgnoreCase("emp")){
+            return new Employee();
+        }
+        else if(type.equalsIgnoreCase("cust")){
+            return new Customer();
+        }
+        else if(type.equalsIgnoreCase("stud")){
+            return new Student();
+        }
+        else 
+            throw new IllegalArgumentException("invalid person type");
+
+    }
+}
+
+Note:: Always assume Factory class and and ClientApps that using factory classes are developed
+two different programmers.. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
