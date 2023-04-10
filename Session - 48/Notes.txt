@@ -1,0 +1,87 @@
+Swagger 
+=======
+-> Swagger is used to generate documentation for REST APIs 
+
+-> Swagger UI is used to test REST API with user interface
+
+
+-> Add below property in application.properties file
+
+    spring.mvc.pathmatch.matching-strategy = ANT_PATH_MATCHER
+
+-> Create Swagger Config class like below 
+    @EnableWebMvc
+    @Configuration
+    @EnableSwagger2
+    public class SwaggerConfig {
+
+        @Bean
+        public Docket apiDoc() {
+            return new Docket(DocumentationType.SWAGGER_2)
+                    .select()
+                    .apis(RequestHandlerSelectors.basePackage("com.shivam.rest"))
+                    .paths(PathSelectors.any())
+                    .build();
+
+        }
+    }
+
+
+-> Dependency for using Swagger 
+    add it in pom.xml
+
+    <dependency>
+		    <groupId>io.springfox</groupId>
+		    <artifactId>springfox-boot-starter</artifactId>
+		    <version>3.0.0</version>
+	</dependency>
+
+
+
+-> we can access swagger ui using below URL 
+    http://localhost:8085/swagger-ui/index.html
+
+-> we can access swagger documentation using below url 
+
+    http://localhost:8085/v2/api-docs
+
+
+
+#####################
+Embedded Database (H2)
+######################
+
+-> Embedded Database are temporary databases 
+
+-> Embedded Databases are used for POC development (Proof of concept)
+
+-> We no need to download and install embedded databases 
+
+->  Embedded Databases will come along with application
+
+-> When we start application then embedded db will start and when we stop the application the embedded db will be stopped
+
+Note: Data is not permanent in the embedded db.(When we stop the application we will loose the data)
+
+Note: In Memory DBs are not used for realtime project development in the company.
+
+-> we can use H2 DB as an in-memory DB for practice.
+
+-> Add Below Dependency in pom.xml 
+
+    <dependency>
+		    <groupId>com.h2database</groupId>
+		    <artifactId>h2</artifactId>
+	</dependency>
+
+-> add below to application.properties file 
+
+    spring.datasource.url=jdbc:h2:mem:testdb
+    spring.datasource.username=sa
+    spring.datasource.password=sa
+    spring.datasource.driver-class-name=org.h2.Driver
+
+-> Run the application  and access h2-console using below URL 
+
+    http://localhost:8085/h2-console
+
