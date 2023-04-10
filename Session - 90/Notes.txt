@@ -1,0 +1,194 @@
+Need of Generics
+=================
+
+Problem Code 
+============
+
+    public Person getDetails(String type){
+    if(type.equals("cust"))
+        return new Customer();
+    else if(type.equals("emp"))
+        return new Employee();
+    else
+        return throw new IllegalArgumentException("Invalid PersonType");
+    }
+
+
+Testing Code 
+=============
+
+    Person per = getDetails("cust");//valid
+    //using "per" we can call only common of Person and class Customer class.. To call
+    // Direct methods of Customer class we need type casting..
+    Customer cust = (Customer)per;
+    //using cust we can directly call methods of "Customer" class 
+
+    Person per = getDetails("emp");//valid
+    //using "per" we can call only common of Person and class Employee class.. To call
+    // Direct methods of Employee class we need type casting..
+    Employee cust = (Employee)per;
+    //using cust we can directly call methods of "Employee" class
+
+Note: When we do typecasting there is possibility of getting Type casting related exception that is ClassCastException. that means code is not type safe to make code as type safe code take the help of Generics.
+
+------------------------------------------------------------------------------------------------------
+
+
+Solution Using Generics:
+========================
+
+public <T> T getDetails(String type,Class<T> clazz){
+    if(type.equals("cust"))
+        return clazz.newInstance();
+    else if(type.equals("emp"))
+        return clazz.newInstance();
+    else
+        return throw new IllegalArgumentException("Invalid PersonType");
+}
+
+Testing Code 
+===========
+// Class c1 = Employee.class;
+
+Employee e = getDetails("emp",Employee.class);
+
+// Here Employee.class gives object of java.lang.Class having Employee class details as data 
+
+[ Here no typecasting is required because of Generics , so we can say ClassCastException is avoided and we can say code is type safe code.]
+
+Customer cust = getDetails("cust",Customer.class);
+
+
+
+More Improved Code 
+===================
+
+public <T extends Person> T getDetails(String type,Class<T> clazz){
+    if(type.equals("cust"))
+        return clazz.newInstance();
+    else if(type.equals("emp"))
+        return clazz.newInstance();
+    else
+        return throw new IllegalArgumentException("Invalid PersonType");
+}
+
+
+//public <T extends Person> T getDetails(String type,Class<T> clazz) Here Class<T> clazz means it must be Person and its sub class based java.lang.Class obj .
+
+------------------------------------------------------------------------------------------------------
+
+Old getBean(-) of BeanFactory (spring 1.O onwards)
+==============================
+
+signature
+----------
+
+public Object getBean(Spring beanid) throws beansException
+
+    eg::
+
+    Object obj=factory.getBean("wmg");
+    //using obj we can not call direct methods of "WishMessage" Generator class
+
+    //for Go for Type casting
+    WishMessageGenerator generator=(WishMessageGenerator)obj;
+
+    //using "generator" we can call direct method WishMessageGenerator class.
+    
+    note: Type casting required, so there is possibility of getting ClassCastExceptionException i.e code is not type safe.
+
+
+------------------------------------------------------------------------------------------------------
+
+
+
+Improvised getBean(-,-) method of BeanFactory (Using generics from spring 2.5)
+=============================================
+
+
+signature ::
+
+public <T> T getBean(String beanid,Class<T> clazz) throws beansException
+
+eg:
+
+    WishMessageGenerator generator = factory.getBean("wmg",WishMessageGenerator.class);
+    // passing WishMessageGenerator.class as the object of java.lang.Class
+    // No typecasting is required so code becomes type safe code..
+
+eg::
+    Date d = factory.getBean("date",Date.class);
+        // No Type casting required, So code becomes type safe code..
+
+Improved factor.getBean(-,-) method in the Client App 
+-------------------------------------------------
+package com.st.test;
+
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.FileSystemResource;
+
+import com.st.beans.WishMessageGenerator;
+
+public class ConstructorInjectionTest1 {
+	
+	
+	public static void main(String[] args) {
+		// Locate and hold spring bean cfgs file name and location
+		FileSystemResource res = new FileSystemResource("src/main/java/com/st/cfgs/applicationContext.xml");
+		
+		//create IOC Container (BeanFactory container)
+		XmlBeanFactory factory=new XmlBeanFactory(res);
+
+		//get Target spring bean class object
+		WishMessageGenerator  generator=factory.getBean("wmg",WishMessageGenerator.class);
+
+		//invoke the b.method
+		String result=generator.generateMessage("Rajesh");
+
+		System.out.println("Wish Message is ::"+result); 
+
+		
+		
+	
+	}//main
+}//class
+
+
+
+
+STS (Spring Tool Suite)
+=========================
+=>STS is an IDE which exclusively given for spring/spring Boot apps development.
+=>This IDE is based Eclipse IDE
+=> Instead of STS IDE.. we add STS plugin to Eclipse,So we can use Eclipse features and STS IDE features..
+
+=>Plugin
+=======
+=> A plugin is patch s/w that provides additional features on the top of existing features.. in the
+software or software App.
+
+    Eclipse having two type plugins
+        a) Eclipse supplied plugins
+            => Can be added using help menu => Install new software option
+            eg:: Gui builder, GlassFish Tools, Jboss tools and etc..
+        b) Third Party plugins
+            =>Can be added using help menu=>Eclipse market place
+            eg:: STS plugin, sonar cube, jasper soft and etc..
+
+
+note: From eclipse 2019 Gradle, maven, GIT, SVN and etc.. plugins are built-in plugins in basic Eclipse Installation..
+
+STS plugin features 
+===================
+
+a) Allows to crete spring bean cfg file by importing selected XSD names spaces
+b) helps to finish spring cfg file development very fast ly
+c) simplifies spring boot App development by lots of starters..
+d) allows to create spring project and spring boot projects easily.. and etc..
+
+
+Help Menu ===> Eclipse Market place ==> search STS --> go --->
+select 3.9.18 version -->install --->confirm ---> next ----> accept terms conditions --> restart
+eclipse IDE
+
+
