@@ -1,0 +1,336 @@
+Strategy Design Pattern Continued
+==================================
+
+---------------------------------------------
+(ii) Code becomes fragile (Easy breakable)
+---------------------------------------------
+
+class A{
+
+    public int m1(){ // if I Here change int to float then it becomes fragile.
+        ....
+        return 100;
+    }
+}
+
+class B extends A{
+    public int m1(){
+        ...
+        return 1000;
+    }
+}
+
+class C extends B{
+    ...
+    ...
+}
+
+class D extends B{
+    ...
+    ...
+}
+
+
+
+problem:: If we modify the return type of m1() in "A" class from int to float the all classes that inheriting from "A" class directly indirectly will be disturbed and we can get lots of inconsistency problem.
+
+note:: if the signature of java.lang.Object class methods are modified bit .. then all java apis will be collapsed ..because java.lang.Object is the top most class in the inheritance hierarchy of every java class.
+ 
+Solution:: Use the composition, then we can restrict the problem to certain 1 or 2 methods.
+
+class A{
+    public int m1(){ // int -> float
+        ...
+        return 100;
+    }
+}
+
+class B{
+    private A a = new A();
+    public int m1(){
+        int x = a.m1();
+        // we just need to modify this line
+        // we can easily change here 
+        //int x = Math.round(a.m1());
+                (or)
+        // var x = a.m1(); // from java10 onwards
+        ....
+        return x+1000;
+    }
+}
+
+class C extends B{
+    ...
+    ...
+}
+
+class D extends B{
+    ...
+    ...
+}
+
+
+=>Here B class has the object of A class (composition and no inheritance b/w A and B classes), So if we change the return type of m1() in A class from int to float .. we just need to modify the code in B class or other classes when that m1() of A class is being invoked i.e we can restrict the code change problem propagation to certain method call area .. All classes in the hierarchy will not be disturbed.
+
+=> declaring local variable having type "var" given from Java 10 ..
+-----------------------------------------------
+In Java 10, the var keyword allows local variable type inference, which means the type for the local
+variable will be inferred by the compiler based on the value that is assigned.
+
+
+============================================
+(iii) Testing of code becomes very complex.
+============================================
+
+=>Programmer’s testing on his own piece of code is called unitTesting.
+
+=> We can use Junit tool to perform UnitTesting through coding.
+
+Problem Code 
+++++++++++++
+
+class A{
+    public int m1(){
+        return 100;
+    }
+    public int m2(){
+        ..
+        return 200;
+    }
+}
+
+class B extends A{
+    public int m3(){
+        ... 
+        return 300;
+    }
+    public float m4(){
+        ...
+        return 45.77;
+    }
+
+}
+
+class C extends B{
+    ..
+    ..//more methods 
+    ..
+}
+
+class D extends C{
+    ..
+    ..//more 3 methods 
+    ..
+}
+
+
+
+B b = new B();
+b.m1(); b.m2(); b.m3(); b.m4();
+---------------------------------
+D d = new D();
+// we can Invoke total 10 methods on this object.
+
+
+While performing unit Testing of any sub class .. we need to write test cases for the direct methods of the sub class and also for the inherited method to sub class .. This improves burden on the programmer.
+
+Solution 
+++++++++
+
+class A{
+    public int m1(){
+        return 100;
+    }
+    public int m2(){
+        ..
+        return 200;
+    }
+}
+
+class B extends A{
+    private A a = new A();
+
+    public int m3(){
+        int x=a.m1();
+        return x+200;
+    }
+    public float m4(){
+        return 200.6f;
+    }
+}
+
+class C {
+    ..
+    .. // more 3 methods
+    ..
+}
+
+class D{
+    ..
+    .. // more 3 methods
+    ..
+}
+
+B b = new B();
+b.m3();
+b.m4();
+
+---------------
+
+D d = new D();
+we can only 3 methods on this object of "D" class.
+
+=> Here while doing unit testing on any class.. we just need to write test cases only for that class methods.. So burden on the programmer will be decreased.
+
+
+----------------------------------------------------------------------------------------------------
+
+
+=================================================
+b) Code to interfaces/abstract classes .. Never Code to Concrete classes. (Strategy Pattern Rule2)
+=================================================
+
+Problem :: Tight Coupling 
++++++++++++++++++++++++++
+
+// target class 
+class Flipkart {
+
+    // HAS-A Property
+    //private DTDT dtdc = new DTDC();
+    private BlueDart bDart = new BlueDart();
+    public String shopping(
+        Sting item[],float price[]){
+            ....
+            ....// calc b.method 
+            ....
+            ....//logic for payment
+            ....
+            ....
+            //String status = dtdc.deliver(old);
+            String status = bDart.deliver(old);
+            
+            return status +" "+billAmt;
+        }
+    }
+}
+
+
+// dependent class 
+public class DTDC{
+    public String deliver(int old){
+        ...
+        ...
+    }
+}
+
+
+// dependent class 
+public class BlueDart{
+    public String deliver(int old){
+        ...
+        ...
+    }
+}
+
+
+=>To change Dependent "DTDC" to "BlueDart" we need to modify the source code target class every time , So we can say there is tight coupling.
+
+
+
+Solution :: Loose Coupling through interfaces/abstract classes
++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+=>Make all related Dependent classes implementing the common Interface or extending from Common super class /abstract class
+
+=> Take common Interface or super class or abstract class type HAS-A property in the
+Target class and use the support of setter method or parameterized constructor for assigning dependent to target externally.
+
+Solution Code 
+==============
+
+// common interface 
+interface Courier{
+    public String deliver(int old);
+}
+
+
+// Target Class 
+class Flipkart {
+    // HAS-A property
+    private Courier courier;
+
+    public void setCourier(Courier courier){
+        this.courier=courier;
+    }
+
+    public String shopping(
+        Sting item[],float price[]){
+            ....
+            ....// calc b.method 
+            ....
+            ....//logic for payment
+            ....
+            ....
+           String status = courier.deliver(oid);
+            
+            return status +" "+billAmt;
+        }
+}
+
+// Dependent class1 
+class DTDC implements Courier{
+    public String deliver(int old){
+        ...
+        ...
+        return "...";
+    }
+}
+
+// Dependent class2 
+class BlueDart implements Courier{
+    public String deliver(int old){
+        ...
+        ...
+        return "...";
+    }
+}
+
+Client App - 1
+==============
+
+Flipkart fpkt = new Flipkart();// target class obj 
+
+Courier courier - new DTDC();// Dependent class obj
+
+fpkt.setCourier(courier); // assigning dependent class obj to target class obj 
+
+String resultMsg = fpkt.shopping(new String[]{"shirt","trouser"},new float[]{5000.0f,4000.0f});
+
+Client App - 2
+==============
+
+Flipkart fpkt = new Flipkart();// target class obj 
+
+Courier courier - new BlueDart();// Dependent class obj
+
+fpkt.setCourier(courier); // assigning dependent class obj to target class obj 
+
+String resultMsg = fpkt.shopping(new String[]{"shirt","trouser"},new float[]{5000.0f,4000.0f});
+
+
+In the Client Apps we can from one Dependent courier and another Dependent courier with out changing the code of target class because the coding is done to interfaces.. to achieve loosely coupling.
+
+
+================================================
+c) code must be open for extension and must be close for modification (Strategy Pattern Rule3)
+================================================
+
+=> This rule is extension of rule2. if we enhance rule2  then automatically rule 3 will be implemented.
+
+=>  we can take more independent classes like DHL,FirstFlight and etc.. implementing the common interface i.e. our code is open for Extension.
+
+=>we can take both target and dependent classes as final classes or their methods as final methods to make their code "Closed for modification" (final class can not have sub classes, Final methods can not be overridden in sub classes )
+
