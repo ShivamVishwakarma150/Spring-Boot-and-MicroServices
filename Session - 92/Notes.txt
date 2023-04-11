@@ -1,0 +1,149 @@
+Factory Pattern
+================
+=> Factory Pattern creates and returns one of several related related classes obj based on the
+data that is supplied by providing abstraction (hiding the details) on object creation process.
+
+=> related classes means, the classes having common super class or commonly implementing interface.
+
+Problem code -> IOCProj04-FactoryPattern-Problem
+
+HEre the multiple client Apps should know following things
+a) How to create objects for different car classes
+b) if need they should know how to create the required dependent class objects
+c) They should good command on the hierarchy of classes
+
+Code is in Folder
+
+=>To this solve this problem for clients provide then one factory class having factory pattern
+which takes care of object creation process.. by hiding details from clients..
+
+Solution Using Factory Pattern 
+-------------------------------
+
+follow folder -> IOCProj05-FactoryPattern-Solution
+
+
+
+----------------------------------------------------------------------------------------------------
+
+
+
+Strategy pattern
+=================
+
+=> Strategy means planning
+=> It is a GOF pattern and can be implemented in any oop language
+=> It has become very popular after arrival spring framework .. but it is not spring framework pattern.
+
+=> This patterns gives set of rules/principles to designing classes having dependent as target and dependent classes.
+
+=> This design pattern says develop the target and dependent classes of Dependency Management as loosely coupled interchangeable parts.
+(i.e we can change one dependent class to another dependent class with out effecting the the source code target class)
+
+=>if the degree of dependency is more b/w two comps/classes then they are called tightly coupled classes/comps
+
+    eg:: CPU Box     Console/Display Unit
+    eg:: Fan and switch
+
+=>if the degree of dependency is less b/w two comps/classes then they are called loosely coupled classes/comps
+
+    eg:: TV and Remote
+    eg:: laptop and Mouse
+
+
+The three principles/ rules of Strategy pattern.
+================================================
+a) Favour Composition over Inheritance
+b) Code to interfaces/abstract classes .. Never Code to Concrete classes.
+c) code must be open for extension and must be close for modification.
+
+
+a) Favour Composition over Inheritance
++++++++++++++++++++++++++++++++++++++++
+
+Inheritance Is-A Relation
+-------------------------
+
+class A{
+    ...
+    ...
+}
+
+Class B extends A{
+    ...
+    ...
+}
+
+Composition (HAS-A Relation)
+----------------------------
+class A{
+    ...
+    ...
+}
+class B{
+    private A a = new A();
+    ...
+
+}
+B has got A class object.
+
+
+=> if class1 wants to use entire state and behavior of class2 them keep them in Inheritance relationship.
+
+=> if class1 wants to use specific state and behavior of class2 them keep them in Composition relationship.
+
+
+Limitations of Inheritance (while using it in Dependency Management)
++++++++++++++++++++++++++++++++++++++++++++++++
+
+(i) Few languages do not support inheriting from multiple classes (including java)
+
+(ii) Code becomes fragile (Easy breakable)
+
+(iii) Testing of code becomes very complex.
+
+
+
+
+
+-------------------------------------------------
+(i) Few languages do not support inheriting from multiple classes (including java)
+-------------------------------------------------
+
+problem::
+---------
+
+class A{
+    ...
+}
+
+class B{
+    ...
+}
+class C extends A,B{ // Not allowed in most of the OOPS language.
+    ...
+    ...
+}
+
+=> Don't look at interfaces in the angle of Inheritance because they does not contain any thing exclusively to inherit always look at them in the angle of polymorphism.
+
+
+Solution ::
+------------
+
+class A{
+    ...
+}
+
+class B{
+    ...
+}
+
+class C {
+    private A a = new A();
+    private B b = new B();
+    ....
+    ....
+}
+
+=> Can work with multiple other classes object using Composition.  
