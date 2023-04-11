@@ -1,0 +1,105 @@
+-> As of now we developed several REST API's 
+
+-> We have tested our REST APIs functionality using POSTMAN 
+
+-> We have added Swagger to generate documentation for REST API 
+
+-> We have used Swagger UI also to test REST API with User Interface 
+
+-> All our REST APIs executed in localhost (only we can access within our
+machine)
+
+-> Our REST API running in the server, that server is running in local machine thats why we can access only in our local machine (It is not available for public access) 
+
+-> To provide public access for our REST API we need to deploy that into cloud platform 
+
+-> Cloud means getting resources over the web, based on our demand 
+
+-> We have several cloud platforms in the market
+    1) AWS 
+    2) Azure 
+    3) GCP 
+    4) VM Ware 
+    5) Heroku etc....
+
+
+-> Heroku Cloud Providing 'Platform As a Service' to run our applications (PaaS) 
+
+-> Heroku Cloud Platform provided by Salesforce cloud 
+
+-> Now Heroku is not Free :(
+
+######################################### 
+How to deploy Spring Boot App in AWS Cloud 
+######################################### 
+
+1) Create free tier account in AWS 
+
+2) Launch EC2 Linux Virtual Machine in AWS Cloud
+
+3) Connect to EC2 Linux VM using MobaXterm / PuTTY 
+
+4) Upload our Spring Boot Jar file into EC2 VM 
+
+5) Install Java software in EC2 VM 
+
+6) Run the Java application in EC2 VM 
+
+7) Access the application in browser
+
+
+
+======================================================================================================
+
+
+
+
+############### 
+REST Client 
+################ 
+
+-> The application which is accessing REST API is called as REST Client 
+
+-> Rest Client app and REST Api application will communicate using HTTP as a mediator. 
+
+-> Every Programming language having support to develop REST Client .
+
+-> Using Spring Boot also we can develop REST Client Applications 
+1) RestTemplate 
+2) WebClient (introduced in spring 5.x version) 
+
+-> RestTemplate is a predefined class, which is part of 'spring-boot-starter-web' dependency. It supports only synchronous communication.
+
+
+-> WebClient is a interface which is part of 'spring-boot-starter-webflux' dependency. It supports both synchronous & asynchronous communication. 
+
+Note: To develop REST Client we need to know REST API details 
+    1) API URL 
+    2) API Request Method 
+    2) API request data structure 
+    3) API response data structure
+
+-> REST API team will send swagger documentation to REST Client side team. Using swagger documentation we need to understand the api and we need to develop REST Client logic to access REST API.
+
+
+########################################
+RestTemplate Example to access REST API 
+########################################
+
+    String apiURL = "https://www.google.com";
+		
+	RestTemplate rt = new RestTemplate();
+		
+	ResponseEntity<String> forEntity = rt.getForEntity(apiURL,String.class);
+		
+	String body=forEntity.getBody();
+		
+	System.out.println(body);
+
+
+
+
+
+
+
+
