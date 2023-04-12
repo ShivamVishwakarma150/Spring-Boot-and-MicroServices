@@ -1,0 +1,129 @@
+=>To provide abstraction to Client App developers .. It is better to provide Factory to them
+
+Example Application on Strategy DP 
+===================================
+
+Refer code :- IOCProj06-StrategyDPWithFactoryDP-CoreJava
+
+
+package com.st.comp;
+
+public interface Courier {
+     public String  deliver(int oid);
+}
+
+-----------------------------------------
+
+//BlueDart.java (Dependent class1)
+package com.st.comp;
+
+public final class BlueDart implements Courier {
+  
+	public BlueDart() {
+		System.out.println("BlueDart:: 0-param consturctor");
+	}
+	
+	@Override
+	public String deliver(int oid) {
+	    return oid+" order id order is delivered by BlueDart";
+	}
+
+}
+
+-----------------------------------------------
+
+//DTDC.java (Dependent class1)
+package com.st.comp;
+
+public final class DTDC implements Courier {
+  
+	public DTDC() {
+		System.out.println("DTDC:: 0-param consturctor");
+	}
+	
+	@Override
+	public String deliver(int oid) {
+	    return oid+" order id order  is delivered by DTDC";
+	}
+
+}
+
+--------------------------------------------------
+
+//Fliplkart.java (target class)
+package com.st.comp;
+
+import java.util.Arrays;
+import java.util.Random;
+
+public final class Flipkart {
+	//HAS -A   property of type interface
+	private Courier courier;
+	
+	public Flipkart() {
+		System.out.println("Fliplkart:: 0-param constructor");
+	}
+
+	//setter method for setter Injection
+	public void setCourier(Courier courier) {
+		System.out.println("Fliplkart.setCourier(-)");
+		this.courier = courier;
+	}
+	
+	public  String shopping(String items[], float prices[]) {
+		//calculate billAmt  (b.logic)
+		float billAmt=0.0f;
+		for(int i=0;i<items.length;++i)
+			billAmt=billAmt+prices[i];
+		//generate order id
+		int oid=new Random().nextInt(100000);
+		//use courier for shipping
+		String status=courier.deliver(oid);
+		String finalMsg=Arrays.toString(items)+"are purchsed with prices"+Arrays.toString(prices)+". The geneated billAmount is::"+billAmt;
+		
+		return finalMsg+" :::"+status;
+	}
+	
+	 
+
+}
+---------------------------------------------------
+
+//StrategyDPTest.java
+package com.st.test;
+
+import com.st.comp.Flipkart;
+import com.st.factory.FlipkartFactory;
+
+public class StrategyDPTest {
+
+	public static void main(String[] args) {
+		 try {
+			 //get target class object form Factory
+			 Flipkart fpkt=FlipkartFactory.createFlipkart("bDart");
+			 // invoke the b.method
+			 String result=fpkt.shopping(new String[] {"shirt","trouser","mobile"},
+					                                         new float[] {3400.0f , 5600.0f, 60000.0f});
+			 System.out.println(result);
+			 
+		 }//try
+		 catch(Exception e) {
+			 e.printStackTrace();
+		 }
+	}//main
+}//class
+
+
+-----------------------------------------------------
+
+
+
+=>The above code is developed by using strategy DP and Factory DP and getting loose coupling
+with respect to target and dependent classes i.e we can change from dependent class to another dependent class with out changing the source code of target class, But this not 100% loosely coupled code..
+
+Why the above code is not 100% Loosely coupled?
++++++++++++++++++++++++++++++++++++++++++++++++
+
+a) after adding 1 more courier class by implementing Courier(I) ...we need to modify the source code of Factory class.
+
+b) if Client App wants to change from 1 courier to another courier then we need to modify the source code of Client App.
