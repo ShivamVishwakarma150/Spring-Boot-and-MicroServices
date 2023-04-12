@@ -1,0 +1,101 @@
+To make ini Strategy DP application as 100% Loosely Coupled App , we need to use the properties file or xml file. 
+
+
+
+Properties File 
+================
+
+=>The text that maintain the entries as key=value pairs is called properties file. It is recommended to take .properties extension for the properties file.
+
+info.properties
+---------------
+# person info 
+per.name = raju
+per.addrs = bom
+per.age = 30
+    keys  = values 
+
+
+=> In keys we can take ".","_","-" as the separators ..not the other characters..
+
+=> keys must be unique.
+=> # symbol comments the line 
+
+
+java.util.Properties is the Map Collection and the sub class of java.util.Hashtable . we can store keys and values of properties file into java.util.Properties Collection using load(-) method of same class.
+
+// sample code 
+============
+// Locate properties file 
+FileInputStream fis = FileInputStream("src/maim/java/com/st/commons/info.properties");
+
+// Load properties file content into java.util.Properties class object 
+Properties props = new Properties();
+props.load(fis);
+
+System.out.println(props);
+
+System.out.println("per.age key value "+props.getProperty("per.age")); // -> gives value 40
+
+// In java.util.Properties Collection elements the key and values must be in strings.
+
+
+======================================================================================================
+
+
+Making Core java based StrategyDP App as loosely coupled App using the support of Properties file
+------------------------------------------------
+
+Refer Code :- IOCProj06-StrategyDPWithFactoryDP-CoreJava-PropertiesFile
+
+Refer Notes : Notes.png
+
+
+Problems in StrategyDP impl using Core Java Setup even after improvising with properties file 
+++++++++++++++++++++++++++++++++++++++++++++++
+
+a) We need to implement factory pattern explicitly
+
+b) No Internal cache by default.. if needed we should write those logics explicitly
+
+c) To make code of 100% Loosely coupled code , we need to take properties and xml file but reading from properties file or from xml file needs lots of api knowledge required .. This improves burden on the programmer.
+
+To overcome these problem implement strategy DP using Spring framework.
+
+
+
+=================================================
+Making Core java based StrategyDP App as loosely coupled App using the support of spring framework
+==================================================
+
+Refer Code :- IOCProj06-StrategyDP-Spring
+
+Refer Notes : Notes.png
+
+
+Advantages of developing strategy DP application using spring framework
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+a) No need of developing Factory pattern ..because spring Container/lOC container itself acts as factory Pattern.
+
+b) Keeps Spring bean class objects in the built-in internal cache of IOC container giving the reusability of spring bean class object.
+
+c) Allows to give Dependency Management inputs in multiple ways like xml file, annotations, java classes.
+
+d) improves the readability of the Application.
+
+e) 100% Loosely coupling promised.
+
+f) It is industry standard to use Spring Framework for Dependency Management.
+and etc..
+
+=>A perfectly develop spring App contains the following DesignPatterns
+
+a) Factory pattern
+b) strategy DP
+c) Flyweight pattern (keeping objects in the internal cache and reusing the objects is activity of Flyweight pattern)
+
+
+
+
+
