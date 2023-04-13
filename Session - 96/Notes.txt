@@ -1,0 +1,67 @@
+Q) Where should use setter Injection and where should we constructor Injection?
+
+Ans) if all properties spring bean are mandatory to participate in Dependency Injection then go for Constructor Injection .. if the properties of spring bean are optional to participate in dependency Injection then go for setter Injection.
+
+    =>Spring Bean class with 4 properties
+        a, b, c, d are bean properties
+    -------------------------------------------
+
+    Let us assume 4 param constructor is placed in spring bean class
+
+
+    =>if we do constructor injection using 4-param constructor then all params must participate in the injection
+
+
+    => Using constructor Injection , if want to involve our choice no.of properties in the Injection process then we need multiple overloaded constructors that is 4! no.of constructors (24), if the bean properties count is 4. 10! no.of constructors if the bean properties count 10(36,28,800)
+
+    Conclusion: Performing constructor Injection using overloaded constructors on our choice no.of bean properties is very complex process. So prefer constructor Injection only when all bean properties mandatory to participate in constructor Injection.. For this only one parameterized constructor is enough
+
+    eg: spring bean with 10 properties
+
+    => constructor injection on all bean properties => one 10 param constructor is enough
+
+    => constructor injection on my choice bean properties ==> we need 10! no.of overloaded constructors (36,28,800)
+
+    =>While working setter methods setter Injection we can involve our choice no.of bean properties fo setter Injection.
+
+
+
+
+
+10 spring bean properties in spring bean class
+==============================================
+
+=>To involve our choice no.of bean properties in setter Injection we just need 10 setter methods
+
+=> All properties must participate in dependency Injection :: Not possible with setter Injection.
+
+
+
+Final Conclusion:
+spring bean class with 10 bean properties
+--------------------------------------------
+
+=>all bean properties must participate in the Dependency Injection then go for one 10 param constructor supporting constructor Injection
+
+=>all bean properties are optional to participate in the Dependency Injection then go for 10 setter methods supporting setter Injection.
+
+=>In spring bean class few properties are mandatory to participate in dependency Injection another few properties optional to participate in the dependency Injection then prefer using both setter and constructor Injection
+
+=>For mandatory properties :: constructor Injection
+=> for optional properties :: setter Injection.
+
+
+=>Spring's dependency Injection is not given to Inject the end user supplied non technical input values to spring bean properties like name,age, address and etc.. It is always given to Inject programmer supplied technical input values (liked jdbc properties) or IOC container created spring bean class objects (like DTDC obj to Flipkart)
+
+jdbc properties jdbc driver class name, jdbc url, db user, db pwd.
+
+
+======================================================================================================
+
+For Code :- follow IOCProj07-SetterVsConstructorInjection
+
+For Notes :- follow Notes.png
+
+
+======================================================================================================
+
