@@ -1,0 +1,164 @@
+Realtime DI Background preparation (Mini Project Development)
+=================================================
+=> A typical project contains the following logics
+
+    a)presentation logics (Logic giving user-interface)
+
+    b) business logic/ Service logic ( Logic performing calculations, analyzations, filtering ,sorting and etc..)
+
+    c) Persistence logic performing CURD/CRUD Operations on s/w
+        (Insert,update,delete and select operations)
+        and etc..
+
+
+
+Limitations of keeping multiple logics in single java class (it is like Bachelor single Room)
+-------------------------------------------------
+
+=> Multiple logics will be mixedup , So we can say there is no clean separation b/w logics
+
+=> Code becomes very clumsy
+
+=> The modifications done in one kind of logics effects other kind of logics
+
+=> Maintenance and the enhancement of the Project becomes complex
+
+=>Parallel development is not possible , So the productivity is poor.
+
+=> It is not industry standard approach to develop the s/w Apps.
+
+=>To overcome these problems .. Develop the App/project as the Layered App/Project where multiple category logics will be placed in multiple logical or physical partitions (nothing but layers) of the Project.
+
+=> A Layer is logical or physical partition of the Project having 1 more resources(files/classes) representing certain category logics.
+
+    =>Presentation layer (1 or more classes/files) represents presentation logics
+
+    =>Service layer (1 or more classes/files) represents service logics
+
+    =>Persistence layer/DAO Layer (1 or more classes/files) represents Persistence logics
+
+    =>Controller layer (generally 1 class) represents controlling or monitoring logics
+
+
+Standalone Layered Application (It is like 3BHK flat)
+=============================================
+
+Refer :- Notes.png 
+
+
+
+Web Based Layered Application
+==============================
+
+Refer :- Notes.png 
+
+
+
+=>DB s/ws like oracle ,mysql ,mongoDB and etc.. called Data storage technologies
+
+=> JDBC, hibernate, spring JDBC, spring ORM, spring data jpa and etc.. are given to access and manipulate the data of Db s/ws.. So they are called Data Access technologies or frameworks
+
+insert ,update, delete and select perations
+are called CURD Operations
+
+
+Two types of JDBC con objects
+1. Direct JDBC Con object :-
+    created by the programmer manually.
+2.Pooled JDBC con obj
+    JDBC con pool (ready made jdbc con obj)
+
+
+
+DAO class (Data Access Object class)
+====================================
+
+=>The java class whose code is written using one or another Data Access technologies  or frameworks to separate persistence logics from other logics of the Project to make the Persistence logics as the reusable logics and flexible to modify is called DAO class.
+
+=>DAO class should have only persistence logic performing CURD operations .. it should not have even c=a+b kind of b.logic
+
+=>DAO class can use either direct JDBC con object or Pooled JDBC object for interacting with Db s/w..
+
+=> if project is having <100 db tables then take 1 DAO class per 1 db table if project is having >=100 db tables then take 1 DAO class per related 4 to 5 db tables
+
+=> Can have persistence logic calling PL/SQL procedures and functions
+
+=> Every DAO class contains two parts
+    a) Query part (All SQL queries will be placed at top of the class in upper case letters as private string constant values (private static final String variable) 
+        eg: private static final String GET_ALL_EMPS="SELECT * FROM EMP";
+
+        private => To make query specific to current class 
+
+        static => To access query without object
+
+        final => to make sure that query is not going to be modified in rest of the program.
+
+        Recommended to take in upper case to differentiate from the regular java code. 
+
+Code Part 
+=========
+
+    Java method having persistence logic developed using persistence technologies /frameworks like JDBC, hibernate, spring JDBC, spring ORM, spring data jpa.
+
+
+------------------------------------------------------------------------------------------
+
+
+Service class
+==============
+
+=>The java class that contains b.logic or service logic representing calculations,analyzations, filtering, sorting and etc..
+
+=>It is 1 class per module
+
+    University Project 
+        |-> Admission Module 
+        |-> Examination module 
+        |-> Academics Module
+        |-> Sports Module 
+        |-> Payroll Module
+        |-> Co-Circular Activities Module 
+        |-> Placement Module 
+
+
+=> purely contains b.logics /service logics 
+
+
+Controller class
+================
+
+=> The java class contains purely monitoring logics
+
+=>This class code controls all activities of the Application
+
+=> It is 1 class Per Project.
+
+=>Makes Appropriate Client Apps/ presentation comp/view comp taking appropriate Service class and vice-versa.
+
+=> it is like supervisor
+
+=>It contains additional logics like logging, auditing and etc.. to enable more control and monitoring on the Project.
+
+=>All the activities of the App must take place under the monitoring Controller.
+
+
+
+Client App / View Comps/ html,jsp comps
+========================================
+
+
+=>Contains presentation logics providing user-interface to end user
+
+=>Responsible to gather inputs from end user and to display results for end user
+
+=> Any exception raised in any layer during the execution of the Project should be propagated/passed to Client App to display to end user..
+
+
+
+Where did u Realtime DI in your project?
+=========================================
+Ans) My Project is Layered App.. In the Project multiple layer classes are there like DAO class, service class,Controller class and etc.. By cfg these classes as spring beans for IOC container we make the IOC container injecting DAO class object to service class obj and Service class object Controller object..
+
+note:: The Client App gets Controller object having injected Service,DAO class objects by calling factory.getBean(-) method
+
+for Diagram Refer Notes.png
