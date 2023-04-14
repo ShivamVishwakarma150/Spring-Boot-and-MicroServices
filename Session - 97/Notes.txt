@@ -1,0 +1,154 @@
+Cyclic Dependency Injection/ Circular Injection
+===========================================
+
+=> Here Target and dependent classes maintain HAS-A property having Circular Dependency i.e Both are dependent to each other.
+
+=> if A,B are the spring Beans the A dependent B and B is dependent to A
+
+=> In real Projects, we do not see the need of Cyclic DI.. It is purely POC (knowledge).
+
+=>setter Injection support Cyclic DI and constructor Injection does not Support Cyclic DI
+
+Cyclic DI using setter Injection
+---------------------------------
+
+//A.java
+package com.st.beans;
+
+public class A {
+	private  B b;
+	
+	public A() {
+		System.out.println("A:: 0-param constructor");
+	}
+	 
+  public void setB(B b) {
+	  System.out.println("A.setB()");
+		this.b = b;
+	}
+
+@Override
+public String toString() {
+	return "A [b=]";
+}
+
+}
+
+
+
+//B.java
+package com.st.beans;
+
+public class B {
+  private A a;
+  
+  
+   public B() {
+	System.out.println("B: 0-param constructor");
+   }
+
+
+public void setA(A a) {
+	System.out.println("B.setA()");
+	this.a = a;
+}
+
+
+@Override
+public String toString() {
+	return "B [a=]";
+}
+
+}
+
+
+applicationContext.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+  <!--Spring beans cfg  -->
+  <bean id="a1" class="com.st.beans.A">
+     <property name="b"  ref="b1"/>
+  </bean>
+  
+  <bean id="b1" class="com.st.beans.B">
+        <property name="a" ref="a1"/>
+       </bean>
+</beans>
+
+
+
+
+//CyclicDITest.java
+package com.st.test;
+
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+
+import com.st.beans.A;
+
+public class CyclicDITest {
+
+	public static void main(String[] args) {
+		//create IOC container
+		DefaultListableBeanFactory factory=new DefaultListableBeanFactory();
+		
+		XmlBeanDefinitionReader reader=new XmlBeanDefinitionReader(factory);
+		
+		reader.loadBeanDefinitions("com/st/cfgs/applicationContext.xml");
+		
+		//get Spring bean calss obj
+		A  oa=factory.getBean("a1",A.class);
+		System.out.println(oa);
+
+	}
+
+}
+
+
+
+
+==========================================================================================
+
+Cyclic DI using constructor Injection (not possible .. 
+throws Exception
+org.springframework.beans.factory.BeanCurrentlylnCreationException
+: Error creating bean with name 'a1': Requested bean is currently in creation: Is there an unresolvable circular reference?)
+
+
+------------------------------------------------------------------------------------------------------
+
+For code Follow :- IOCProj09-CyclicDI-constructorInjection
+
+
+For Notes follow :-  Notes.png
+
+
+------------------------------------------------------------------------------------------------------
+
+
+Cyclic DI using. one side constructor Injection and another side Setter Injection
+===============================================
+
+Possible but we need to pass that class beanid in factory.getBean(-) where setter Injection is enabled.
+
+For COde :- IOCProj10-CyclicDI-SetterAndconstructorInjection
+
+For Notes follow :-  Notes.png
+
+
+
+
+
+
+
+
+What is difference b/w setter Injection and constructor Injection?
+=================================================
+
+Check in Notes :- Notes.png
+
+
