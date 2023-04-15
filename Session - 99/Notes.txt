@@ -1,0 +1,13 @@
+3 Types of JAva beans
+
+a) VO class (Value Object class)
+b) DTO class (Data Transfer Object class)
+c) BO class (Business object class)
+
+VO class ==> carries inputs or outputs
+Generally contains all its properties as string properties
+
+DTO class ==> carries data with in projects across the multiple layers
+and also carries data across the multiple projects
+
+BO class/Domain class/Entity class/Model class ==> represents persistable data (to be saved/inserted) or persistent data (retrieved/collected from db table)
