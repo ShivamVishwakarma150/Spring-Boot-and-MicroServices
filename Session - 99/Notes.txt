@@ -1,13 +1,223 @@
-3 Types of JAva beans
+3 Types of Java beans
+======================
 
 a) VO class (Value Object class)
 b) DTO class (Data Transfer Object class)
 c) BO class (Business object class)
 
-VO class ==> carries inputs or outputs
-Generally contains all its properties as string properties
+VO class ==> carries inputs or outputs Generally contains all its properties as string properties
 
-DTO class ==> carries data with in projects across the multiple layers
-and also carries data across the multiple projects
+DTO class ==> carries data with in projects across the multiple layers  and also carries data across the multiple projects
 
 BO class/Domain class/Entity class/Model class ==> represents persistable data (to be saved/inserted) or persistent data (retrieved/collected from db table)
+
+
+Standalone Layered App
+======================
+                VO                          DTO                 BO 
+CLient App -------------> Controller Class --> Service class -----> DAO class-----> Db/sw
+
+
+if one class of one layer wants to pass more than 3 values to another of another layer or same layer we do not design methods
+having more than 3 params.. we design methods having java bean type parameters.
+
+=>Client App passes multiple values to controller class as VO class object
+
+=>Controller class passes multiple values to Service class as DTO class object
+
+=>Service class passes multiple values to DAO class as BO class object.
+
+
+=> One java Project sends multiple values to another Java Project (Flipkart to Paypal , flipkart to Gpay and etc.. ) in the form of
+DTO class object.
+
+
+
+Web based Layered Application
+===============================
+
+html/jsp form -----> Controller Servlet --------> Service class -------->DAO ------------>DB s/w
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+DataSource and JDBC con pool
+=============================
+JDBC con pool
+=============
+
+=> It is a factory that contains set of readily available jdbc con objects before actually being used.
+
+=>the jdbc con pool advantages are
+
+    i) reusability of jdbc con objects
+
+    ii) minimum no.of jdbc con objects , we can make max client Apps/requests talking to DB s/w.
+
+    iii) creation of jdbc con obj in jdbc con pool,managing jdbc con object and destroying jdbc con object if needed will be taken care by jdbc con pool.. not the programmer.
+
+=> all JDBC con objects in JDBC con pool represents the connectivity with same Db s/w..
+
+egl: jdbc con pool for oracle means, all the jdbc con objects in that jdbc con pool represents the connectivity with same oracle Db s/w
+
+eg2: jdbc con pool for mysql means, all the jdbc con objects in that jdbc con pool represents the connectivity with same mysql Db s/w
+
+=>DataSource object represents each JDBC con pool , i.e it acts as entry point for jdbc con pool to access all the JDBC con objects from jdbc con pool as needed.
+
+----------------
+Refer Notes.png
+----------------
+
+=>DataSource obj means .. It is the object of java class implementing javax.sql.DataSource(I)
+
+
+
+
+Two types JDBC con objects
+===========================
+1) Direct JDBC con object 
+    =>Created by programmers manually
+    eg: class.ForName("...");
+    Connection con = DriverManager.getConnection(-,-,-);
+    Here con => Direct JDBC con object 
+
+
+2) Pooled JDBC con object 
+    Connection con = ds.getConnection();
+    Here con => Represents DataSource class obj
+    // Gives pooled JDBC con object 
+
+=> By creating object for DataSource class (class implementing DataSource(l)) and filling with JDBC driver details and db details (jdbc properties) .. we can make dataSource creating JDBC con pool having given details based jdbc con objects.. and that jdbc con pool will be represented by DataSource object.
+
+=>Different classes implementing DataSource (I) (popular classes)
+
+=> org.sf.jdbc.datasoruce.DriverManagerDataSource (given by spring api)
+
+=> <pkg>.HikariDataSource (given by Hikari CP)
+
+=> <pkg>.BasicDataSource (given by Apache DBCP)
+
+=> <pkg>.ComboPooledDataSource (Given by C3PO ) and etc..
+
+=>Hikari CP(Best),Apache DBCP, C3P0 and etc.. third party supplied JDBC con pool libraries.
+
+creating spring supplied DataSource object representing JDBC con pool
+===========================================
+
+DriverManagerDataSource ds=new DriverManagerDataSource(); 
+//jdbc con pool
+
+ds.setDriverClassName("oracle.jdbc.driver.OracleDriver");
+
+ds.setUrl("jdbc:oracle:thi localhost:1521:xe");
+
+ds.setUsername("system");
+
+ds.setPassword ("manager");
+
+Refer Notes.png
+---------------
+
+=>DriverManagerDataSource
+initially creates only 1 one con object.. as need is increased it becomes ready to create more jdbc con objects.
+
+
+In spring env.. we can make IOC container creating java class objects and performing injections as show below even for dataSource object.
+
+
+
+
+
+
+
+in applicationContext.xml
+
+<beans>
+    <bean id="drds" class="org.sf.jdbc.datasource.DriverManagerDataSource">
+
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+
+        <property name="username" value="system"/>
+
+        <property name="password" value="manager"/>
+
+    </bean>
+</beans>
+
+
+=>We need to Inject the above DataSource obj to DAO class , So the methods of DAO class can use the injected DataSource object to get pooled jdbc con object to create other jdbc objects and to develop jdbc code as persistence logic.
+
+
+
+Refer Notes.png
+---------------
+
+=>Total 4 injections are required in this Layered App
+a) jdbc properties to DS (DataSource)
+b) DS(DataSource) to DAO
+c) DAO to Service
+d) service to Controller
+
+
+//DAO class
+============
+
+public class StudentDAO {
+
+    //HAS- property (interface type)
+    private DataSource ds;
+
+    //for constructor Injection
+    public StudentDAO(DataSource ds){
+    this.ds=ds;
+    }
+
+    public int insertStudent(StudentBO bo){
+    try{
+
+        //get Pooled JDBC con object from JDBC con pool
+        // using DataSource obj
+        Connection con=ds.getConnection();
+
+        ....
+        ....//jdbc code to inserts the records
+        ....
+        }
+        catch(SQLException se){
+        se.printStackTrace();
+        }
+        return 0/1;
+    }//method 
+
+}//class 
+
+
+Improved applicationContext.xml
+================================
+
+<beans>
+    <bean id="drds" class="org.sf.jdbc.datasource.DriverManagerDataSource">
+
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+
+        <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+
+        <property name="username" value="system"/>
+
+        <property name="password" value="manager"/>
+
+    </bean>
+
+    <bean id="stDAO" class="<pkg>.StudentDAO">
+        <constructor-arg name="ds" ref="drds"/>
+    </bean>
+
+    ...
+    ...
+    ...
+</beans>
+
+
