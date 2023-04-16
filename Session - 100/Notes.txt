@@ -1,0 +1,289 @@
+Exception propagation in Layered Apps
+=====================================
+
+Layered App
+------------
+
+Client App --->controller ----> service ----> DAO -----> DB s/w
+
+
+DAO class
+++++++++++
+
+If use try with catch blocks or try with resource in the layers of layered App .. the raised exception will be suppressed or eaten by catch of block that layer itself..Actually the exception/problem must be propagated other layers until it reaches to End user through Client App.
+
+
+
+=> End user is giving inputs to Client App..So results or error(exception) should be given to end user through Client app.. For that we need to go exception propagation with the support exception re-throwing concept using "throw" and "throws" key words.
+
+
+Improved According to our Need DAO class
+++++++++++++++++++++++++++++++++++++++++
+
+public int insert(StudentBO bo) throws Exception{
+    try{
+        ....
+        ....// jdbc code
+        ....
+    }
+    catch(SQLException se){
+        se.printStackTrace();
+        throw se; // re throwing the exception
+    }
+}
+
+throws Exception ==> Exception Propagation
+
+
+
+=>In Layered Apps .. no layer should suppress the exception by catching the exception.. every layer should rethrow the raised exception to its next layer until it reaches to End user through Client App .. w.r.t our App DAO, Service, Controller should propagate the exception to their next layer.. where as Client App should catch and handle exception to display exception related message to end user as non-technical guiding message.
+
+
+(Basic Concept is Exception propagation.. In that Exception re-throwing concept will be used)
+
+Q) How did you propagate/Pass exception raised DAO class to Client App or end user
+
+=>DAO passes to Service class , Service class passes to Controller, controller class pass to Client app and The Client App catches and handles exception to display non-technical messages related to raised exception to end user.
+
+Layered App =======>|
+============        |
+                    |    
+Refer Notes.png <===|
+
+
+Story board of Layered Application
+===================================
+
+=>Registering Employee after calculating his grossSalary and net Salary details
+
+grossSalary :: basics salary + additions (pf+ta+da+hra+LTA+ and etc...)
+
+netSalary :: Gross Salary - deductions (IT, PT and etc..)    
+
+
+Gross Salary = basic salary + 40% of basicSalary
+
+Net salary= Gross Salary - 20% basic salary
+
+
+3 java beans classes
+--------------------
+EmployeeDTO.java (DTO class) (To pass data from controller to service)
+
+=>EmployeeVO.java (VO class) (To pass data from client to Controller)
+
+=> EmployeeBO.java (BO class) (to pass data from service to DAO )
+
+
+
+DAO interface and DAO Impl class
+=================================
+
+IEmployeeDAO.java (DAO Interface)
+-----------------
+package com.st.dao;
+public interface IEmployeeDAO{
+    public int insertEmployee(EmployeeBO bo)throws Exception;
+}
+
+
+package com.st.dao;
+public final class EmployeeDAOImpl implements IEmployeeDAO {
+    // HAS-A property
+    private DataSource ds;
+
+    public EmployeeDAOImpl(DataSource ds){
+        this.ds=ds;
+    }
+
+    public inr insertEmployee(EmployeeBO bo) throws Exception{
+        try{
+            //get pooled JDBC connection
+            Connection con = ds.getConnection();
+
+            ...
+            ...// jdbc code to insert record by collecting values
+            ...//from BO class object
+        }
+
+        catch(SQLException se){
+            se.printStackTrace();
+            throw se;
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+        finally{
+            ...
+            ...// to close JDBC objs 
+            ...
+
+        }
+        return 0/1;
+
+    }//method
+}//class
+
+
+ApplicationContext.xml
+=======================
+
+<beans ...>
+    <bean id="drds" class="org.sf.jdbc.datasource.DriverManagerDataSource">
+        ....// jdbc properties injection
+        ...
+    
+    </bean>
+    <bean id="empDAO" class="com.st.dao.EmployeeDAOImpl">
+        <constructor-arg name="ds" ref="drds"/>
+    </bean>
+
+</beans>
+
+
+Service Interface and Its Impl class 
+=====================================
+
+IEmployeeMgmtService.java (service interface)
+
+public interface IEmployeeMgmtService{
+    public String registerEmployee(EmployeeDTO dto) throws Exception;
+}
+
+
+EmployeeMgmtServiceImpl.java (service Impl class)
+----------------------------------------
+
+package com.st.service;
+
+public final class EmployeeMgmtServiceImpl implements IEmployeeMgmtService{
+
+    // HAS-A property
+    private IEmployeeDAO dao;
+    public EmployeeMgmtServiceImpl(IEmployeeDAO dao){
+        this.dao=dao;
+    }
+
+    public String registerEmployee(EmployeeDTO dto) throws Exception{
+
+        //collects inputs from DTO and generate gross salary,netSalary
+        ....
+        ....
+        .... 
+        //prepare EmployeeBO class object having persistable data (ename,desg,basicSalary,grossSalary,netSalary)
+        ....
+        ....
+        //use DAO
+
+        int count = dao.insertEmployee(bo);
+
+        if(count==0)
+            return "Employee Registration failed.";
+        else 
+            return "Employee registered successfully";
+    }//method 
+}//class 
+
+ApplicationContext.xml
+=======================
+
+<beans ...>
+    <bean id="drds" class="org.sf.jdbc.datasource.DriverManagerDataSource">
+        ....// jdbc properties injection
+        ...
+    
+    </bean>
+    <bean id="empDAO" class="com.st.dao.EmployeeDAOImpl">
+        <constructor-arg name="ds" ref="drds"/>
+    </bean>
+
+    <bean id="empService" class="con.st.service.EmployeeMgmtServiceImpl">
+        <constructor-arg name="dao" ref="empDAO"/>
+    </bean>
+
+</beans>
+
+Refer Notes.png 
+
+Controller class 
+================
+
+
+package com.st.controller;
+public class MainController{
+
+    //HAS-A property
+    private IEmployeeMgmtService service;
+
+    public MainController(IEmployeeMgmtService service){
+        this.service=service;
+    }
+
+    public string processEmployee(EmployeeVO vo) throws Exception{
+        //convert EmployeeVO class obj to EmployeeDTO class obj 
+        ...
+        //use service 
+        String result = service.registerEmployee(dto);
+        return result;
+
+    } //method 
+}//class
+
+ApplicationContext.xml
+=======================
+
+<beans ...>
+    <bean id="drds" class="org.sf.jdbc.datasource.DriverManagerDataSource">
+        ....// jdbc properties injection
+        ...
+    
+    </bean>
+    <bean id="empDAO" class="com.st.dao.EmployeeDAOImpl">
+        <constructor-arg name="ds" ref="drds"/>
+    </bean>
+
+    <bean id="empService" class="con.st.service.EmployeeMgmtServiceImpl">
+        <constructor-arg name="dao" ref="empDAO"/>
+    </bean>
+
+    <bean id="controller" class="com.st.controller.MainController">
+        <constructor-arg name="service" ref="empService"/>
+    </bean>
+
+</beans>
+
+
+Client App 
+==========
+package com.st.test;
+
+public class RealtimeDITest{
+    p s v Main (String []args){
+        // create IOC Container
+        ....
+        ....
+        // read inputs as string values and store them into EmployeeVO class obj 
+        ....
+        ....
+        ....
+        //get controller class obj from IOC container 
+        MainController controller=factory.getBean("controller",MainController.class);
+        //invoke b.method 
+        try{
+            String msg=controller.processEmployee(vo);
+
+            System.out.println(msg);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            S.o.p("Internal problem");
+            
+        }
+    }//main 
+}//class
+
+
+=================
+Refer Notes.png 
+=================
