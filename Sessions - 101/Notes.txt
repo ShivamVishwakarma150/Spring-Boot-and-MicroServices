@@ -1,0 +1,28 @@
+Procedure to develope Realtime DI /Realtime StrategyDP Layered App or MiniProject
+============================================
+
+stepl) Use SQL develop create Db table in oracle Db s/w
+RealTimeDI_ Layered_spring_employee
+    |-->eno (pk) (n)
+    |—>ename (vc2) 
+    | —>basicSalary (float) 
+    |-—>grossSalary (float) 
+    |—>netSalary (float) 
+
+GUI DB tools to make DB operations easy 
+eg:: SQL developer for oracle 
+    TOAD for oracle
+    mysql workbench
+    ToAD for mysql and etc.
+
+
+note:: SQL developer is separate installation by downloading from 
+https://www.oracle.com/tools/downloads/sqldev-downloads.html
+
+
+-------------------------------------
+for further notes follow Notes1.png  && Notes2.png
+-------------------------------------
+
+
+
