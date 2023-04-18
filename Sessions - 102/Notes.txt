@@ -1,0 +1,296 @@
+MysQL Db s/w
+=============
+type :: Db s/w
+version : 8.x
+vendor :: Devx/ Sun Ms oracle corp
+open source
+To download mysql Db s/w https://www.mysql.com/downloads/
+Gives built-in GUI Db tool called mysql workbench
+default admin username : root
+default admin password : root ( should be chosen during the installation
+allows to create Logical DBs .. default logical dbs are "world","sakilla"
+
+Logical DB is a Logial partiation of physical DB s/w ..Generaly it will created on 1 per Project basis
+
+----------------
+Refer Notes.png 
+----------------
+
+=>Every Project related db tables, pl/sQL procedures functions, view ,sequences and etc.. will be created .. in that project related Logical DB.
+
+
+=> In oracle DB s/w, every logical DB is identified with its SID (service id).. In Expression edition Oracle DB s/w the default Logical Db name is "xe".
+
+=> In enterprise edition Oracle DB s/w the default Logical Db name is ORCL
+
+
+
+
+===> Procedure to create logical Db in mysql DB s/w having db table using mysql work bench <=====
+++++++++++++++++++++++++++++++++++++++++++++++++++
+
+step1) launch mysql work bench and create the connection with mysql Db s/w..
+
+----------------
+Refer Notes.png 
+----------------
+
+
+step2) create Logical Db in mysql DB s/w
+        |
+        |---> logical Db name :: stsbmsdb -----> next --> finish
+
+
+=> Oracle supports sequences
+=> mysql does not support sequences.. as alternate we can make PK colum as Identity column having auto increment constraint.
+    ( initial value max val +1 .. next values previous val+1)
+
+step3) create db table in the above logical DB 
+
+        expand our Logical Db --> right click on table fill data -> apply ok 
+
+    CREATE TABLE `realtimedi_spring_employee` (
+    `eno` int NOT NULL AUTO_INCREMENT,
+    `ename` varchar(25) DEFAULT NULL,
+    `desg` varchar(25) DEFAULT NULL,
+    `basicSalary` float DEFAULT NULL,
+    `grossSalary` float DEFAULT NULL,
+    `netSalary` float DEFAULT NULL,
+    PRIMARY KEY (`eno`),
+    UNIQUE KEY `eno_UNIQUE` (`eno`)
+    ) 
+
+
+DONE 
+
+====================================================================================================
+
+
+=>The type4 mechanism based jdbc driver for mysql Db s/w is called Connector/J JDBC driver and its
+details are
+
+    1) driver class name :: com.mysql.cj.jdbc.Driver 
+    jdbc url :: jdbc:mysql:///<logicalDB> (for Local mysql DB s/w)
+                jdbc:mysql://<hostname>:<portno>/<LogicalDB> (for remote mysql DB s/w)
+
+    jar file x: mysql-connector-java-<version>.jar (supports auto loading of jdbc driver)
+
+    <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+    <dependency>
+        <groupId>com.mysql</groupId>
+        <artifactId>mysql-connector-j</artifactId>
+        <version>8.0.32</version>
+    </dependency>
+
+
+
+
+Making our Mini Project working for mysql Db s/w providing loose coupling to change from oracle to mysql and mysql to Oracle Db s/w
+====================================================================================================
+
+
+step1) keep the Mini Project ready
+
+
+step2) add mysql Connector/J JDBC driver dependency to pom.xml
+
+    <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
+    <dependency>
+        <groupId>com.mysql</groupId>
+        <artifactId>mysql-connector-j</artifactId>
+        <version>8.0.32</version>
+    </dependency>
+
+
+step3) make sure that db table in mysql Db s/w is available refer above
+
+step4) Develop separate DAOImpl class having persistence logic related mysql Db s/w
+
+package com.st.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;   //ctl+shift+o  :: To import pkgs
+
+import com.st.bo.EmployeeBO;
+
+public class EmployeeMySQLDAOImpl implements IEmployeeDAO {
+	private static final String  EMP_INSERT_QUERY="INSERT INTO REALTIMEDI_SPRING_EMPLOYEE(ENAME,DESG,BASICSALARY,GROSSSALARY,NETSALARY) VALUES(?,?,?,?,?)";
+	//HAS-A Property
+	private  DataSource ds;
+	
+	//Alt+shift+s, o
+	public EmployeeMySQLDAOImpl(DataSource ds) {
+		System.out.println("EmployeeMysqlDAOImpl: 1- param constructor");
+		this.ds = ds;
+	}
+
+	
+	@Override
+	public int insertEmployee(EmployeeBO bo) throws Exception {
+		System.out.println("EmployeeMysqlDAOImpl.insertEmployee()");
+		int result=0;
+		try(Connection con=ds.getConnection();
+				PreparedStatement ps=con.prepareStatement(EMP_INSERT_QUERY);
+				){
+			//set values to query params
+			ps.setString(1,bo.getEname());
+			ps.setString(2, bo.getDesg());
+			ps.setFloat(3, bo.getBasicSalary());
+			ps.setFloat(4, bo.getGrossSalary());
+			ps.setFloat(5, bo.getNetSalary());
+			//execute the Query
+			 result=ps.executeUpdate();
+		}//try
+		catch(SQLException se) {
+			se.printStackTrace();
+			throw se; //exception rethrowing
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw e; //exception rethrowing
+		}
+		
+		return result;
+	}//method
+	
+
+	/*@Override
+	public int insertEmployee(EmployeeBO bo) throws Exception {
+		Connection con=null;
+		PreparedStatement ps=null;
+		int result=0;
+		try {
+			//get Pooled JDBC con object
+			con=ds.getConnection();
+			//create PreparedStatment object having  query as the pre-compiled SQL query
+			ps=con.prepareStatement(EMP_INSERT_QUERY);
+			//set values to query params
+			ps.setString(1,bo.getEname());
+			ps.setString(2, bo.getDesg());
+			ps.setFloat(3, bo.getBasicSalary());
+			ps.setFloat(4, bo.getGrossSalary());
+			ps.setFloat(5, bo.getNetSalary());
+			//execute the Query
+			 result=ps.executeUpdate();
+		}
+		catch(SQLException se) {
+			se.printStackTrace();
+			throw se; //exeption rethrowing
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+		finally {
+			//close jdbc objs
+			try {
+				if(ps!=null)
+					ps.close();
+			}
+			catch(SQLException se) {
+				se.printStackTrace();
+			}
+			try {
+				if(con!=null)
+					con.close();
+			}
+			catch(SQLException se) {
+				se.printStackTrace();
+			}
+			
+		}//finally
+		return result;
+	}//method */
+
+}//class
+
+----------------
+Refer Notes.png 
+----------------
+
+step5) cfg DriverManagerDataSource and DAOImpl class related to mysql Db s/w.
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+
+  <!-- DataSource cfg -->
+  <bean id="drdsMysql"  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="url" value="jdbc:mysql:///stsbmsdb"/>
+      <property name="username" value="root"/>
+      <property name="password" value="Shivam@123"/>
+  </bean>
+  
+
+
+
+  <!-- DAO class cfg -->
+   <bean id="empMySqlDAO"  class="com.st.dao.EmployeeMySQLDAOImpl">
+      <constructor-arg name="ds" ref="drdsMysql"/>
+  </bean>
+  
+
+
+
+  <!-- service class cfg  -->
+  <bean id="empService" class="com.st.service.EmployeeMgmtServiceImpl">
+    <constructor-arg name="dao"  ref="empMySqlDAO"/>  
+  </bean>
+  
+
+
+
+  <!-- controller cfg -->
+  <bean id="controller"  class="com.st.controller.MainController">
+      <constructor-arg name="service"  ref="empService"/>
+  </bean>
+
+</beans>
+
+step6) In service Impl cfg ..change DAO impl class bean id accordingly
+     <!-- service class cfg  -->
+    <bean id="empService" class="com.st.service.EmployeeMgmtServiceImpl">
+        <constructor-arg name="dao"  ref="empMySqlDAO"/>  
+    </bean>
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
