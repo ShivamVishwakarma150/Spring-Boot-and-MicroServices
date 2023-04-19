@@ -1,0 +1,78 @@
+############### 
+REST Client 
+################ 
+
+-> The application which is accessing REST API is called as REST Client 
+
+-> Rest Client app and REST Api application will communicate using HTTP as a mediator. 
+
+-> Every Programming language having support to develop REST Client .
+
+-> Using Spring Boot also we can develop REST Client Applications 
+1) RestTemplate 
+2) WebClient (introduced in spring 5.x version) 
+
+-> RestTemplate is a predefined class, which is part of 'spring-boot-starter-web' dependency. It supports only synchronous communication.
+
+
+-> WebClient is a interface which is part of 'spring-boot-starter-webflux' dependency. It supports both synchronous & asynchronous communication. 
+
+Note: To develop REST Client we need to know REST API details 
+    1) API URL 
+    2) API Request Method 
+    2) API request data structure 
+    3) API response data structure
+
+-> REST API team will send swagger documentation to REST Client side team. Using swagger documentation we need to understand the api and we need to develop REST Client logic to access REST API.
+
+
+########################################
+RestTemplate Example to access REST API 
+########################################
+
+
+
+********************************************
+Sending HTTP GET Request using RestTemplate
+********************************************
+
+
+    String apiURL = "https://www.google.com";
+		
+	RestTemplate rt = new RestTemplate();
+		
+	ResponseEntity<String> forEntity = rt.getForEntity(apiURL,String.class);
+		
+	String body=forEntity.getBody();
+		
+	System.out.println(body);
+
+
+********************************************
+Sending HTTP POST Request using RestTemplate
+********************************************
+
+@Service
+public class BookClient {
+	
+	public void invokeBookTicket() {
+		
+		String apiUrl = "http://localhost:8085/book/";
+		
+		Book book = new Book();
+		book.setBookName("Java");
+		book.setBookPrice(340.0);
+		
+		RestTemplate rt = new RestTemplate();
+		
+		ResponseEntity<String> postForEntity = rt.postForEntity(apiUrl, book,String.class);// String.class represents response type
+		
+		System.out.println(postForEntity.getBody());
+	}
+	
+}
+
+
+
+
+
