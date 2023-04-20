@@ -138,7 +138,97 @@ Refer Notes.png
 
 
 
+note:: All spring beans cfg in spring cfg file must have unique bean ids..
 
 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+What happens if configure real singleton java as spring bean having singleton scope?
+    Does it continue to behave as singleton java class or not?
+
+
+
+=>if that "singleton java class" cfg as spring bean only 1 time as having "singleton" scope then that "singleton java class " behavior continues because the IOC container keeps spring bean class obj in the internal cache of IOC container and uses that object across the multiple factory.getBean(-) method calls with same bean ids.
+
+applicationContext.xml   real singleton java class 
+--------------------------------------------------
+
+<bean id="p1" class="com.st.ston.Printer"/>
+
+Client App
+===========
+    //get Spring bean class obj
+    Printer pl=factory.getBean("p1",Printer.class);
+    Printer p2=factory.getBean("p1",Printer.class);
+    System.out.println(pl.hashCode()+" "+p2.hashCode()); //gives same hashCode
+
+
+=> if that java "singleton java class" is cfg for multiple times as spring beans having different bean ids with the scope singleton then "singleton java class" behavior will be broke because IOC container uses reflection api to access private constructor of singleton java class and creates multiple objects for singleton java class with respective multiple bean ids of same spring bean class cfgs.
+
+
+
+
+
+In applicationContext.xml
+
+bean id="p1" class="com.st.ston.Printer"/>
+<bean id="p" class="com.st.ston.Printer"/>
+
+In Client App
+
+//Total two objects are create for printer class and two objects will be created for two different bean ids (singleton java class is broken)
+
+//get Spring bean class obj
+Printer pl=factory.getBean("p1",Printer.class);
+Printer p2=factory.getBean("p1",Printer.class);
+
+System.out.println(p1l.hashCode()+" "+p2.hashCode()); 
+
+System.out.println( ; created for Printer class
+//get Spring bean class obj and two objects wil be created
+
+Printer p3=factory.getBean("p" Printer.class);// for two different bean ids (singleton java class
+Printer p4=factory.getBean("p",Printer.class); is broken)
+
+System.out.println(p3.hashCode()+" "+pa.hashCode());
+
+
+
+Solution1 :: Make IOC container creating Singleton Java class obj using static factory-method bean instantiation
+==========================================
+
+
+
+
+code
+=====
+
+// static factory method bean instantiation is enabled
+<bean id="p1" class="com.st.ston.Printer" factory-method="getInstance"/> 
+
+<bean id="p" class="com.st.ston. Printer" factory-method="getlnstance"/> 
+
+
+client App Code 
+================
+
+// al of them give same Printer class obj ref so we can say singleton java class pattern is not broken.
+
+//get Spring bean class obj
+Printer pl=factory.getBean("p1",Printer.class);
+Printer p2=factory.getBean("p1",Printer.class);
+System.out.println(p1.hashCode()+" "+p2.hashCode()); 
+
+//get Spring bean class obj
+Printer p3=factory.getBean("p",Printer.class);
+Printer p4=factory.getBean("p",Printer.class);
+System. out.println(p3.hashCode()+" "+p4.hashCode());
+
+
+============================================================================================
+
+
+Solution2: Make Printer as perfect singleton java class (make Printer as reflection api protected Singleton Java class)
 
 
