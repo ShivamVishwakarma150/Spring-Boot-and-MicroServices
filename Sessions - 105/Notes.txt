@@ -1,0 +1,144 @@
+Spring Bean Scope 
+==================
+IOC container not only creates the spring bean class objects.. it also can keep them in
+different scopes.
+
+
+scopes in spring 1.x
+---------------------
+singleton (default)
+prototype
+
+scopes in spring 2.x 
+--------------------
+singleton (default)
+prototype
+request
+session 
+globalSession
+
+
+scopes in spring 3.x 
+--------------------
+singleton (default)
+prototype
+request
+session 
+globalSession (Deprecated)
+
+
+scopes in spring 4.x 
+--------------------
+singleton (default)
+prototype
+request
+session 
+websocket
+
+scopes in spring 5.x (latest)
+++++++++++++++++++++++++++++++++++
+
+can be used in both standalone, web applications
+------------------------
+singleton (default)    |
+prototype              |
+request                |
+------------------------
+
+only in web application
+------------------------
+session                |
+application            |
+websocket              |
+------------------------
+
+=> To specify spring bean scope in xml driven configurations use "scope" attribute of <bean> tag
+
+=>To specify spring bean scope in annotation driven configurations use @Scope annotation.
+
+
+scope="singleton"
+================
+    =>The IOC container creates single object for given spring bean class with respect to spring bean id and also keeps that object in the internal cache of IOC container for reusability.
+
+    => Uses same spring bean class object ref across the multiple calls factory.getBean(--) method having same spring bean id because it collects Spring bean class obj ref from the internal cache of IOC container.
+
+    =>This is "default" scope if no scope is specified ..
+
+    =>This scope is no way related singleton java class .. i.e it does not make spring bean class as singleton java class but it gives "singleton" behavior by creating only one object for spring bean with respect to bean id and using that object ref across the multiple factory.getBean(-) method calls (having same bean id)
+
+    Eg:
+
+    <bean id="wmg" class="com.st.beans.WishMessageGenerator" scope="singleton">
+    ....
+    ....
+    </bean>
+
+
+    Code in Client App 
+    ==================
+    //get Target spring bean class object
+	WishMessageGenerator generator1=factory.getBean("wmg",WishMessageGenerator.class);
+	WishMessageGenerator generator2=factory.getBean("wmg",WishMessageGenerator.class);
+		
+	
+	System.out.println("hashcodes=="+generator1.hashCode()+"   "+generator2.hashCode()); // gives same hashcode 
+	System.out.println("generator1==generator2?"+(generator1==generator2)); // gives true
+
+    ----------------
+    Refer Notes.txt 
+    ----------------
+
+=> Because the spring bean class object ref kept in Internal cache of IOC container .. we are getting "singleton" behavior for spring bean whose scope="singleton".. But it is not going make spring bean class singleton java class.
+
+
+
+
+
+What is the difference between singleton java class and singleton scope for spring beans?
+==============================================
+
+Ans) Singleton java class means we add additional to normal java class to make that class allowing only one object creation in any given situation.
+
+"singleton" scope for spring bean makes IOC container to create only one object for spring bean with respect to bean id and to reuse that object ref across the multiple calls to factory.getBean(-) method calls having same bean id by keeping that object ref in the internal cache.
+
+    => Singleton java ==>Restrict users to create only one object for java class
+
+    => "Singleton" scope ===> Restricts IOC container to create only one object for spring bean with respect to bean id.
+
+
+    => Singleton java class ==> Class level restriction to have only one object (Sincere employee)
+
+    "singleton" scope spring bean ==> No Class Level Restriction .. only IOC container level restriction to create only one for given spring bean class with respect to bean id.(Sincere organization employee)
+
+
+
+
+
+
+What happens ,if we configure same spring bean class having singleton scope for 2 times with two different bean ids?
+==============================================
+
+Ans) Two objects will be created for spring bean class on 1 per each bean id and they will be placed in the internal cache of IOC container having bean ids as keys and bean class objects references as the values.
+
+in applicationContext.xml
+-------------------------
+
+  <bean id="wmg" class="com.st.beans.WishMessageGenerator"  >
+     <property name="date" ref="dt"/>
+  </bean>
+  
+  <bean id="wmg1" class="com.st.beans.WishMessageGenerator"  >
+     <property name="date" ref="dt"/>
+  </bean>
+
+----------------
+Refer Notes.png
+----------------
+
+
+
+
+
+
+
