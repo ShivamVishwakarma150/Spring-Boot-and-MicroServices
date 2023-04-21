@@ -1,0 +1,114 @@
+When should we use java class as singleton java class or spring bean as singleton scope spring beans?
+=====================================================================================================
+
+a) if class is not having any state (No Member variables)
+
+b) if class is having only read only state (final variables)
+
+c) if class is having sharable state across multiple other classes (cache implementations)
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+a) if class is not having any state (No Member variables)
+------------------------------------------
+
+problem
+=======
+
+public class Arithmetic{
+    public int sum(int a,int b){
+        return a+b;
+    }
+}
+
+// Two objects with no state is created
+Arithmetic ar1 = new Arithmetic();
+ar1.sum(10,20);
+Arithmetic ar2=new Arithmetic();
+ar2.sum(20,30);
+
+=>creating multiple objects for same java class with out state is waste of memory and cpu time , Make the class singleton java class or singleton scope spring bean to minimize the memory consumption and cpu time.
+
+
+Solution 1::
+-------------
+
+
+public class Arithmetic{
+    private static Arithmetic INSTANCE;
+
+    private Arithmetic(){ }
+    public static Arithmetic getInstance(){
+        if(INSTANCE==null)
+            INSTANCE=new Arithmetic();
+        return INSTANCE;
+    }
+    public int sum(int a,int b){
+        return a+b;
+    }
+
+}
+
+// Only ine object is create but used for two times.
+Arithmetic ar1 = Arithmetic.getInstance();
+ar1.sum(10,20);
+Arithmetic ar2=new Arithmetic.getInstance();
+ar2.sum(20,30);
+
+
+
+Solution2::
+++++++++++++
+
+    applicationContext.xml
+   ======================
+    // Normal class with singleton scope 
+    <bean id="ar" class="pkg.Arithmetic" scope="singleton"/>
+    
+
+
+    in Client App 
+    =============
+
+    Arithmetic ar=factory.getBean("ar",Arithmetic.class);
+    ar.sum(10,20);
+
+    Arithmetic ar1=factory.getBean("ar",Arithmetic.class);
+    ar1.sum(10,20);
+
+
+
+note:: To get singleton behavior in spring ,we need not to develope java class "singleton java class. we just need to cfg that java class as "singleton" scope spring bean as shown above.
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+b) if class is having only read only state (final variables)
+===========================================
+
+problem : Normal java class 
+--------------------------
+
+public class Circle{
+    private final float PI=3.14f;
+
+    public float CalcArea(float radius){
+        return PI*radius*radius;
+    }
+}
+
+
+// multiple creating objects with fixed state is waste of memory and waste of CPU time.
+Circle circle = new Circle();
+circle.CalcArea(10.0f);
+
+Circle circle1=new Circle();
+circle1.CalcArea(20.0f);
+
+
