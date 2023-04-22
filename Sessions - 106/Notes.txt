@@ -112,3 +112,182 @@ Circle circle1=new Circle();
 circle1.CalcArea(20.0f);
 
 
+Solution1: singleton Java class 
+-------------------------------
+
+public class Circle {
+    private final float PI=3.14f;
+    private static Circle INSTANCE;
+
+    private Circle(){
+
+    }
+    public static Circle getInstance(){
+        if(INSTANCE==null)
+            INSTANCE=new Circle();
+        return INSTANCE;
+    }
+    public float calcArea(float radius){
+        return PI*radius*radius;
+    }
+}
+
+// Here one object is created and that will be used for multiple  times.
+Circle circle1 = Circle.getInstance();
+circle1.calcArea(10.0f);
+
+Circle circle2 = Circle.getInstance();
+circle2.calcArea(20.0f);
+
+
+============================================================================
+
+Solution2::
+
+in applicationContext.xml 
+
+    <bean id="circle" class="pkg.Circle" scope="singleton"/>
+
+in Client App 
+=============
+
+    Circle circle1 = factory.getBean("circle",circle.class);
+    circle1.calcArea(10.0f);
+
+    Circle circle2 = factory.getBean("circle",circle.class);
+    circle2.calcArea(20.0f);
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+c) if class is having sharable state across multiple other classes (cache implementations)
+
+
+Problem::
+
+    public  class CacheMemory{
+        private Map<string,Object> cacheMap=null;
+
+        public CacheMemory(){
+            CacheMap = new HashMap();
+
+           // CacheMap ==> Represents cache
+            ....
+            ....// jdbc code get Countries from DB table and put them in cacheMap object 
+            ....
+            ....
+        }
+
+        public List<String> getCountries(String key){
+            return (List<String> cacheMap.get(key)); 
+         }
+    }
+
+
+CacheMemory memory1 = new CacheMemory();
+List<String> countriesList1 = memory1.getCountry("country");
+
+CacheMemory memory2 = new CacheMemory();
+List<String> countriesList2 = memory2.getCountry("country");
+
+----------------
+Refer Notes.png 
+----------------
+
+creating multiple objects having same sharable data is waste of memory and waste of CPU time.
+
+
+
+
+----------------------------------------------------------------------------------
+
+solution1:: develop CacheMemory class singleton java class 
+
+    public class CacheMemory{
+        private static CacheMemory INSTANCE;
+
+        private Map<string,Object> cacheMap=null;
+
+        private CacheMemory(){
+            CacheMap = new HashMap();
+
+           // CacheMap ==> Represents cache
+            ....
+            ....// jdbc code get Countries from DB table and put them in cacheMap object 
+            ....
+            ....
+        }
+
+        private static CacheMemory getInstance(){
+            if(INSTANCE==null){
+                INSTANCE = new CacheMemory();
+            }
+            return INSTANCE;
+        }
+
+        public List<String> getCountries(String key){
+            return (List<String> cacheMap.get(key)); 
+         }
+
+    }
+
+    Client App 
+    ==========
+
+    CacheMemory memory1 = CacheMemory.getInstance();
+    List<String> countriesList1 = memory1.getCountry("country");
+
+    CacheMemory memory2 = CacheMemory.getInstance();
+    List<String> countriesList2 = memory2.getCountry("country");
+
+----------------
+Refer Notes.png 
+----------------
+
+
+
+
+Solution2:: make Cache Memory class as spring bean having singleton scope
+----------------------------------------
+
+    in applicationContext.xml
+    ---------------------------
+
+    <bean id="memory" class="pkg.CacheMemory" scope="singleton"/>
+
+    singleton scope spring beans in layered Apps
+
+
+    Client App
+    ----------
+
+
+    CacheMemory memory1=factory.getBean("memory",CacheMemory.class);
+    List<String> countriesList=memory1.getCountries("country");
+
+    CacheMemory memory2=factory.getBean("memory",CacheMemory.class);
+    List<String> countriesList=memory2.getCountries("country");
+
+
+----------------
+Refer Notes.png 
+----------------
+
+
+singleton scope spring beans in layered Apps 
+=============================================
+
+
+DataSource classes, DAO classes, service classes and controller class of spring layered app generally contains effectively read only i.e almost fixed state/read only state .. So it is recommended to take them singleton scope spring beans.
+
+note: if u know how to use singleton scope of spring bean effectively ..then there is no need of implementing "singleton class" Design pattern in spring projects..
+
+
+
+
+
