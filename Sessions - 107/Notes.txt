@@ -122,11 +122,86 @@ Refer Solution1::
 
 
 
-=====================================================================================================================================
+====================================================================================================================================
+
+
+
+++++++++++++++++
+Scope="request"
+++++++++++++++++
+
+
+=> Can be used only in web applications
+
+=> IOC container keeps spring bean class obj in request scope i.e places spring bean class obj as request attribute having bean id as the attribute name and spring bean class obj as the attribute (req.setAttribute(--))
+
+=> This scope specific to each request i.e across the same spring bean class object will be used through out in different web comps that are processing a request.
+
+----------------
+Refer Notes.png 
+----------------
+
+// total 2 objects is created
+if "wmg" bean id scope is "request" then all 3 times same object will be given for request1 and another same object will be given for 3 times for request2
+
+
+// total 6 objects is created
+if "wmg" bean id scope is "prototype" then all 3 times 3 different objects will be given for both request1 and request2.
+
+// total 1 objects is created
+if "wmg" bean id scope is "singleton" then all the times same object will be given for all the requests
+
+
+
+note:: Generally The java bean class object that holds form data in spring based web application will have request scope compare to prototype scope.
 
 
 
 
+==================
+scope = "session"
+==================
+
+=> can be used only in web applications.. 
+
+=> IOC container keeps spring bean class object in session scope by making session attribute.. i.e takes bean id as session attribute name and spring bean class obj as session attribute value.
+
+=> Generally the java bean that holds Login credentials (username, password,country and etc...) will be maintained as session scope spring bean..
+
+=> session scope means specific to each browser s/w of a each client machine
+
+----------------
+Refer Notes.png 
+----------------
+
+
+
+
+
+
+
+
+=====================
+scope = "application"
+=====================
+
+=> can be used only in web applications.
+
+=> IOC container creates spring bean class object in application scope by making it as application attribute/servlet context attribute.
+
+=> For the Entire web application only one object of spring bean will be created.
+
+=> if spring bean class obj is carrying global data of web application .. like request count and user's count days count and etc.. then go for application scope
+
+
+
+
+What is the difference b/w "singleton" and "application" scopes?
+=========================================
+
+Ans) "singleton" scope can be used in both "standalone" , "web applications".. where as "application scope" can be used only in web application.
+
+"singleton" scope uses the Internal cache of IOC container to manage spring bean class obj. "application" scope uses the ServletContext obj/application object to manage spring bean class obj.
 
 
 
