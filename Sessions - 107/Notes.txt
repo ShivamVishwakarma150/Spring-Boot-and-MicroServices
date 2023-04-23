@@ -1,0 +1,150 @@
+spring bean scopes in spring 5.x
+=================================
+singleton (default)
+prototype
+request
+session
+application
+websocket
+
+
+scope="prototype"
+=================
+
+=> makes IOC container to create new object for spring bean for every factory.getBean(-) method call
+
+=> This scope object of spring bean will not be kept in the internal cache of IOC container ..So there
+is not reusability spring bean class object.
+
+=>Every factory.getBean(-) method call returns new object created for the spring bean.
+
+
+<bean id="wmg" class="com.st.beans.WishMessageGenerator" scope="prototype"/>
+
+Client App 
+===========
+
+    // Gives two different objects for WishMessageGenerator class 
+    WishMessageGenerator generator1 = factory.getBean("wmg",WishMessageGenerator.class);
+
+    WishMessageGenerator generator2 = factory.getBean("wmg",WishMessageGenerator.class);
+
+    System.out.println(generator1.hashCode()+" "+generator2.hashCode());// gives tow different hashCode 
+
+    System.out.println(generator1==generator2); //gives false
+
+
+
+=> The scope "prototype" is inspired from the design pattern "prototype" which says create new objects based on existing objects using cloning process. but the scope "prototype" does not use any cloning process to create new objects. in fact it creates every object normally using reflection api.
+
+Exceptional Case1::
+-------------------
+    => if the object is created through cloning process or  DeSerialization process then constructor will not be executed.
+
+Exceptional Case2::
+--------------------
+    => if the object for the sub class of abstract class is created the abstract class constructor executes but that does not mean object created for abstract class.
+
+
+
+=>When should we use prototype scope spring beans?
+-------------------------------------------------------
+    => If the state of the spring bean class object is changing time to time 
+
+    => if the state of spring bean class obj is changing request to request in web application.
+
+    => If we need multiple objects for same spring bean class at time with different states then we can go for prototype scopes.
+
+
+ 
+use case: In spring based web applications... we prefer taking prototype scope for VO,DTO,BO classes if think to configure these classes as spring beans in layered apps.. where as the DAO,DataSource, service and controller classes will be taken as singleton scope spring beans.
+
+
+if 300 user are suing spring based layered web application.. then 300 customers/users details must be stored and passed at time across the multiple layered for that we need multiple objects for VO,DTO,BO classes with different states .. For that prototype
+scope is good for them.
+
+=>Generally the DAO, DataSource, Service, controller classes contain effectively read only/final state..So we take them as singleton scope spring beans.. where as the VO, DTO, BO classes maintain changing states time to time or request to request So go for prototype scope.
+
+
+
+
+What happens if configure "real singleton java class" as prototype scope spring bean?
+==================================================================================
+
+Ans) The singleton java class behavior will be broken because the IOC container internally uses reflection api to private constructor and to instantiation singleton java class as many times as required.
+
+
+    applicationContext.xml
+    ----------------------
+
+    <bean id="p1" class="com.st.ston.Printer" scope="prototype" />
+
+    In Client App
+    --------------
+    // get Spring bean class obj 
+        Printer p1=factory.getBean("p1",Printer.class);
+		Printer p2=factory.getBean("p1",Printer.class);
+		
+	
+		System.out.println("hashcodes=="+p1.hashCode()+"   "+p2.hashCode());// gives different hashCodes
+
+
+Solution 1:: Enable static factory method bean instantiation on singleton java class that cfg as spring bean.
+
+    applicationContext.xml
+    ----------------------
+
+    <bean id="p1" class="com.st.ston.Printer" scope="prototype" factory-method="getInstance"/>
+
+    In Client App
+    --------------
+    // get Spring bean class obj 
+        Printer p1=factory.getBean("p1",Printer.class);
+		Printer p2=factory.getBean("p1",Printer.class);
+		
+	
+		System.out.println("hashcodes=="+p1.hashCode()+"   "+p2.hashCode()); // gives same hashCodes
+
+
+Solution 2::  Develop Singleton java class as perfect /strict singleton java class by providing protection from reflect api based object creation accessing private constructor.
+
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Q) Though spring bean scope is taken as prototype How can we make spring bean behaving like "Singleton" scope spring bean?
+
+Ans) Take spring bean as singleton Java class" and enable static factory method bean instantiation.
+
+------------------
+Refer Solution1::
+------------------
+
+
+
+
+=====================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
