@@ -1,0 +1,278 @@
+ApplicationContext container 
+=============================
+
+=> It is another IOC container that build on the top of BeanFactory container.
+
+ApplicationContext IOC container = BeanFactory IOC Container ++
+
+=> It is having every feature of BeanFactory container and also provides additional features... they are
+
+    # -> Important
+
+    #=>working with Properties files and place holders
+
+    #=> support for Internationalization (I18n) means changing the nature according to requirement.
+    eg: Google in english
+        Google in Hindi
+
+    #=> support for pre-instantiation on singleton scope spring beans
+
+    => Ability to stop or close or refresh IOC container 
+    
+    #=> Support for annotation driven cfgs, 100% code driven cfgs, spring boot programming 
+
+    #=> Support for BeanPostProcessors an BeanFactoryPostProcessors
+
+    =>Support for Event handling and Event publication and etc..
+
+
+
+
+=> To Create ApplicationContext container we must instantiation the class that implements org.springframework.context.ApplicationContext(I) and this is sub interface of org.springframework.beans.factory.BeanFactoryBeanFactory(I).
+
+ 
+
+
+
+org.springframework.beans.factory.BeanFactory(I)
+           |
+        extends
+           |
+org.springframework.beans.factory.ListableBeanFactory(I)
+           |
+        extends
+           |
+org.springframework.context.ApplicationContext(I)
+
+
+Popular implementation classes of ApplicationContext(I)
+=============================================
+
+a) FileSystemXmlApplicationContext
+   --------------------------------
+    =>creates ApplicationContext container in standalone env.. by taking given spring cfg file from specified path of file system
+
+    => we can pass either relative path or absolute path of spring bean cfg file
+
+
+    FileSystemXmlApplicationContext ctx = new FileSystemXmlApplicationContext("src/main/java/com/st/cfgs/applicationContext.xml");
+
+
+
+b) ClassPathXmlApplicationContext
+    =>Creates the ApplicationContext container in standalone env.. by taking the given spring bean cfg file from jars and directories added the CLASS PATH env.. variable.
+    (build PATH)
+
+    ClassPathXmlApplicationContext ctx=new ClassPathXmlApplicationContext("com/st/cfgs/applicationContext.xml");
+
+
+    by default src/main/java folder every maven project resides in CLASSPATH/BuildPath
+
+
+
+c) XmlWebApplicationContext
+  --------------------------
+
+    =>creates ApplicationContext (AC) container in java web application by taking <servlet logical name>-servlet.xml of WEB-INF folder as the spring bean cfg file.
+
+    if the controller servlet logical name given in <sevlet-name> tag of web.xml file is "abc" then it takes abc-servlet.xml of WEB-INF folder as spring bean configuration file name.
+    
+        eg:: XmlWebApplicationContext Ctx=new XmlWebApplicationContext();
+
+
+=>while developing spring Apps in 100% code driven mode and also in spring boot mode we do not take xml file as spring bean cfg file rather we need to take java class as "spring bean configuration class".. In that situations we need to use following classes to create ApplicationContext container.
+
+
+
+d) AnnotationConfigApplicationContext
+  ------------------------------------
+
+=>creates ApplicationContext (AC) container in standalone env.. by taking given java class as the configuration class.
+
+    AnnotationConfigApplicationContext ctx=new AnnotationConfigApplicationContext(AppConfig.class); 
+
+AppConfig.class => java class acting as spring bean configuration class.
+AppConfig is recommended name any name can be taken.
+
+
+
+
+
+e) AnnotationConfigWebApplicationContext
+  -------------------------------------
+
+=> creates ApplicationContext (AC) container in web application (spring MVC App) by taking given java class name as the spring bean configuration class name.
+
+    AnnotationConfigWebApplicationContext ctx=new AnnotationConfigWebApplicationContext(AppConfig.class);
+
+
+
+
+
+
+===========================================================================================================================
+
+
+
+
+Improved Client App 
+===================
+
+//StrategyDPTest.java
+package com.st.test;
+
+
+import org.springframework.context.support.FileSystemXmlApplicationContext;
+
+import com.st.comp.Flipkart;
+
+public class StrategyDPTest {
+
+	public static void main(String[] args) {
+		 FileSystemXmlApplicationContext ctx=new FileSystemXmlApplicationContext("src/main/java/com/st/cfgs/applicationContext.xml");
+		 //get Target class obj
+		 Flipkart fpkt=ctx.getBean("fpkt",Flipkart.class);
+		 //invoke the b.method
+		 String resultMsg=fpkt.shopping(new String[] {"shirt","trouser","glasses"},
+				                                                new float[] {5679.60f,5557.55f,4545.77f} );
+		 System.out.println(resultMsg);
+		 
+		 //close container
+		 ctx.close();
+		 
+	}//main
+}//class
+
+
+----------------------------------------------------------------------------------
+
+Improved Client App2
+=====================
+
+
+
+//StrategyDPTest1.java
+package com.st.test;
+
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.st.comp.Flipkart;
+
+
+public class StrategyDPTest1 {
+
+	public static void main(String[] args) {
+		
+        // by default src/main/java folder is placed in build path or CLASSPATH of the project 
+
+		ClassPathXmlApplicationContext ctx=new ClassPathXmlApplicationContext("com/st/cfgs/applicationContext.xml");
+		
+		//get Target class obj
+		 Flipkart fpkt=ctx.getBean("fpkt",Flipkart.class);
+		 //invoke the b.method
+		 String resultMsg=fpkt.shopping(new String[] {"shirt","trouser","glasses"},
+				                                                new float[] {5679.60f,5557.55f,4545.77f} );
+		 System.out.println(resultMsg);
+		 
+		 //close container
+		 ctx.close(); 
+		 
+	}//main
+}//class
+
+
+--------------------------------------------------------------------------------------------
+
+Improved client Application-3
+==============================
+
+//StrategyDPTest.java
+package com.st.test;
+
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.st.comp.Flipkart;
+
+
+public class StrategyDPTest1 {
+
+	public static void main(String[] args) {
+		 
+        // for this we must take src/main/java/com/st/cfgs folder as the source folder by adding the classpath / buildpath 
+
+		ClassPathXmlApplicationContext ctx=new ClassPathXmlApplicationContext("applicationContext.xml");
+
+		//get Target class obj
+		 Flipkart fpkt=ctx.getBean("fpkt",Flipkart.class);
+		 //invoke the b.method
+		 String resultMsg=fpkt.shopping(new String[] {"shirt","trouser","glasses"},
+				                                                new float[] {5679.60f,5557.55f,4545.77f} );
+		 System.out.println(resultMsg);
+		 
+		 //close container
+		 ctx.close(); 
+		 
+	}//main
+}//class
+
+
+
+while working with xml driven cfgs, annotations + xml driven cfgs based spring app development in standalone env.. we need to prefer using "ClassPathXmlApplicationContext" class.
+
+
+
+
+
+==========================================================================================================================================
+
+
+
+Features of ApplicationContext Container
+++++++++++++++++++++++++++++++++++++++++
+
+
+
+Feature-1
+----------
+support for pre-instantiation on singleton scope spring beans
+
+
+=> The BeanFactory container does not create spring bean class object until factory.getBean(-) method is called for any scope spring bean.. i.e it will create spring bean class obj only when need is there..that to on demand.. So it is called lazy instantiation.
+
+=> The moment ApplicationContext container created.. all the singleton scope spring beans will be instantiated and injections will be done on those beans irrespective whether those spring bean objects will be used or not. this called eager instantiation or pre-instantiation of spring beans.
+
+=> if the target singleton scope spring bean is having prototype scope spring bean as the dependent spring bean.. the dependent spring bean also participates in pre-instantiation with out changing its scope to support injections on singleton scope spring bean.
+
+
+applicationContext.xml
+======================
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <!-- cfg dependent classes -->
+  // Here all 4 beans participates in pre-instantiation if the container is "AC" container.
+  // Even BlueDart spring bean participates in pre-instantiation in order to make it ready to complete injections activities on target Flipkart class object who participates pre-instantiation. 
+
+  <bean id="dtdc" class="com.st.comp.DTDC"/>
+  <bean id="dhl" class="com.st.comp.DHL"/>
+  <bean id="bDart" class="com.st.comp.BlueDart" scope="prototype"/>
+  
+  <!-- cfg Target class -->
+  <bean id="fpkt" class="com.st.comp.Flipkart" scope="singleton">
+     <property name="courier"  ref="dtdc"/>
+  </bean>
+
+</beans>
+
+
+==========================================================================================================================================
+
+
+Q) How to make prototype scope spring bean participating in pre-instantiation?
+Ans) Make it as the dependent spring bean to the target singleton scope spring bean in "AC" IOC container.
+
+Q) Why there no is pre-instantiation for other than singleton scope spring beans?
+Ans) The other than singleton scope spring beans objects will not be placed in the internal cache of IOC container and will not be reused .. So creating objects for those spring beans through pre-instantiation process makes the created objects as the waste objects.. So no pre-instantiation enabled for other than singleton scope spring beans.
