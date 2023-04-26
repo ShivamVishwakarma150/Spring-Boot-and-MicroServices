@@ -1,0 +1,35 @@
+How to disable Pre-instantiation on singleton scope spring beans?
+==================================
+
+Ans) By using lazy-init="true" we can disable pre-instantiation on singleton scope spring bean
+
+    <bean id='dtdc' class="com.st.comp.DTDC" lazy-init="true"/>
+
+
+
+Q)if lazy-init enabled singleton scope bean is dependent to singleton scope target spring bean class then what happens?
+-------------------------------------------
+Ans) The lazy-init enabled singleton scope spring bean also participates in pre-instantiation in supports the pre-instantiation of singleton scope target spring bean.
+
+
+     <bean id="dtdc" class="com.st.comp.DTDC" lazy-init="true"/>
+
+    <!-- cfg Target class -->
+    <bean id="fpkt" class="com.st.comp.Flipkart">
+        <property name="courier"  ref="dtdc"/>
+    </bean>
+
+
+
+Q) we have 10 spring beans cfg in spring bean cfg file.. how to enable pre-instantiation only 5 spring beans?
+========================================
+
+case1:: 
+
+=>Take 5 spring beans as the singleton scope spring beans
+
+=> Another 5 spring beans as the prototype scope spring beans
+
+=> make sure that prototype spring beans are not taken as the dependent spring beans
+
+
