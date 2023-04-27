@@ -1,5 +1,5 @@
 How to disable Pre-instantiation on singleton scope spring beans?
-==================================
+============================================
 
 Ans) By using lazy-init="true" we can disable pre-instantiation on singleton scope spring bean
 
@@ -30,6 +30,98 @@ case1::
 
 => Another 5 spring beans as the prototype scope spring beans
 
-=> make sure that prototype spring beans are not taken as the dependent spring beans
+=> make sure that prototype spring beans are not taken as the dependent spring beans to singleton scope spring beans.
+
+
+case2:: 
+
+=>Take 5 spring beans as the singleton scope spring beans
+
+=> Another 5 spring beans as the singleton scope spring beans by enabling lazy-init
+
+=> make sure that lazy init enabled beans are not taken as the dependent spring beans to other singleton scope spring beans.
+
+
+
+What is the use of the pre-instantiation of singleton spring beans in real projects?
+==============================================
+
+=> web application with BeanFactory container and not enabling <load-on-startup> on controller servlet
+
+
+    request1 to web application :: 
+    
+    =>servlet loading , servlet instantiation + Initialization
+
+    => spring beans loading ,spring beans instantiation, injections on spring beans
+
+    => request processing operation.
+
+    other than request1 to web application :: request processing
+        1st request is taking more time compare to other than 1st request to words processing and generating generation because <load-on-startup> on servlet is not enabled + ApplicationContextContainer is not taken performing pre-instantiation of singleton scope spring beans.
+
+
+
+
+web application with ApplicationContext container and enabling <load-on-startup> on controller servlet
+============================================================================================
+
+
+    During the deployment of the web application or during the server startup
+    =========================================
+
+    note: In web application we create IOC container in controller servlet comp.
+
+    => servlet loading + servlet instantiation + servlet Initialization
+    
+    => IOC Container creation(AC), singleton scope spring bean loading, instantiation and injections takes place
+
+    request1 to web application :: Directly request processing
+
+    other than request1 to web application :: directly request processing
+
+    request1 and other than request1 are taking same time to process the request.
+
+
+==============================================
+Features2 :: Ability to work with properties file and place holders 
+==============================================
+
+    properties file 
+    ===============
+    => The text file that maintains the entries in the form key=value pairs is called properties file 
+
+    eg:
+        info.txt 
+        # personal info 
+        per.name=Akash
+        per.age=30
+        per.address=Mumbai
+            keys  = values 
+
+
+in our Java Apps to keep jdbc properties we take the support of properties file .. It avoid hardcoding of jdbc properties allows us to modify jdbc properties with out touching the source code of the application.
+
+    jdbc properties
+    ================
+        jdbc driver class name
+        jdbc url
+        db username
+        db password
+
+Q) In Spring Apps we cfg DataSource injecting jdbc properties in spring bean cfg file.. there it self (xml file) we are avoiding hard coding of jdbc properties what us the need of taking separate properties file in spring Apps.
+Ans:-
+
+Refer Notes.png
+
+If there is 1 project with 10 modules.
+
+Problem:
+    if module1 to module9 code is gathering jdbc properties from properties file and 10th is gathering same properties from spring bean cfg file then any change in jdbc properties we need to modify in two places.. To get rid these problems use the the following solution as shown in the diagram,.
+
+    solution :: make module10 which is developed in spring gathering jdbc properties from
+    properties file through spring bean cfg file.   
+
+
 
 
