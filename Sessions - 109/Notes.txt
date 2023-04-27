@@ -122,6 +122,90 @@ Problem:
     solution :: make module10 which is developed in spring gathering jdbc properties from
     properties file through spring bean cfg file.   
 
+    Ans2) While developing spring apps using 100% code driven cfgs and in spring boot mode we can not take the xml file as spring bean cfg file.. there we need to use properties file only.
 
 
+
+
+
+
+Adding properties file support to MiniProject having jdbc properties
+============================================================================================
+
+step1) keep u r mini project app ready
+
+
+step2) add jdbc.properties file in com.st.commons pkg of src/main/java folder
+having jdbc properties of certain Db s/w of ur choice
+    #jdbc properties
+    jdbc.driver=oracle.jdbc.driver.OracleDriver
+    jdbc.url=jdbc:oracle:thin:@localhost:1521:xe
+    db.user=system
+    db.pwd=Shivam12345
+
+step3) cfg jdbc properties file in spring bean cfg file using <context:property-placeholder > tag
+
+    in ApplicationContext.xml (import context name space using namespace tab)
+    ==========================
+
+    // this tag internally locates given properties file and also replaces the placeholder of InMemoryMetaData of spring bean cfg with the real values collected from properties file
+    <context:property-placeholder location="com/st/commons/jdbc.properties"/>
+
+step4) place the key of properties file as place holders while injected jdbc properties to DataSource configuration
+
+    // placeholders having keys of the properties whose values will be replaced with the real values collected from the properties file 
+      <!-- DataSource cfg -->
+  <bean id="drds"  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name="driverClassName" value="${jdbc.driver}"/>
+      <property name="url" value="${jdbc.url}"/>
+      <property name="username" value="${db.user}"/>
+      <property name="password" value="${db.pwd}"/>
+  </bean>
+  
+step5) do changes in spring bean cfq file according to the changes done in DataSource cfg
+
+    // since jdbc properties are dynamically coming from properties file at runtime so there is no need of taking multiple DataSource cfg for multiple Db s/w just take one DataSource cfg change jdbc properties time to time to change the Db s/w.
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+    <context:property-placeholder location="com/st/commons/jdbc.properties"/>
+
+    <!-- DataSource cfg -->
+    <bean id="drds"  class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${db.user}"/>
+        <property name="password" value="${db.pwd}"/>
+    </bean>
+    
+    
+    
+    <!-- DAO class cfg -->
+    <bean id="empOraDAO"  class="com.st.dao.EmployeeOracleDAOImpl">
+        <constructor-arg name="ds" ref="drds"/>
+    </bean>
+    <bean id="empMySqlDAO"  class="com.st.dao.EmployeeMySQLDAOImpl">
+        <constructor-arg name="ds" ref="drds"/>
+    </bean>
+    
+    <!-- service class cfg  -->
+    <bean id="empService" class="com.st.service.EmployeeMgmtServiceImpl">
+        <!--  <constructor-arg name="dao"  ref="empOraDAO"/> -->
+        <constructor-arg name="dao"  ref="empMySqlDAO"/>
+        <property name="osName" value="${os.name}"/>
+        <property name="path"  value="${Path}"/> 
+    </bean>
+    
+    <!-- controller cfg -->
+    <bean id="controller"  class="com.st.controller.MainController">
+        <constructor-arg name="service"  ref="empService"/>
+    </bean>
+
+    </beans>
+
+step6) change BeanFactory container to ApplicationContext container in the Client App.
 
