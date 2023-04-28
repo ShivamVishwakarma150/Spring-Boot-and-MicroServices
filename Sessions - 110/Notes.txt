@@ -1,0 +1,4 @@
+What is the difference between BeanFactory Container and ApplicationContext Container ?
+=============================================
+
+Refer Note.jpg
