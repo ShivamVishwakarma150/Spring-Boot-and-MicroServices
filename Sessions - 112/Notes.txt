@@ -1,0 +1,7 @@
+Spring Core Annotations @Autowired
+===================================
+
+Flow of the Previous Application :- 
+
+Refer Flow_of_Execution.jpg
+
