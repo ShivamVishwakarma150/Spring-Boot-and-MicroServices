@@ -1,0 +1,74 @@
+#########################################
+application.properties file vs application.yml file
+##########################################
+
+-> When we create spring boot application by default application.properties will be created
+
+-> We can avoid hard coded values by configuring app properties in this application.properties file
+
+-> properties file will represent data only in key-value format
+
+
+Ex:
+
+server.port = 9090
+spring.mvc.view.prefix = /views/
+spring.mvc.view.suffix = .jsp
+
+-> properties file will represent data in sequential format
+
+-> .properties file will be supported by only java
+
+-> For every profile we need to create a separate properties file
+
+
+******** As an alternate to .properties file we can use .yml file in spring boot ***************
+
+
+-> YML stands YET ANOTHER MARKUP Language
+
+-> YML represents data in hierarchial format
+
+server:
+  port: 9090
+
+-> YML supports key-value, list and map values also
+
+-> YML supported by other programming languages also (It is universal)
+
+-> All the profiles can be configured in single YML file
+
+
+############################
+Working with Dynamic Properties
+##############################
+
+++++++++++++++++
+application.properties
+++++++++++++++++
+server.port=9090
+
+welcome.msg=Welcome to India 
+
+++++++++++++++++++++++++++++++++++
+@RestController
+public class WelcomeRestController {
+	
+	@Value("${welcome.msg}")
+	private String msg;
+	@GetMapping("/")
+	public String WelcomeMsg() {
+		
+		return msg;
+	}
+}
+
++++++++++++++++++++++++++++++++++++
+
+-> application messages and REST Endpoint URLS are not recommended to hardcode in java classes. Because if we change any message or any url then we have to compile and package entire application.
+
+-> To avoid this problem we will configure messages and URLs in application.properties file or in application.yml file
+
+-> When we change application.properties file or application.yml file we no need to compile and build entire project .
+
+
