@@ -1,0 +1,159 @@
+@value -> It is used to read the messages from the properties file or YAML file into java class variables.
+
+Based on the key we can retrieve the value and we can store the value.
+
++++++++++++++++++++++++++++++
+Working with App properties
++++++++++++++++++++++++++++++
+
+------------------- application.yml ----------------------------
+
+# Predefined properties
+server:
+  port: 9090  
+spring:
+  application:
+    name: sb-yml-app
+ 
+#Custom Properties    
+training: <- this is for differentiate custom properties
+  messages:
+    welcomeMsg: Welcome to India
+    greetMsg: Good Morning
+    wishMsg: All the best
+    
+
+
+------------------- AppProperties.java -----------------
+
+@Data
+@Configuration
+@EnableConfigurationProperties
+@ConfigurationProperties(prefix="training")
+public class AppProperties {
+	private Map<String,String> messages = new HashMap<>();
+	
+}
+
+----------------------- DemoRestController.java -------------------
+
+
+@RestController
+public class DemoRestController {
+	
+	@Autowired
+	private AppProperties props;
+	
+	@GetMapping("/welcome")
+	public String welcomeMsg() {
+		Map<String, String> messages = props.getMessages();	
+		
+		String value=messages.get("welcomeMsg");
+		return value;
+	}
+	
+	@GetMapping("/greet")
+	public String getGreetMsg() {
+		Map<String,String> messages = props.getMessages();
+		String value = messages.get("greetMsg");
+		return value;
+}
+	
+	@GetMapping("/wish")
+	public String getWishMsg() {
+		return props.getMessages().get("wishMsg");
+	}
+}
+
+
+==============================================================================================
+
+
+######################
+Spring Boot Actuators
+######################
+
+-> Actuator is one of the powerful feature introduced in Spring Boot
+
+-> Actuators are used to monitor and manage our application
+
+-> Actuators are giving Production ready features for our boot application
+
++++++++++++++++++
+Actuator Endpoints
++++++++++++++++++
+
+/health : To get application health status
+
+/info : To get application information
+
+/beans : To get what beans loaded by our application
+
+/mappings: To get what URL patterns available in our application
+
+/configProps : To get configuration properties loaded by our application
+
+/heapdump : To download heap data
+
+/threaddump : To get threads information
+
+/shutdown : To stop our application (This is special, it is binded to POST request)
+
+
+=> To work with actuators we have to use 'spring-boot-starter-actuator' dependency
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+-> We can see actuator exposed endpoints using below URL
+
+		URL : http://localhost:9090/actuator
+
+
+Note: /health is a default endpoint which we can access directly
+
+
+-> We can expose other actuator endpoints using below property
+
++++++++++++++++
+application.yml
++++++++++++++
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+        exclude: beans
+
+
+Note: To expose endpoints using application.properties we will use below property
+
+for excluding beans from all endpoint we just have to use 
+    exclude: beans 
+
+management.endpoints.web.exposure.include=*
+
+
+
++++++++++++++++++++
+Working with shutdown
+++++++++++++++++++++
+
+-> IT is used to stop our application
+-> We need to enable this manually
+-> It is binded to http post request
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    shutdown:
+      enabled: true
+
+
+
+

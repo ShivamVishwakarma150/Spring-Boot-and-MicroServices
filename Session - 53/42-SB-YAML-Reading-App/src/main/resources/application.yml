@@ -1,0 +1,19 @@
+
+# Predefined properties
+server:
+  port: 9090  
+spring:
+  application:
+    name: sb-yml-app
+    
+    
+    
+#Custom Properties    
+training:
+  messages:
+    welcomeMsg: Welcome to India
+    greetMsg: Good Morning
+    wishMsg: All the best
+    
+    
+    
