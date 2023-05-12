@@ -1,0 +1,62 @@
+######################## 
+Microservices Architecture 
+######################## 
+
+
+-> Microservices is an architectural design pattern to develop our applications 
+
+-> There is no fixed architecture for Microservices Based Applications 
+
+-> People are customizing Microservices Architecture according to their requirement 
+
+*********** Let us see generalized architecture of Microservices ***************
+
+
+1) Service Registry 
+2) Admin Server 
+3) Zipkin Server 
+4) Services (REST APIs) 
+5) FeignClient 
+6) API Gateway
+
+
+ServiceRegistry
+================
+
+-> ServiceRegistry is used to register all our backend services/apis 
+
+-> Service Registry will maintain services names, urls and status of each service 
+
+-> We can use EurekaServer as a service registry
+
+Note: EurekaServer provided by Spring Cloud Netflix Library
+
+
+AdminServer
+============
+
+
+-> AdminServer is used to monitor and manage all our backend services at one place 
+
+-> AdminServer will provide user interface to monitor and manage our services 
+
+-> Using AdminServer user interface we can access Actuator Endpoints of our services at one place 
+
+Note: AdminServer and Admin Client provided by 'Code Centric' company (we can integrate with boot)
+
+
+
+
+ZipkinServer 
+=============
+
+
+
+-> ZipkinServer is used for Distributed Log Tracing 
+
+-> ZipkinServer will provide user interface to monitor application execution details 
+
+-> How many services involved and which service took more time to process the request can be monitored using Zipkin 
+
+
+Note: Zipkin is third party open source server (can be integrated with spring boot)
