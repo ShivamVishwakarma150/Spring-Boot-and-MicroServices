@@ -58,5 +58,45 @@ ZipkinServer
 
 -> How many services involved and which service took more time to process the request can be monitored using Zipkin 
 
-
 Note: Zipkin is third party open source server (can be integrated with spring boot)
+
+
+Backend services
+=================
+
+-> Backend services are nothing but REST APIs (which are also called as Microservices) 
+
+-> Backend REST APIs contains actual business logic of our application 
+
+-> One project will have multiple REST APIs in the backend 
+
+-> Each Backend api will act as client for Service Registry + Admin Server + Zipkin Server
+
+
+
+
+
+
+
+-> With in the same application If one backend api communicating with another backend api then it is called as Interservice communication 
+
+-> FeignClient will be used to perform Interservice Communication 
+
+Note: Based on requirement our backend apis can communicate with 3rd party apis using RestTemplate or WebClient
+
+
+-> Api Gateway will act as an Entry point for our backend apis 
+-> It acts as mediator between end users and backend apis 
+-> API Gateway contains Filters and Routing 
+-> Filters we can use to authenticate incoming requests 
+-> Routing will decide which request should go to which backend api 
+
+Note: In previous versions we have Zuul Proxy as API Gateway but now it got removed from latest version of boot 
+
+-> Spring Cloud Gateway we can use as API Gateway for our application
+
+
+
+
+
+01:25:16
