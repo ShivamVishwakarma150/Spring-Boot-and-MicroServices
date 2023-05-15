@@ -98,5 +98,3 @@ Note: In previous versions we have Zuul Proxy as API Gateway but now it got remo
 
 
 
-
-01:25:16
