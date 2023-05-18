@@ -81,3 +81,85 @@ Spring Boot with Redis Integration
 		</dependency>
 
 
+------------------------------
+
+@Configuration
+public class RedisConfig {
+
+	@Bean
+	public JedisConnectionFactory getJedisConnection() {
+		JedisConnectionFactory factory = new JedisConnectionFactory();
+		// factory.setHostName(hostName);
+		// factory.setPassword(password);
+		// factory.setPort(port);;
+		return factory;
+	}
+
+	@Bean
+	@Primary
+	public RedisTemplate<String, User> getRedisTemplate(JedisConnectionFactory factory) {
+		RedisTemplate<String, User> rt = new RedisTemplate<>();
+		rt.setConnectionFactory(factory);
+		return rt;
+	}
+
+}
+-----------------------------------------------------
+package in.ashokit.binding;
+
+import java.io.Serializable;
+
+import lombok.Data;
+
+@Data
+public class User implements Serializable{
+
+	private Integer uid;
+	private String name;
+	private Integer age;
+	
+}
+
+------------------------------------------
+@RestController
+public class UserRestController {
+
+	private HashOperations<String, Integer, User> hashOps;
+
+	public UserRestController(RedisTemplate<String, User> redisTemplate) {
+		hashOps = redisTemplate.opsForHash();
+	}
+
+	@PostMapping("/user")
+	public String storeData(@RequestBody User user) {
+		hashOps.put("PERSONS", user.getUid(), user);
+		return "success";
+	}
+
+	@GetMapping("/user/{uid}")
+	public User getData(@PathVariable Integer uid) {
+		User value = (User) hashOps.get("PERSONS", uid);
+		return value;
+	}
+	
+	@GetMapping("/users")
+	public List<User> getAllUsers(){
+		return hashOps.values("PERSONS");
+	}
+	
+	@DeleteMapping("/user/{uid}")
+	public String deleteUser(@PathVariable Integer uid) {
+		hashOps.delete("PERSONS", uid);
+		return "User Deleted";
+	}
+}
+
+
+
+
+
+
+
+
+
+
