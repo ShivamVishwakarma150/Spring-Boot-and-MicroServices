@@ -1,0 +1,83 @@
+################
+What is Cache ?
+###############
+
+-> Cache is a temporary storage
+
+-> When our application wants to access same data frequently then we will use Cache memory
+
+-> Cache will improve performance of our application by reducing database calls
+
+
+Note: Database calls are always costly which will take more time to execute
+
+-> To reduce no.of round trips between application and database we will use 'Cache'
+
+##############
+Redis Cache
+###############
+
+-> Redis is one of the distributed cache available in the market
+
+-> Redis will store data in key-value pair
+
+-> Multiple Applications can connect with Redis Cache at a time...
+
+The open source, in-memory data store used by millions of developers as a database, cache, streaming engine, and message broker.
+
+
+
+############
+Redis Setup
+############
+
+-> Download Redis Software 
+
+URL : https://redis.io/download/#redis-downloads
+
+-> Run 'redis-server.exe' file
+
+Note: By default it runs on '6379' port number
+
+-> Run 'Redis-cli.exe' file
+
+-> Type 'ping' command in Redis CLI 
+
+Note: Server will respond with 'PONG' as response
+
+
+
+################################
+Spring Boot with Redis Integration
+#################################
+
+-> Spring Boot provided starter pom to connect with Redis Server
+
+
+-> Create JedisConnectionFactory bean
+
+-> Create RedisTemplate and Inject JedisConnectionFactory into RedisTemplate
+
+-> Using RedisTemplate get HashOperations object
+
+-> Using HashOperations we can perform storing/retrieving/deleting operations with Redis Server
+
+
+
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>io.lettuce</groupId>
+					<artifactId>lettuce-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+		</dependency>
+
+
