@@ -1,0 +1,143 @@
+##############
+Config Server
+##############
+
+-> As part of our application development we will use several configuration properties
+
+Ex:
+
+a) data source properties
+b) actuator properties
+c) security properties
+d) smtp properties
+e) kafka properties
+f) application messages etc..
+
+-> As of now we configured those configuration properties in application.properties / application.yml file
+
+-> application.properties / application.yml file will be available with in the project
+
+-> When we package our boot application for deployment our configuration properties will be part of that packaged file
+
+Note: If we want to change any configuration properties then we have to package our application again and we have to re-deploy our application (This is not recommended).
+
+-> To avoid this problem we will keep configuration properties outside of the project.
+
+******************* Config server is used to externalize application configuration properties *********************************
+
+-> Using Config Server we can load Configuration Properties from outside of the project
+
+-> When we want to change any configuration properties we no need to re-package and re-deploy our application
+
+-> Using Config Server we can de-couple our application and configuration properties
+
+********************************************************************************************************************************************
+
+1) Create Git Hub Repository and keep configuration properties in git hub repo
+
+Note: We need use application name for configuration properties/yml file name
+
+Ex:
+
+welcome.yml
+welcome-dev.yml
+welcome-prod.yml
+
+admin.yml
+admin-dev.yml
+admin-prod.yml
+
+reports.yml
+reports-dev.yml
+reports-prod.yml
+
+Git Repo URL : https://github.com/shivamvishwakarma150
+/configuration_properties.git
+
+
+
+#####################
+Config Server Project
+######################
+
+1) Create Boot application with below dependencies
+	
+		a) config-server
+		b) actuator
+
+2) Write @EnableConfigServer annotation at boot start class
+
+3) Configure below properties in application.yml file
+
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/shivamvishwakarma150/configuration_properties
+          clone-on-start: true
+management:
+  security:
+    enabled: false
+
+
+######################################################################
+Microservice To Load Config Properties using Config Server (Config Client App)
+######################################################################
+
+
+1) Create Boot application with below dependencies
+
+	a) config-client
+	b) web-starter
+	c) cloud-bootstrap
+	
+
+2) Configure application name, application port, config-server-url, profile
+
+
+a) bootstrap.yml (app-name & config-server-url)
+
+
+spring:
+  application:
+    name: welcome
+  cloud:
+    config:
+      uri: http://localhost:8080
+
+
+b) application.yml (server port)
+
+server:
+  port: 9090
+
+
+3) Create Rest Controller with required methods
+
+@RestController
+@RefreshScope
+public class WelcomeRestController {
+
+	@Value("${msg:Config Server Not Working}")
+	private String msg;
+
+	@GetMapping("/")
+	public String getWelcomeMsg() {
+		return msg;
+	}
+}
+
+
+4) Run the application and test it.
+
+
+
+
+
+
+
+
+
+
+
