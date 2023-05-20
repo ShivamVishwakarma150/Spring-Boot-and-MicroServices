@@ -78,7 +78,7 @@ Note: server.properties file will be available in config folder (Copied to windo
 
 Step-6 : Create Kakfa Topic using below command from kafka/bin/windows folder
 
-Command : kafka-topics.bat --create --bootstap-server localhost:2181--replication-factor 1 --partitions 1 --topic demo-sbms-topic
+Command : kafka-topics.bat --create --bootstrap-server localhost:2181--replication-factor 1 --partitions 1 --topic demo-sbms-topic
 
 Step-7 : View created Topics using below command
 
