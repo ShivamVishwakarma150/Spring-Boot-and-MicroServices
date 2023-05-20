@@ -1,0 +1,61 @@
+####################
+Mono & Flux Objects
+####################
+
+-> Mono means single object
+
+-> Flux means stream of objects
+
+
+-> Create spring boot application with below 3 dependencies
+
+1) web-starter
+2) webflux
+3) lombok
+
+--------------------------------
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class CustomerEvent {
+	
+	private String name;
+	private Date createDate;
+	
+}
+---------------------------------
+@RestController
+public class CustomerRestController {
+
+	@GetMapping(value = "/event", produces = "application/json")
+	public ResponseEntity<Mono<CustomerEvent>> getEvent() {
+		CustomerEvent event = new CustomerEvent("Vikash", new Date());
+		Mono<CustomerEvent> customerMono = Mono.just(event);
+		return new ResponseEntity<Mono<CustomerEvent>>(customerMono, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public ResponseEntity<Flux<CustomerEvent>> getEvents() {
+
+		// creating binding object with data
+		CustomerEvent event = new CustomerEvent("Vikash", new Date());
+
+		// creating stream for binding object
+		Stream<CustomerEvent> customerStream = Stream.generate(() -> event);
+
+		// create flux object using stream
+		Flux<CustomerEvent> cflux = Flux.fromStream(customerStream);
+
+		// setting response interval
+		Flux<Long> intervalFlux = Flux.interval(Duration.ofSeconds(5));
+		
+		// combine interval flux and customer event flux
+		Flux<Tuple2<Long, CustomerEvent>> zip = Flux.zip(intervalFlux, cflux);
+		
+		// Getting Tuple value as T2
+		Flux<CustomerEvent> fluxMap = zip.map(Tuple2::getT2);
+		
+		//sending response
+		return new ResponseEntity<>(fluxMap, HttpStatus.OK);
+	}
+}
