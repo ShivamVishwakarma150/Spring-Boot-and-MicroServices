@@ -1,4 +1,4 @@
-package com.shivam.rest;
+package com.shivam.exception;
 
 import lombok.Data;
 

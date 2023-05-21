@@ -91,8 +91,79 @@ public class DemoRestController {
 
 
 
+-> As per the above code ExceptionHandler will execute for that controller (Local Exception Handling )
+
+-> To implement global exception handling we need to write a class like below 
+
+@RestControllerAdvice
+public class AppExceptionHandler {
+	
+	@ExceptionHandler(value=ArithmeticException.class)
+	public ResponseEntity<ExceptionInfo> handleAE(ArithmeticException ae) {
+		ExceptionInfo exception = new ExceptionInfo();
+
+		exception.setMsg(ae.getMessage());
+		exception.setCode("SBI0004");
+
+		return new ResponseEntity<>(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+	} 
+}
 
 
 
 
+============================================================================================================
+
+
++++++++++++++++++++++++++++++++++++++++
+Working with User Defined Exceptions 
++++++++++++++++++++++++++++++++++++++++
+
+-> Create User Defined Exception class like below 
+ 
+ public class NoDataFoundException extends RuntimeException{
+	
+	public NoDataFoundException(String msg) {
+		super(msg);
+	}
+}
+
+-> Create a RestController method and throw the exception based on condition
+
+@RestController
+public class BookController {
+
+	@GetMapping("/price/{isbn}")
+	public String getPrice(@PathVariable String isbn) {
+		String msg="";
+		
+		if(isbn.equals("ISBN001")) {
+			msg="Book Price is : 400 $";
+			
+		}else {
+			throw new NoDataFoundException("Invalid ISBN");
+		}
+		
+		return msg;
+	}
+	
+}
+
+
+-> Create ExceptionHandler Global Method 
+
+// Global Exception Handler
+@RestControllerAdvice
+public class AppExceptionHandler {
+	@ExceptionHandler(value=NoDataFoundException.class)
+	public ResponseEntity<ExceptionInfo> handleNdfe(NoDataFoundException ndfe){
+		ExceptionInfo exception = new ExceptionInfo();
+
+		exception.setMsg(ndfe.getMessage());
+		exception.setCode("NDFE0001");	
+		
+		return new ResponseEntity<>(exception,HttpStatus.INTERNAL_SERVER_ERROR);
+		
+	}
+}
 
