@@ -1,0 +1,154 @@
+Last Session : What is Authentication & Authorization & Spring Security
+-------------------------------------------------------------------------
+
+-> Spring team provided security module to protect our applications from hackers and from data breaches
+
+-> Spring Security is providing below 2 functionalities
+
+		1) Authentication
+		2) Authorization
+
+-> Authentication talks about weather the user can access our application nor not.
+
+-> Authorization talks about weather the user having access for that functionality or not.
+
+-> Spring Security works based on a filter. Spring Security using DelegatingFilterProxy.
+
+-> If application having Spring Security then request will go to Filter first then it will go to dispatcher servlet.
+
+----------------------------------------------------------------------------------Spring Security with In-Memory Credentials
+----------------------------------------------------------------------------------
+-> In-Memory credentials means with-in application we will configure credentials of the users.
+
+
+1) Create Spring Boot application with below dependencies
+
+		i) spring-boot-starter-web
+		ii) spring-boot-starter-security
+		iii) spring-boot-starter-thymeleaf
+		iv) devtools
+
+
+2) Create Controller class with Required methods
+
+3) Create View Files using Thymeleaf
+
+4) Create Security Config class
+
+5) Run the application and test it.
+
+----------------------------------------------------------------------------------
+
+@Controller
+public class HomeController {
+
+	@GetMapping("/home")
+	public String getHomePage() {
+		return "homePage";
+	}
+
+	@GetMapping("/welcome")
+	public String getWelcomePage() {
+		return "welcomePage";
+	}
+
+	@GetMapping("/admin")
+	public String getAdminPage() {
+		return "adminPage";
+	}
+
+	@GetMapping("/emp")
+	public String getEmpPage() {
+		return "empPage";
+	}
+
+	@GetMapping("/mgr")
+	public String getMgrPage() {
+		return "mgrPage";
+	}
+
+	@GetMapping("/common")
+	public String getCommonPage() {
+		return "commonPage";
+	}
+
+	@GetMapping("/accessDenied")
+	public String getAccessDeniedPage() {
+		return "accessDeniedPage";
+	}
+
+}
+----------------------------------------------------------------------------------
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+	/**
+	 * In this method we will configure Authentication credentials
+	 */
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+		// {noop} --> No Operation for password encoder
+
+		auth.inMemoryAuthentication().withUser("devs").password("{noop}devs").authorities("ADMIN");
+		auth.inMemoryAuthentication().withUser("ns").password("{noop}devs").authorities("EMPLOYEE");
+		auth.inMemoryAuthentication().withUser("vs").password("{noop}devs").authorities("MANAGER");
+
+	}
+
+	/**
+	 * In this method we will configure Authorization roles
+	 */
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		
+			http.authorizeRequests()
+				.antMatchers("/home").permitAll()
+				.antMatchers("/welcome").authenticated()
+				.antMatchers("/admin").hasAuthority("ADMIN")
+				.antMatchers("/emp").hasAuthority("EMPLOYEE")
+				.antMatchers("/mgr").hasAuthority("MANAGER")
+				.antMatchers("/common").hasAnyAuthority("EMPLOYEE", "MANAGER")
+				
+				.anyRequest().authenticated()
+				
+				.and()
+				.formLogin()
+				.defaultSuccessUrl("/welcome",true)
+				
+				.and()
+				.logout()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				
+				.and()
+				.exceptionHandling()
+				.accessDeniedPage("/accessDenied");
+		
+	}
+
+}
+----------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
