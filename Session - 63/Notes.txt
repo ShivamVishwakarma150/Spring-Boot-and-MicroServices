@@ -1,0 +1,71 @@
+-------------------------------------------------------------------------
+Spring Security
+-------------------------------------------------------------------------
+-> For every application we should provide some security to protect that application from hackers.
+
+-> In realtime applications, every client is asking to provide security
+
+-> As per the most recent verizon data breach investigation report-2020, 43% of data breaches were attacks on web applications.
+
+-> To protect our application from hacker attacks & data breaches we can use Spring Security concept.
+
+---------------------------------------------------------------------------------
+
+-> Spring Security works on a concept called JAAS (Java Authentication & Authorization Services).
+
+-> In brief, Spring security mainly works on javax.servlet.Filter concept.
+
+-> Filters are used to apply some pre-processing logic based on that we can decide weather to process that request or not.
+
+-> In Spring Security we have predefined filter class to apply pre-processing logic for the request
+
+			DelegatingFilterProxy
+
+-> DelegatingFilterProxy will check for below 2 things
+
+		1) Authentication
+		2) Authorization
+
+
+
+-> Authentication is the process of checking weather this user can access our application or not.
+
+-> Authorization is the process of checking weather this user having access for this functionality/page or not.
+
+---------------------------------------------------------------------------------
+-> We can implement spring boot security authentication in below 3 ways
+
+	i) In-Memory Credentials Security
+	ii) Using Data base (JDBC)
+	iii) Using UserDetailsService
+
+
+-> We can implement spring boot security authorization in below 4 ways
+
+i) permitAll  : no authorization required, all pages can be accessed
+ii) authenticated : if authentication pass, page can access 
+iii) hasAuthority : If user authenticated and authorized then only he can
+iv) hasAnyAuthority : if user having any role which are configure then it can access
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
