@@ -1,0 +1,89 @@
+=====================================
+How to secure REST APIs using Spring Boot
+=====================================
+
+-> Security is very important for every web application
+
+-> To protect our application & application data we need to implement security logic
+
+-> Spring Security concept we can use to secure our web applications / REST APIs
+
+
+-> To secure our spring boot application we need to add below starter in pom.xml file
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+Note: When we add this dependency in pom.xml file then by default our application will be secured with basic authentication. It will generate random password to access our application. 
+
+Note: Generated Random Password will be printed on console.
+
+-> We need to use below credentials to access our application
+
+				Username : user
+
+				Password : <copy the pwd from console>
+
+
+-> When we access our application url in browser then it will display "Login Form" to authenticate our request.
+
+-> To access secured REST API from postman, we need to set Auth values in POSTMAN to send the request
+
+
+=============================================
+How to override Spring Security Random Password
+=============================================
+
+-> To override random credentials we can configure security credentials in application.properties file or application.yml file like
+
+
+spring.security.user.name=shivam
+spring.security.user.password=shivam@123
+
+
+-> After configuring credentials like above, we need to give above credentials to access our application / api.
+
+
+===================================
+How to secure specific URL Patterns
+==================================
+
+-> When we add 'security-starter' in pom.xml then it will apply security filter for all the HTTP methods of our application.
+
+-> But in reality we need to secure only few methods not all methods
+
+
+		For Example
+
+				/ login-page --> security not required
+		
+				/ transfer ---> security required
+
+				/ balance ---> security required
+
+				/about-us ---> security not required
+
+
+-> In order to achieve above requirement we need to Customize Security Configuration in our project like below
+
+
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+	@Bean
+	public SecurityFilterChain securityFilter(HttpSecurity http) throws Exception{
+		
+		http.authorizeHttpRequests((request) -> request
+				.antMatchers("/","/login","/about", "/swagger-ui.html").permitAll()
+				.anyRequest().authenticated()
+		).formLogin();
+		
+		return http.build();
+	}
+}
+
+
