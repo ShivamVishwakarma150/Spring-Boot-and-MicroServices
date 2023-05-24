@@ -365,3 +365,36 @@ The `JwtRequestFilter` is then applied to intercept each request and validate th
 
 This configuration ensures that only authenticated users with valid JWT tokens can access the protected resources of our application.
 
+
+<br/>
+
+# Claim in Jwt
+
+In the context of JSON Web Tokens (JWT), "claim" refers to a piece of information contained within the token. A JWT is a compact and self-contained way of transmitting data between parties as a JSON object. It consists of three parts: a header, a payload, and a signature.
+
+The payload of a JWT contains claims, which are statements about the entity (typically the user) and additional data. Claims can be categorized into three types: reserved claims, public claims, and private claims.
+
+1. Reserved claims: These are predefined claims that have specific meanings and are commonly used. Some examples include:
+   - "iss" (Issuer): Indicates the issuer of the token.
+   - "sub" (Subject): Identifies the subject of the token (typically the user).
+   - "exp" (Expiration Time): Specifies the expiration time of the token.
+   - "iat" (Issued At): Indicates the time at which the token was issued.
+   - "aud" (Audience): Specifies the intended audience for the token.
+
+2. Public claims: These claims are defined by the JWT specification but are not mandatory. They can be used to add additional information to the token. Public claims should be defined in the IANA JSON Web Token Claims registry to ensure they don't conflict with other claims. Examples include "name," "email," or "role."
+
+3. Private claims: These claims are specific to the applications or organizations using JWTs. They are not standardized and should be defined by the parties involved in the token exchange.
+
+Claims within a JWT are represented as key-value pairs in the JSON format. For example:
+
+```
+{
+  "sub": "1234567890",
+  "name": "John Doe",
+  "admin": true
+}
+```
+
+These claims provide information about the subject ("sub"), the name of the user ("name"), and whether the user is an admin ("admin").
+
+It's important to note that while JWTs can carry information, the server must validate the signature of the token to ensure its authenticity and integrity before trusting the claims within it.
