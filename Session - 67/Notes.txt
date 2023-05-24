@@ -43,7 +43,7 @@ public class WelcomeRestController {
 
 	@GetMapping("/")
 	public String welcome() {
-		return "Welcome to Ashok IT";
+		return "Welcome to India";
 	}
 }
 
