@@ -1,0 +1,65 @@
+===========
+OAuth 2.0
+===========
+
+1) Create Spring Boot application with below dependencies
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-oauth2-client</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+
+2) Create OAuth app in Github.com
+
+	(Login --> Setting --> Developer Settings --> OAuth Apps --> Create App --> Copy Client ID & Secret)
+
+
+3) Configure GitHub OAuth App client id & client secret in application.yml file like below
+
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            clientId: <id>
+            clientSecret: <secret>
+
+
+4) Create Rest Controller with method
+
+@RestController
+public class WelcomeRestController {
+
+	@GetMapping("/")
+	public String welcome() {
+		return "Welcome to Ashok IT";
+	}
+}
+
+5) Run the application and test it.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
