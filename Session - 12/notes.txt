@@ -75,7 +75,7 @@ public class Test {
 		System.out.println(car2.hashCode());
 	}
 
-}
+}.
 
 OP:-
 Car:Constructor
