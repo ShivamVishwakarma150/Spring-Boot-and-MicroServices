@@ -10,7 +10,7 @@ Spring Boot & Microservices
 
 -> Spring framework came into market in 2004 
 
--> The current version of Spring is 5.x 
+-> The current version of Spring is 6.x 
 
 -> Spring is non-invasive framework 
 
