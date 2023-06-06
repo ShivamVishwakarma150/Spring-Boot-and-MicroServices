@@ -27,5 +27,3 @@
    - Use cases for runners include tasks such as sending emails, loading data into caches, or performing any logic that needs to be executed only once when the application starts.
    - To use runners, create a class and implement either the `ApplicationRunner` or `CommandLineRunner` interface, and override the `run()` method with the desired logic.
    - Annotate the class with `@Component` to make it a Spring Bean, and Spring Boot will automatically detect and execute the runner's `run()` method.
-
-I hope this provides a more detailed explanation of the mentioned points. Let me know if you have further questions or need more clarification!
