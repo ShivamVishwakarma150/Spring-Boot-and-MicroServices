@@ -1,5 +1,5 @@
 Autowiring Example with @Qualifer 
-+++++++++++++++++++++++++++++++ 
++++++++++++++++++++++++++++++++++ 
 
 -> When we use @Autowired annotation it will use byType mode to identify dependent object 
 
@@ -66,14 +66,14 @@ public class ReportService {
 
 
 @Autowired at Constructor Level
-++++++++++++++++++++++++++++ 
++++++++++++++++++++++++++++++++ 
 
 
 -> If we have both 0-Param constructor and parameterized constructor then ioc will use 0-param constrictor to create object 
 
 -> If we want IOC to choose Param-Constructor to create obj then we should write @Autowired annotation at param-constructor 
 
-Note: If we have only param constructor in our class then @Autowired is optional
+Note: If we have only one param constructor in our class then @Autowired is optional
 
 @Service
 public class ReportService {
