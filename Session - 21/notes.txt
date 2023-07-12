@@ -13,7 +13,7 @@
         reportDao.findData(); 
         System.out.println("generating report...."); 
         } 
-    }
+}
 
 Note: Field Injection is not recommended because it is violating oops principles and it breaks Single Responsibility Principles. 
 
